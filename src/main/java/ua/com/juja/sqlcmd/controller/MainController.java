@@ -5,6 +5,8 @@ import ua.com.juja.sqlcmd.model.InMemoryDatabaseManager;
 import ua.com.juja.sqlcmd.view.Console;
 import ua.com.juja.sqlcmd.view.View;
 
+import java.util.Arrays;
+
 
 public class MainController {
 
@@ -48,7 +50,33 @@ public class MainController {
     }
 
     public void run(){
+
         connectToDb();
+        while (true){
+        view.write("введи команду или help:");
+        String command = view.read();
+        if(command.equals("list")){
+            doList();
+        } else if (command.equals("help")){
+            doHelp();
+        } else {
+            view.write("несуществующая команда:" +command);
+        }
+        }
+    }
+
+    private void doHelp() {
+        view.write("список команд:");
+        view.write("\tlist");
+        view.write("\t\tсписок таблиц");
+        view.write("\thelp");
+        view.write("\t\tсписок команд");
+    }
+
+    private void doList() {
+        String[] tableNames = manager.getTables();
+        String message = Arrays.toString(tableNames);
+        view.write(message);
     }
 
 
