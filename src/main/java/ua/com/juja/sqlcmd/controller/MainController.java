@@ -1,8 +1,7 @@
 package ua.com.juja.sqlcmd.controller;
 
+import ua.com.juja.sqlcmd.model.DataSet;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
-import ua.com.juja.sqlcmd.model.InMemoryDatabaseManager;
-import ua.com.juja.sqlcmd.view.Console;
 import ua.com.juja.sqlcmd.view.View;
 
 import java.util.Arrays;
@@ -59,18 +58,66 @@ public class MainController {
             doList();
         } else if (command.equals("help")){
             doHelp();
+        } else if (command.equals("exit")){
+            view.write("exit");
+            System.exit(0);
+        } else if (command.startsWith("find|")){
+            doFind(command);
         } else {
             view.write("несуществующая команда:" +command);
         }
         }
     }
 
+    private void doFind(String command) {
+        String[] data = command.split("\\|");
+        String tableName = data[1];
+
+        DataSet[] tableData = manager.getTableDataSet(tableName);
+        String[] tableColumns = manager.getTableCloumns(tableName);
+
+        printHeader(tableColumns);
+        printTable(tableData);
+
+    }
+
+    private void printTable(DataSet[] tableData) {
+
+        for(DataSet row : tableData){
+           printRow(row);
+        }
+    }
+
+    private void printRow(DataSet row) {
+        Object[] values = row.getValue();
+        String result = "|";
+        for (Object value : values){
+            result += value + "|";
+        }
+        view.write(result);
+    }
+
+    private void printHeader(String[] tableColumns) {
+        String result = "|";
+        for (String name : tableColumns){
+           result += name + "|";
+        }
+        view.write(result);
+    }
+
     private void doHelp() {
         view.write("список команд:");
-        view.write("\tlist");
-        view.write("\t\tсписок таблиц");
         view.write("\thelp");
         view.write("\t\tсписок команд");
+
+        view.write("\texit");
+        view.write("\t\tвыход");
+
+        view.write("\tfind|tableName");
+        view.write("\t\tсодержимое таблицы 'tableName'");
+
+        view.write("\tlist");
+        view.write("\t\tсписок таблиц");
     }
 
     private void doList() {
