@@ -1,5 +1,7 @@
 package ua.com.juja.sqlcmd.controller;
 
+import ua.com.juja.sqlcmd.controller.command.Command;
+import ua.com.juja.sqlcmd.controller.command.Exit;
 import ua.com.juja.sqlcmd.model.DataSet;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.view.View;
@@ -9,12 +11,14 @@ import java.util.Arrays;
 
 public class MainController {
 
+    private Command commands[];
     private View view;
     private DatabaseManager manager;
 
     public MainController(View view, DatabaseManager manager ){
         this.view = view;
         this.manager = manager;
+        this.commands = new Command[]{new Exit(view)};
 
     }
     private void connectToDb() {
@@ -58,9 +62,8 @@ public class MainController {
             doList();
         } else if (command.equals("help")){
             doHelp();
-        } else if (command.equals("exit")){
-            view.write("exit");
-            System.exit(0);
+        } else if (commands[0].canProcess(command)){
+            commands[0].process(command);
         } else if (command.startsWith("find|")){
             doFind(command);
         } else {
@@ -102,7 +105,9 @@ public class MainController {
         for (String name : tableColumns){
            result += name + "|";
         }
+        view.write("-----------------");
         view.write(result);
+        view.write("-----------------");
     }
 
     private void doHelp() {
