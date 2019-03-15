@@ -18,6 +18,10 @@ public class Help implements Command {
     @Override
     public void process(String command) {
         view.write("список команд:");
+
+        view.write("\tconnect|databaseName|userName|password");
+        view.write("\t\tдля подключения к базе данных, с которой будем работать");
+
         view.write("\thelp");
         view.write("\t\tсписок команд");
 
