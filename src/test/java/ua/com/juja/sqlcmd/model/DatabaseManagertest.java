@@ -10,8 +10,7 @@ import ua.com.juja.sqlcmd.model.DatabaseManager;
 import java.util.Arrays;
 
 import static org.junit.Assert.assertEquals;
-
-
+import static org.junit.Assert.assertTrue;
 
 
 public abstract class DatabaseManagertest {
@@ -87,6 +86,14 @@ public abstract class DatabaseManagertest {
         String[] columnNames = manager.getTableCloumns("newlist");
 
         assertEquals("[id, name, lastname]", Arrays.toString(columnNames));
+
+    }
+
+    @Test
+    public void testIsConnected(){
+
+
+        assertTrue(manager.isConnected());
 
     }
 

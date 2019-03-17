@@ -34,6 +34,9 @@ public class MainController {
 
         while (true){
             String input = view.read();
+            if (input == null){//TODO
+                new Exit(view).process(input);
+            }
 
             for (Command command : commands){
                 if (command.canProcess(input)){
