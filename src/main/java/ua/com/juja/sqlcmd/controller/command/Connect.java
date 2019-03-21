@@ -45,6 +45,7 @@ public class Connect implements Command {
     }
 
     private int count() {
+
         return COMMAND_SAMPLE.split("\\|").length;
     }
 

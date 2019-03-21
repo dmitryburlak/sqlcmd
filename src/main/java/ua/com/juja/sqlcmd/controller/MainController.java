@@ -1,7 +1,6 @@
 package ua.com.juja.sqlcmd.controller;
 
 import ua.com.juja.sqlcmd.controller.command.*;
-import ua.com.juja.sqlcmd.model.DataSet;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.view.View;
 
@@ -29,17 +28,27 @@ public class MainController {
     }
 
     public void run(){
+        try {
+            doWork();
+            //return;
+        }catch (ExitException e){
+            //do nothing
+        }
+
+    }
+
+    private void doWork() {
         view.write("привет");
         view.write("введи, имя базы, логин, пароль в формате: connect|databaseName|userName|password");
 
-        while (true){
+        while (true) {
             String input = view.read();
-            if (input == null){//TODO
+            if (input == null) {//TODO
                 new Exit(view).process(input);
             }
 
-            for (Command command : commands){
-                if (command.canProcess(input)){
+            for (Command command : commands) {
+                if (command.canProcess(input)) {
                     command.process(input);
                     break;
                 }
@@ -47,12 +56,6 @@ public class MainController {
             view.write("введи команду или help:");
         }
     }
-
-
-
-
-
-
 
 
 }
