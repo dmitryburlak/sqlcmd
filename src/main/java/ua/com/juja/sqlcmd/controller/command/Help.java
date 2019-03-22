@@ -34,5 +34,11 @@ public class Help implements Command {
         view.write("\tlist");
         view.write("\t\tсписок таблиц");
 
+        view.write("\tclear|tableName");
+        view.write("\t\tочистка таблицы 'tableName'");
+
+        view.write("\tcreate|tableName|column1|value1|column2|value2|...|columnN|valueN");
+        view.write("\t\tсоздание записи в таблице 'tableName'");
+
     }
 }

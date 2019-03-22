@@ -4,6 +4,9 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import ua.com.juja.sqlcmd.controller.Main;
+import ua.com.juja.sqlcmd.model.DataSet;
+import ua.com.juja.sqlcmd.model.DatabaseManager;
+import ua.com.juja.sqlcmd.model.JDBCDatabaseManager;
 
 
 import java.io.ByteArrayOutputStream;
@@ -19,9 +22,11 @@ public class IntegrationTest {
 
     private ConfigurableInputStream in;
     private ByteArrayOutputStream out;
+    private DatabaseManager databaseManager;
 
     @Before
     public void setup(){
+        databaseManager = new JDBCDatabaseManager();
         in = new ConfigurableInputStream();
         out = new ByteArrayOutputStream();
 
@@ -64,6 +69,10 @@ public class IntegrationTest {
                 "\t\tсодержимое таблицы 'tableName'\r\n" +
                 "\tlist\r\n" +
                 "\t\tсписок таблиц\r\n" +
+                "\tclear|tableName\r\n" +
+                "\t\tочистка таблицы 'tableName'\r\n" +
+                "\tcreate|tableName|column1|value1|column2|value2|...|columnN|valueN\r\n" +
+                "\t\tсоздание записи в таблице 'tableName'\r\n" +
                 "введи команду или help:\r\n" +
                 "до встречи!\r\n", getData());
 
@@ -208,6 +217,73 @@ public class IntegrationTest {
                 "-----------------\r\n" +
                 "|id|name|lastname|\r\n" +
                 "-----------------\r\n" +
+                "|11|xxx|ccc|\r\n" +
+                "|12|vvv|bbb|\r\n" +
+                "-----------------\r\n" +
+                "введи команду или help:\r\n" +
+                "до встречи!\r\n", getData());
+
+    }
+
+    @Test
+    public void testConnectWhithError() {
+
+        //given
+        in.add("connect|namelist");
+        in.add("exit");
+
+        //when
+        Main.main(new String[0]);
+
+        //then
+        assertEquals("привет\r\n" +
+                "введи, имя базы, логин, пароль в формате: connect|databaseName|userName|password\r\n" +
+                "error!ожидается 4 параметра, а есть: 2\r\n" +
+                "try again\r\n" +
+                "введи команду или help:\r\n" +
+                "до встречи!\r\n", getData());
+
+    }
+
+    @Test
+    public void testFindAfterConnect_whithData() {
+
+        //given
+       /* databaseManager.connect("namelist", "postgres", "root");
+
+        databaseManager.clear("newlist");
+
+        DataSet name1 = new DataSet();
+        name1.put("id", 10);
+        name1.put("name", "xxx");
+        name1.put("lastname", "ccc");
+        databaseManager.create("newlist", name1);
+
+        DataSet name2 = new DataSet();
+        name2.put("id", 11);
+        name2.put("name", "vvv");
+        name2.put("lastname", "bbb");
+        databaseManager.create("newlist", name2);
+*/
+        in.add("connect|namelist|postgres|root");
+        in.add("clear|newlist");
+        in.add("create|newlist|id|11|name|xxx|lastname|ccc");
+        in.add("create|newlist|id|12|name|vvv|lastname|bbb");
+        in.add("exit");
+
+        //when
+        Main.main(new String[0]);
+
+        //then
+        assertEquals("привет\r\n" +
+                "введи, имя базы, логин, пароль в формате: connect|databaseName|userName|password\r\n" +
+                "ок\r\n" +
+                "введи команду или help:\r\n" +
+                "таблица newlist очищена\r\n" +
+                "введи команду или help:\r\n" +
+                "в таблицу {names:[id, name, lastname], values:[11, xxx, ccc]} запись добавлена\r\n" +
+                "введи команду или help:\r\n" +
+                "в таблицу {names:[id, name, lastname], values:[12, vvv, bbb]} запись добавлена\r\n" +
                 "введи команду или help:\r\n" +
                 "до встречи!\r\n", getData());
 
