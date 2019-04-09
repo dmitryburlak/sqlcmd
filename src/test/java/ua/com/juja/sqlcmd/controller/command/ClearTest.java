@@ -10,6 +10,7 @@ import ua.com.juja.sqlcmd.view.View;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
 
 public class ClearTest {
@@ -63,5 +64,36 @@ public class ClearTest {
         assertFalse(canProcess);
     }
 
+    @Test
+    public void testErrorClearCountParameters1(){
+        //given
+
+
+        //when
+        try {
+            command.process("clear");
+            fail();
+        } catch (IllegalArgumentException e){
+            assertEquals("формат команды 'clear|tableName', а ты ввел:clear",
+                    e.getMessage());
+        }
+
+    }
+
+    @Test
+    public void testErrorClearCountParameters3(){
+        //given
+
+
+        //when
+        try {
+            command.process("qwe|newlist|qwe");
+            fail();
+        } catch (IllegalArgumentException e){
+            assertEquals("формат команды 'clear|tableName', а ты ввел:qwe|newlist|qwe",
+                    e.getMessage());
+        }
+
+    }
 
 }
