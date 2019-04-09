@@ -45,13 +45,18 @@ public class MainController {
 
         while (true) {
             String input = view.read();
-            if (input == null) {//TODO
-                new Exit(view).process(input);
-            }
 
             for (Command command : commands) {
-                if (command.canProcess(input)) {
-                    command.process(input);
+                try {
+                    if (command.canProcess(input)) {
+                        command.process(input);
+                        break;
+                    }
+                } catch (Exception e) {
+                    if (e instanceof ExitException) {
+                        throw new ExitException();
+                    }
+                    printError(e);
                     break;
                 }
             }
@@ -59,5 +64,18 @@ public class MainController {
         }
     }
 
-
+    private void printError(Exception e) {
+        String message = e.getMessage();
+        if (e.getCause() != null) {
+            message += " " + e.getCause().getMessage();
+        }
+        view.write("error!" + message);
+        view.write("try again");
+    }
 }
+
+
+
+
+
+

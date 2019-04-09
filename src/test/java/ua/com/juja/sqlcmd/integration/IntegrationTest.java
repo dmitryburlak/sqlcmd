@@ -289,5 +289,52 @@ public class IntegrationTest {
 
     }
 
+    @Test
+    public void testClearWhithError() {
+
+        //given
+        in.add("connect|namelist|postgres|root");
+        in.add("clear|asd|sdf");
+        in.add("exit");
+
+        //when
+        Main.main(new String[0]);
+
+        //then
+        assertEquals("привет\r\n" +
+                "введи, имя базы, логин, пароль в формате: connect|databaseName|userName|password\r\n" +
+                "ок\r\n" +
+                "введи команду или help:\r\n" +
+                "error!формат команды 'clear|tableName', а ты ввел:clear|asd|sdf\r\n" +
+                "try again\r\n" +
+                "введи команду или help:\r\n" +
+                "до встречи!\r\n", getData());
+
+    }
+
+    @Test
+    public void testCreateWhithError() {
+
+        //given
+        in.add("connect|namelist|postgres|root");
+        in.add("create|newlist|error");
+        in.add("exit");
+
+        //when
+        Main.main(new String[0]);
+
+        //then
+        assertEquals("привет\r\n" +
+                "введи, имя базы, логин, пароль в формате: connect|databaseName|userName|password\r\n" +
+                "ок\r\n" +
+                "введи команду или help:\r\n" +
+                "error!должно быть четное колличесво параметров, в формате 'create|tableName|column1|value1|column2|value2|...|columnN|valueN', а есть:create|newlist|error\r\n" +
+                "try again\r\n" +
+                "введи команду или help:\r\n" +
+                "до встречи!\r\n", getData());
+
+    }
+
+
 
 }
