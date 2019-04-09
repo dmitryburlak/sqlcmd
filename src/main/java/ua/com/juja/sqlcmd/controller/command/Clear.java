@@ -23,7 +23,7 @@ public class Clear implements Command {
     public void process(String command) {
         String[] data = command.split("\\|");
 
-        if (data.length/2 != 1){
+        if (!(data.length == 2)){
             throw new IllegalArgumentException("формат команды 'clear|tableName', а ты ввел:" + command);
         }
         manager.clear(data[1]);

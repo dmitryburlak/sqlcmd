@@ -24,23 +24,16 @@ public class Connect implements Command {
     @Override
     public void process(String command) {
 
-        try {
-            String[] data = command.split("\\|");
-            if(data.length < count()){
-                throw new IllegalArgumentException(String.format("ожидается %s параметра, а есть: %s",
-                        count(), data.length));
-            }
-            String databaseName = data[1];
-            String userName = data[2];
-            String password = data[3];
-            manager.connect(databaseName, userName, password);
-            view.write("ок");
-        } catch (Exception e) {
-            printError(e);
+        String[] data = command.split("\\|");
+        if(data.length < count()){
+            throw new IllegalArgumentException(String.format("ожидается %s параметра, а есть: %s",
+                    count(), data.length));
         }
-
-
-
+        String databaseName = data[1];
+        String userName = data[2];
+        String password = data[3];
+        manager.connect(databaseName, userName, password);
+        view.write("ок");
 
     }
 
@@ -49,13 +42,6 @@ public class Connect implements Command {
         return COMMAND_SAMPLE.split("\\|").length;
     }
 
-    private void printError(Exception e) {
-        String message = e.getMessage();
-        if(e.getCause() != null){
-            message += " " + e.getCause().getMessage();
-        }
-        view.write("error!" + message);
-        view.write("try again");
-    }
+
 
 }
