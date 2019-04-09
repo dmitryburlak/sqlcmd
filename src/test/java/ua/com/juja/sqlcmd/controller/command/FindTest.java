@@ -3,7 +3,10 @@ package ua.com.juja.sqlcmd.controller.command;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.MockingDetails;
+
+
+import static junit.framework.TestCase.assertTrue;
+import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.*;
 import ua.com.juja.sqlcmd.model.DataSet;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
@@ -55,6 +58,54 @@ public class FindTest {
                 " -----------------, " +
                 "|11|xxx|ccc|," +
                 " |12|vvv|bbb|," +
+                " -----------------]",captor.getAllValues().toString());
+
+    }
+    @Test
+    public void testCanProcessFindWithParametersString(){
+        //given
+        Command command = new Find(manager, view);
+
+        //when
+        boolean canProcess = command.canProcess("find|");
+
+        //then
+        assertTrue(canProcess);
+    }
+
+    @Test
+    public void testNotCanProcessFindWithoutParametersString(){
+        //given
+        Command command = new Find(manager, view);
+
+        //when
+        boolean canProcess = command.canProcess("qwe|");
+
+        //then
+        assertFalse(canProcess);
+    }
+
+    @Test
+    public void testPrintEmptyTableData(){
+
+        //given
+        Command command = new Find(manager, view);
+        when(manager.getTableCloumns("newlist"))
+                .thenReturn(new String[]{"id", "name", "lastname"});
+
+
+        DataSet[] data = new DataSet[0];
+        when(manager.getTableDataSet("newlist"))
+                .thenReturn(data);
+
+        //when
+        command.process("find|newlist");
+        //then
+        ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
+        verify(view, atLeastOnce()).write(captor.capture());
+        assertEquals("[-----------------," +
+                " |id|name|lastname|," +
+                " -----------------," +
                 " -----------------]",captor.getAllValues().toString());
 
     }
