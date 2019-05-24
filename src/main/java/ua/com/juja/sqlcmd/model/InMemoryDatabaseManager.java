@@ -64,8 +64,8 @@ public class InMemoryDatabaseManager implements DatabaseManager {
     }
 
     @Override
-    public String[] getTableCloumns(String tableName) {
-        return new String[]{"id", "name", "lastname"};
+    public Set<String> getTableCloumns(String tableName) {
+        return new LinkedHashSet<String>(Arrays.asList("id", "name", "lastname"));
     }
 
     @Override

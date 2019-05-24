@@ -83,9 +83,9 @@ public abstract class DatabaseManagertest {
     public void testGetColumnNames() {
         manager.clear("newlist");
 
-        String[] columnNames = manager.getTableCloumns("newlist");
+        Set<String> columnNames = manager.getTableCloumns("newlist");
 
-        assertEquals("[id, name, lastname]", Arrays.toString(columnNames));
+        assertEquals("[id, name, lastname]", columnNames.toString());
 
     }
 

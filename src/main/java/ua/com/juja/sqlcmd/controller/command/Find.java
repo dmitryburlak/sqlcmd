@@ -4,6 +4,8 @@ import ua.com.juja.sqlcmd.model.DataSet;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.view.View;
 
+import java.util.Set;
+
 public class Find implements Command {
 
     private DatabaseManager manager;
@@ -24,7 +26,7 @@ public class Find implements Command {
         String[] data = command.split("\\|");
         String tableName = data[1];
 
-        String[] tableColumns = manager.getTableCloumns(tableName);
+        Set<String> tableColumns = manager.getTableCloumns(tableName);
         printHeader(tableColumns);
 
         DataSet[] tableData = manager.getTableDataSet(tableName);
@@ -49,7 +51,7 @@ public class Find implements Command {
         view.write(result);
     }
 
-    private void printHeader(String[] tableColumns) {
+    private void printHeader(Set<String> tableColumns) {
         String result = "|";
         for (String name : tableColumns){
             result += name + "|";

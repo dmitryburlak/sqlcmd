@@ -14,6 +14,9 @@ import ua.com.juja.sqlcmd.view.View;
 
 import javax.lang.model.util.Types;
 
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+
 import static org.junit.Assert.assertEquals;
 
 public class FindTest {
@@ -32,8 +35,7 @@ public class FindTest {
     public void testPrintTableData(){
 
         //given
-        when(manager.getTableCloumns("newlist"))
-                  .thenReturn(new String[]{"id", "name", "lastname"});
+        setupTableColumns("newlist", "id", "name", "lastname");
 
             DataSet user1 = new DataSet();
             user1.put("id", 11);
@@ -95,9 +97,7 @@ public class FindTest {
     public void testPrintEmptyTableData(){
 
         //given
-
-        when(manager.getTableCloumns("newlist"))
-                .thenReturn(new String[]{"id", "name", "lastname"});
+        setupTableColumns("newlist", "id", "name", "lastname");
 
 
         DataSet[] data = new DataSet[0];
@@ -111,6 +111,13 @@ public class FindTest {
                 " |id|name|lastname|," +
                 " -----------------," +
                 " -----------------]");
+
+    }
+
+    private void setupTableColumns(String tableName, String... columns) {
+        when(manager.getTableCloumns(tableName))
+                .thenReturn(new LinkedHashSet<String>(Arrays.asList(columns)));
+
 
     }
 }
