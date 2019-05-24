@@ -1,13 +1,13 @@
 package ua.com.juja.sqlcmd.model;
 
 
-
 import org.junit.Before;
 import org.junit.Test;
 import ua.com.juja.sqlcmd.model.DataSet;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
 
 import java.util.Arrays;
+import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -18,7 +18,7 @@ public abstract class DatabaseManagertest {
     private DatabaseManager manager;
 
     @Before
-    public void setup(){
+    public void setup() {
         manager = getDatabaseManager();
         manager.connect("namelist", "postgres", "root");
     }
@@ -27,15 +27,15 @@ public abstract class DatabaseManagertest {
 
 
     @Test
-    public void testDetAllTambleNames(){
-        String[] tablesNames = manager.getTables();
-       assertEquals("[newlist]", Arrays.toString(tablesNames));
+    public void testDetAllTambleNames() {
+        Set<String> tablesNames = manager.getTables();
+        assertEquals("[newlist]", tablesNames.toString());
 
 
     }
 
     @Test
-    public void testGetTableData(){
+    public void testGetTableData() {
 
         manager.clear("newlist");
 
@@ -68,7 +68,7 @@ public abstract class DatabaseManagertest {
         //when
         DataSet newValue = new DataSet();
         newValue.put("lastname", "ggghh");
-        manager.update("newlist",10, newValue);
+        manager.update("newlist", 10, newValue);
 
         //then
         DataSet[] newlists = manager.getTableDataSet("newlist");
@@ -80,7 +80,7 @@ public abstract class DatabaseManagertest {
     }
 
     @Test
-    public void testGetColumnNames(){
+    public void testGetColumnNames() {
         manager.clear("newlist");
 
         String[] columnNames = manager.getTableCloumns("newlist");
@@ -90,12 +90,7 @@ public abstract class DatabaseManagertest {
     }
 
     @Test
-    public void testIsConnected(){
-
-
+    public void testIsConnected() {
         assertTrue(manager.isConnected());
-
     }
-
-
 }

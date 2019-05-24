@@ -1,12 +1,16 @@
 package ua.com.juja.sqlcmd.model;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class InMemoryDatabaseManager implements DatabaseManager {
 
     public static final String TABLE_NAME = "newlist";
     private DataSet[] data = new DataSet[1000];
-    private int freeIndex = 0 ;
+    private int freeIndex = 0;
 
     @Override
     public DataSet[] getTableDataSet(String tablename) {
@@ -15,14 +19,14 @@ public class InMemoryDatabaseManager implements DatabaseManager {
     }
 
     private void validateTable(String tablename) {
-        if(!"newlist".equals(tablename)){
+        if (!"newlist".equals(tablename)) {
             throw new UnsupportedOperationException("only for 'newlist'");
         }
     }
 
     @Override
-    public String[] getTables() {
-        return new String[]{TABLE_NAME};
+    public Set<String> getTables() {
+        return new LinkedHashSet<String>(Arrays.asList(TABLE_NAME));
     }
 
     @Override
@@ -33,7 +37,6 @@ public class InMemoryDatabaseManager implements DatabaseManager {
     @Override
     public void clear(String tableName) {
         validateTable(tableName);
-
         data = new DataSet[1000];
         freeIndex = 0;
     }
@@ -41,7 +44,6 @@ public class InMemoryDatabaseManager implements DatabaseManager {
     @Override
     public void create(String tableName, DataSet input) {
         validateTable(tableName);
-
         data[freeIndex] = input;
         freeIndex++;
     }
@@ -58,14 +60,12 @@ public class InMemoryDatabaseManager implements DatabaseManager {
             if (objected == objectid) {
                 data[index].updateFrom(newValue);
             }
-
         }
-
     }
 
     @Override
     public String[] getTableCloumns(String tableName) {
-        return new String[] {"id", "name", "lastname"};
+        return new String[]{"id", "name", "lastname"};
     }
 
     @Override
