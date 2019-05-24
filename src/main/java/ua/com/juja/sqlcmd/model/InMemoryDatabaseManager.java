@@ -1,21 +1,17 @@
 package ua.com.juja.sqlcmd.model;
 
 import java.lang.reflect.Array;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
 public class InMemoryDatabaseManager implements DatabaseManager {
 
     public static final String TABLE_NAME = "newlist";
-    private DataSet[] data = new DataSet[1000];
-    private int freeIndex = 0;
+    private List<DataSet> data = new LinkedList<DataSet>();
 
     @Override
-    public DataSet[] getTableDataSet(String tablename) {
+    public List<DataSet> getTableDataSet(String tablename) {
         validateTable(tablename);
-        return Arrays.copyOf(data, freeIndex);
+        return data;
     }
 
     private void validateTable(String tablename) {
@@ -37,28 +33,32 @@ public class InMemoryDatabaseManager implements DatabaseManager {
     @Override
     public void clear(String tableName) {
         validateTable(tableName);
-        data = new DataSet[1000];
-        freeIndex = 0;
+        data.clear();
+
     }
 
     @Override
     public void create(String tableName, DataSet input) {
         validateTable(tableName);
-        data[freeIndex] = input;
-        freeIndex++;
+        data.add(input);
     }
 
     @Override
     public void update(String tableName, int id, DataSet newValue) {
-        for (int index = 0; index < freeIndex; index++) {
-            Object objected = 0;
-            if (objected.equals(data[index].get("id"))) objected = true;
+        validateTable(tableName);
+        for (int index = 0; index < data.size(); index++) {
+            DataSet dataSet = data.get(index);
+          /*  if(id == dataSet.get("id")){
+               dataSet.updateFrom(newValue);
+            }*/
+           Object objected = 0;
+            if (objected.equals(dataSet.get("id"))) objected = true;
             else objected = false;
             Object objectid = 0;
             if (objectid.equals(id)) objectid = true;
             else objectid = false;
             if (objected == objectid) {
-                data[index].updateFrom(newValue);
+                dataSet.updateFrom(newValue);
             }
         }
     }

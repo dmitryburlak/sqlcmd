@@ -4,8 +4,6 @@ import ua.com.juja.sqlcmd.controller.command.*;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.view.View;
 
-import java.util.Arrays;
-
 
 public class MainController {
 
@@ -21,7 +19,7 @@ public class MainController {
                 new Help(view),
                 new Exit(view),
                 new IsConnected(manager, view),
-                new List(manager, view),
+                new Tables(manager, view),
                 new Clear(manager, view),
                 new Create(manager, view),
                 new Find(manager, view),

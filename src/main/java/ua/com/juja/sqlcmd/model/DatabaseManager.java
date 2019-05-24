@@ -1,9 +1,11 @@
 package ua.com.juja.sqlcmd.model;
 
+import java.util.List;
 import java.util.Set;
 
 public interface DatabaseManager {
-    DataSet[] getTableDataSet(String tablename);
+
+    List<DataSet> getTableDataSet(String tablename);
 
     Set<String> getTables();
 

@@ -7,6 +7,7 @@ import ua.com.juja.sqlcmd.model.DataSet;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
@@ -45,10 +46,10 @@ public abstract class DatabaseManagertest {
         input.put("lastname", "ggg");
         manager.create("newlist", input);
 
-        DataSet[] newlists = manager.getTableDataSet("newlist");
-        assertEquals(1, newlists.length);
+        List<DataSet> newlists = manager.getTableDataSet("newlist");
+        assertEquals(1, newlists.size());
 
-        DataSet newlist = newlists[0];
+        DataSet newlist = newlists.get(0);
         assertEquals("[id, name, lastname]", Arrays.toString(newlist.getName()));
         assertEquals("[10, hhh, ggg]", Arrays.toString(newlist.getValue()));
 
@@ -71,10 +72,10 @@ public abstract class DatabaseManagertest {
         manager.update("newlist", 10, newValue);
 
         //then
-        DataSet[] newlists = manager.getTableDataSet("newlist");
-        assertEquals(1, newlists.length);
+        List<DataSet> newlists = manager.getTableDataSet("newlist");
+        assertEquals(1, newlists.size());
 
-        DataSet newlist = newlists[0];
+        DataSet newlist = newlists.get(0);
         assertEquals("[id, name, lastname]", Arrays.toString(newlist.getName()));
         assertEquals("[10, hhh, ggghh]", Arrays.toString(newlist.getValue()));
     }

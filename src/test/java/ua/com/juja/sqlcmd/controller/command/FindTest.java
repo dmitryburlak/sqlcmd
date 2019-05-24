@@ -14,8 +14,7 @@ import ua.com.juja.sqlcmd.view.View;
 
 import javax.lang.model.util.Types;
 
-import java.util.Arrays;
-import java.util.LinkedHashSet;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 
@@ -47,12 +46,11 @@ public class FindTest {
             user2.put("name", "vvv");
             user2.put("lastname", "bbb");
 
-            DataSet[] data = new DataSet[]{user1, user2};
-            when(manager.getTableDataSet("newlist"))
-                    .thenReturn(data);
+        when(manager.getTableDataSet("newlist"))
+                .thenReturn(Arrays.asList(user1, user2));
 
             //when
-            command.process("find|newlist");
+        command.process("find|newlist");
             //then
         shouldPrint("[-----------------," +
                             " |id|name|lastname|," +
@@ -99,10 +97,8 @@ public class FindTest {
         //given
         setupTableColumns("newlist", "id", "name", "lastname");
 
-
-        DataSet[] data = new DataSet[0];
         when(manager.getTableDataSet("newlist"))
-                .thenReturn(data);
+                .thenReturn(new ArrayList<DataSet>());
 
         //when
         command.process("find|newlist");
