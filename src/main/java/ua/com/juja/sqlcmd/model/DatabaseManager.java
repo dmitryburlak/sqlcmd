@@ -1,11 +1,14 @@
 package ua.com.juja.sqlcmd.model;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Set;
 
 public interface DatabaseManager {
 
     List<DataSet> getTableDataSet(String tablename);
+
+    int getSize(String tablename);
 
     Set<String> getTables();
 

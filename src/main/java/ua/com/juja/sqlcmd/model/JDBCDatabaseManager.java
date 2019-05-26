@@ -37,14 +37,19 @@ public class JDBCDatabaseManager implements DatabaseManager {
             return result;
         }
     }
-
-    private int getSize(String tablename) throws SQLException {
-        Statement stmt = connection.createStatement();
-        ResultSet resCount = stmt.executeQuery("SELECT COUNT (*) FROM public." + tablename);
+    @Override
+    public int getSize(String tablename){
+        try (Statement stmt = connection.createStatement();
+            ResultSet resCount = stmt.executeQuery("SELECT COUNT (*) FROM public." + tablename))
+        {
         resCount.next();
         int size = resCount.getInt(1);
         resCount.close();
         return size;
+        } catch (SQLException e){
+            e.printStackTrace();
+            return 0;
+        }
     }
 
     @Override

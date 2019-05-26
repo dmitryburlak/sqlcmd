@@ -1,5 +1,6 @@
 package ua.com.juja.sqlcmd.model;
 
+import java.sql.SQLException;
 import java.util.*;
 
 public class InMemoryDatabaseManager implements DatabaseManager {
@@ -11,6 +12,11 @@ public class InMemoryDatabaseManager implements DatabaseManager {
     public List<DataSet> getTableDataSet(String tablename) {
         validateTable(tablename);
         return data;
+    }
+
+    @Override
+    public int getSize(String tablename) {
+        return data.size();
     }
 
     private void validateTable(String tablename) {
