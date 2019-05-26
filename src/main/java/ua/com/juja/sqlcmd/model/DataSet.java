@@ -1,11 +1,14 @@
 package ua.com.juja.sqlcmd.model;
 
+import java.util.List;
+import java.util.Set;
+
 public interface DataSet {
     void put(String name, Object value);
 
-    Object[] getValue();
+    List<Object> getValue();
 
-    String[] getName();
+    Set<String> getName();
 
     Object get(String name);
 

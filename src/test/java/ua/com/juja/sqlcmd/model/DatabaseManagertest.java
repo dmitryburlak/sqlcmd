@@ -48,8 +48,8 @@ public abstract class DatabaseManagertest {
         assertEquals(1, newlists.size());
 
         DataSet newlist = newlists.get(0);
-        assertEquals("[id, name, lastname]", Arrays.toString(newlist.getName()));
-        assertEquals("[10, hhh, ggg]", Arrays.toString(newlist.getValue()));
+        assertEquals("[id, name, lastname]", newlist.getName().toString());
+        assertEquals("[10, hhh, ggg]", newlist.getValue().toString());
 
     }
 
@@ -74,8 +74,8 @@ public abstract class DatabaseManagertest {
         assertEquals(1, newlists.size());
 
         DataSet newlist = newlists.get(0);
-        assertEquals("[id, name, lastname]", Arrays.toString(newlist.getName()));
-        assertEquals("[10, hhh, ggghh]", Arrays.toString(newlist.getValue()));
+        assertEquals("[id, name, lastname]", newlist.getName().toString());
+        assertEquals("[10, hhh, ggghh]", newlist.getValue().toString());
     }
 
     @Test
