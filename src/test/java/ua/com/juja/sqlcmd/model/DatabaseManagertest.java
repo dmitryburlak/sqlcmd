@@ -3,8 +3,6 @@ package ua.com.juja.sqlcmd.model;
 
 import org.junit.Before;
 import org.junit.Test;
-import ua.com.juja.sqlcmd.model.DataSet;
-import ua.com.juja.sqlcmd.model.DatabaseManager;
 
 import java.util.Arrays;
 import java.util.List;
@@ -40,7 +38,7 @@ public abstract class DatabaseManagertest {
 
         manager.clear("newlist");
 
-        DataSet input = new DataSet();
+        DataSet input = new DataSetImpl();
         input.put("id", 10);
         input.put("name", "hhh");
         input.put("lastname", "ggg");
@@ -60,14 +58,14 @@ public abstract class DatabaseManagertest {
         //given
         manager.clear("newlist");
 
-        DataSet input = new DataSet();
+        DataSet input = new DataSetImpl();
         input.put("id", 10);
         input.put("name", "hhh");
         input.put("lastname", "ggg");
         manager.create("newlist", input);
 
         //when
-        DataSet newValue = new DataSet();
+        DataSet newValue = new DataSetImpl();
         newValue.put("lastname", "ggghh");
         manager.update("newlist", 10, newValue);
 

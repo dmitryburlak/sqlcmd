@@ -23,7 +23,7 @@ public class JDBCDatabaseManager implements DatabaseManager {
             ResultSet res = stmt.executeQuery("SELECT * FROM public." + tableName);
             ResultSetMetaData resmd = res.getMetaData();
             while (res.next()) {
-                DataSet dataSet = new DataSet();
+                DataSet dataSet = new DataSetImpl();
                 result.add(dataSet);
                 for (int i = 1; i <= resmd.getColumnCount(); i++) {
                     dataSet.put(resmd.getColumnName(i), res.getObject(i));

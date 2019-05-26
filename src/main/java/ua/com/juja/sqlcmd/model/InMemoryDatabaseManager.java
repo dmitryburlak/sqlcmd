@@ -1,6 +1,5 @@
 package ua.com.juja.sqlcmd.model;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class InMemoryDatabaseManager implements DatabaseManager {
@@ -48,10 +47,7 @@ public class InMemoryDatabaseManager implements DatabaseManager {
         validateTable(tableName);
         for (int index = 0; index < data.size(); index++) {
             DataSet dataSet = data.get(index);
-          /*  if(id == dataSet.get("id")){
-               dataSet.updateFrom(newValue);
-            }*/
-           Object objected = 0;
+            Object objected = 0;
             if (objected.equals(dataSet.get("id"))) objected = true;
             else objected = false;
             Object objectid = 0;

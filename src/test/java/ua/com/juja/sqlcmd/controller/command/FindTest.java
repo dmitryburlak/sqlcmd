@@ -9,10 +9,9 @@ import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.*;
 import ua.com.juja.sqlcmd.model.DataSet;
+import ua.com.juja.sqlcmd.model.DataSetImpl;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.view.View;
-
-import javax.lang.model.util.Types;
 
 import java.util.*;
 
@@ -36,12 +35,12 @@ public class FindTest {
         //given
         setupTableColumns("newlist", "id", "name", "lastname");
 
-            DataSet user1 = new DataSet();
+            DataSet user1 = new DataSetImpl();
             user1.put("id", 11);
             user1.put("name", "xxx");
             user1.put("lastname", "ccc");
 
-            DataSet user2 = new DataSet();
+            DataSet user2 = new DataSetImpl();
             user2.put("id", 12);
             user2.put("name", "vvv");
             user2.put("lastname", "bbb");
