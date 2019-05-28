@@ -67,7 +67,7 @@ public class IntegrationTest {
                 "\t\tвыход\r\n" +
                 "\tfind|tableName\r\n" +
                 "\t\tсодержимое таблицы 'tableName'\r\n" +
-                "\tlist\r\n" +
+                "\ttables\r\n" +
                 "\t\tсписок таблиц\r\n" +
                 "\tclear|tableName\r\n" +
                 "\t\tочистка таблицы 'tableName'\r\n" +
@@ -99,7 +99,7 @@ public class IntegrationTest {
 
         //given
        // in.add("connect|namelist|postgres|root");
-        in.add("list");
+        in.add("tables");
         in.add("exit");
 
         //when
@@ -109,7 +109,7 @@ public class IntegrationTest {
         //then
         assertEquals("привет\r\n" +
                 "введи, имя базы, логин, пароль в формате: connect|databaseName|userName|password\r\n" +
-                "вы не можете пользоваться командой, list, пока не подключитесь с помощью команды connect|databaseName|userName|password\r\n" +
+                "вы не можете пользоваться командой, tables, пока не подключитесь с помощью команды connect|databaseName|userName|password\r\n" +
                 "введи команду или help:\r\n" +
                 "до встречи!\r\n", getData());
 
@@ -179,7 +179,7 @@ public class IntegrationTest {
 
         //given
         in.add("connect|namelist|postgres|root");
-        in.add("list");
+        in.add("tables");
         in.add("exit");
 
         //when
@@ -190,7 +190,7 @@ public class IntegrationTest {
                 "введи, имя базы, логин, пароль в формате: connect|databaseName|userName|password\r\n" +
                 "ок\r\n" +
                 "введи команду или help:\r\n" +
-                //list
+                //tables
                 "[newlist]\r\n" +
                 "введи команду или help:\r\n" +
                 "до встречи!\r\n", getData());

@@ -31,7 +31,7 @@ public class Help implements Command {
         view.write("\tfind|tableName");
         view.write("\t\tсодержимое таблицы 'tableName'");
 
-        view.write("\tlist");
+        view.write("\ttables");
         view.write("\t\tсписок таблиц");
 
         view.write("\tclear|tableName");
