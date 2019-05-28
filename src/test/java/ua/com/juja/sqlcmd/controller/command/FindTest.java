@@ -7,6 +7,7 @@ import org.mockito.ArgumentCaptor;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
 import ua.com.juja.sqlcmd.model.DataSet;
 import ua.com.juja.sqlcmd.model.DataSetImpl;
@@ -113,6 +114,26 @@ public class FindTest {
         when(manager.getTableCloumns(tableName))
                 .thenReturn(new LinkedHashSet<String>(Arrays.asList(columns)));
 
+
+    }
+
+    @Test
+    public void testErrorWhenBadCommand(){
+
+        //given
+        setupTableColumns("newlist", "id", "name", "lastname");
+
+        when(manager.getTableDataSet("newlist"))
+                .thenReturn(new ArrayList<DataSet>());
+
+        //when
+        try {
+            command.process("find|newlist|yyy");
+            fail("expected error");
+        } catch (IllegalArgumentException e){
+            assertEquals("формат команды 'find|tableName', а ты ввел:find|newlist|yyy",
+                    e.getMessage());
+        }
 
     }
 }
