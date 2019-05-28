@@ -38,9 +38,9 @@ public class JDBCDatabaseManager implements DatabaseManager {
         }
     }
     @Override
-    public int getSize(String tablename){
+    public int getSize(String tableName){
         try (Statement stmt = connection.createStatement();
-            ResultSet resCount = stmt.executeQuery("SELECT COUNT (*) FROM public." + tablename))
+            ResultSet resCount = stmt.executeQuery("SELECT COUNT (*) FROM public." + tableName))
         {
         resCount.next();
         int size = resCount.getInt(1);

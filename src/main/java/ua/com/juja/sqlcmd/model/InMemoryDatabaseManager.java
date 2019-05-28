@@ -5,29 +5,22 @@ import java.util.*;
 
 public class InMemoryDatabaseManager implements DatabaseManager {
 
-    public static final String TABLE_NAME = "newlist";
-    private List<DataSet> data = new LinkedList<DataSet>();
+    private Map<String, List<DataSet>> tables = new LinkedHashMap<>();
 
     @Override
-    public List<DataSet> getTableDataSet(String tablename) {
-        validateTable(tablename);
-        return data;
+    public List<DataSet> getTableDataSet(String tableName) {
+        return get(tableName);
     }
 
     @Override
-    public int getSize(String tablename) {
-        return data.size();
+    public int getSize(String tableName) {
+        return get(tableName).size();
     }
 
-    private void validateTable(String tablename) {
-        if (!"newlist".equals(tablename)) {
-            throw new UnsupportedOperationException("only for 'newlist'");
-        }
-    }
 
     @Override
     public Set<String> getTables() {
-        return new LinkedHashSet<String>(Arrays.asList(TABLE_NAME));
+        return tables.keySet();
     }
 
     @Override
@@ -37,22 +30,26 @@ public class InMemoryDatabaseManager implements DatabaseManager {
 
     @Override
     public void clear(String tableName) {
-        validateTable(tableName);
-        data.clear();
+        get(tableName).clear();
+    }
 
+    private List<DataSet> get(String tableName) {
+        if (!tables.containsKey(tableName)){
+            tables.put(tableName, new LinkedList<DataSet>());
+        }
+        return tables.get(tableName);
     }
 
     @Override
     public void create(String tableName, DataSet input) {
-        validateTable(tableName);
-        data.add(input);
+        get(tableName).add(input);
     }
 
     @Override
     public void update(String tableName, int id, DataSet newValue) {
-        validateTable(tableName);
-        for (int index = 0; index < data.size(); index++) {
-            DataSet dataSet = data.get(index);
+
+        for (int index = 0; index < get(tableName).size(); index++) {
+            DataSet dataSet = get(tableName).get(index);
             Object objected = 0;
             if (objected.equals(dataSet.get("id"))) objected = true;
             else objected = false;

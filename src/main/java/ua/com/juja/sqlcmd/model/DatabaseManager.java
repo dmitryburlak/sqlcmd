@@ -6,9 +6,9 @@ import java.util.Set;
 
 public interface DatabaseManager {
 
-    List<DataSet> getTableDataSet(String tablename);
+    List<DataSet> getTableDataSet(String tableName);
 
-    int getSize(String tablename);
+    int getSize(String tableName);
 
     Set<String> getTables();
 

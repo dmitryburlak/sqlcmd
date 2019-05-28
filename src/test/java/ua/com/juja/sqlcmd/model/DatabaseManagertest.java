@@ -20,13 +20,17 @@ public abstract class DatabaseManagertest {
     public void setup() {
         manager = getDatabaseManager();
         manager.connect("namelist", "postgres", "root");
+
     }
 
     public abstract DatabaseManager getDatabaseManager();
 
 
     @Test
-    public void testDetAllTambleNames() {
+    public void testGetAllTambleNames() {
+        //given
+        manager.getTableDataSet("newlist");
+
         Set<String> tablesNames = manager.getTables();
         assertEquals("[newlist]", tablesNames.toString());
 
