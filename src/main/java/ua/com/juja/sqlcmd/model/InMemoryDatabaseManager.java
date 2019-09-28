@@ -34,7 +34,7 @@ public class InMemoryDatabaseManager implements DatabaseManager {
     }
 
     private List<DataSet> get(String tableName) {
-        if (!tables.containsKey(tableName)){
+        if (!tables.containsKey(tableName)) {
             tables.put(tableName, new LinkedList<DataSet>());
         }
         return tables.get(tableName);
@@ -47,7 +47,6 @@ public class InMemoryDatabaseManager implements DatabaseManager {
 
     @Override
     public void update(String tableName, int id, DataSet newValue) {
-
         for (int index = 0; index < get(tableName).size(); index++) {
             DataSet dataSet = get(tableName).get(index);
             Object objected = 0;

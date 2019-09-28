@@ -29,7 +29,7 @@ public class DataSetImpl implements DataSet {
     @Override
     public void updateFrom(DataSet newValue) {
         Set<String> columns = newValue.getName();
-        for(String name : columns){
+        for (String name : columns) {
             Object data = newValue.get(name);
             put(name, data);
         }

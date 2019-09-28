@@ -217,8 +217,7 @@ public class IntegrationTest {
                 "-----------------\r\n" +
                 "|id|name|password|\r\n" +
                 "-----------------\r\n" +
-                "|11|xxx|ccc|\r\n" +
-                "|12|vvv|bbb|\r\n" +
+
                 "-----------------\r\n" +
                 "введи команду или help:\r\n" +
                 "до встречи!\r\n", getData());

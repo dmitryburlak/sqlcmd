@@ -38,15 +38,14 @@ public class JDBCDatabaseManager implements DatabaseManager {
         }
     }
     @Override
-    public int getSize(String tableName){
+    public int getSize(String tableName) {
         try (Statement stmt = connection.createStatement();
-            ResultSet resCount = stmt.executeQuery("SELECT COUNT (*) FROM public." + tableName))
-        {
-        resCount.next();
-        int size = resCount.getInt(1);
-        resCount.close();
-        return size;
-        } catch (SQLException e){
+             ResultSet resCount = stmt.executeQuery("SELECT COUNT (*) FROM public." + tableName)) {
+            resCount.next();
+            int size = resCount.getInt(1);
+            resCount.close();
+            return size;
+        } catch (SQLException e) {
             e.printStackTrace();
             return 0;
         }
@@ -108,7 +107,6 @@ public class JDBCDatabaseManager implements DatabaseManager {
 
     @Override
     public void create(String tableName, DataSet input) {
-
         try {
             Statement stmt = connection.createStatement();
             String tableNames = getNamesFormated(input, "%s,");
@@ -119,7 +117,6 @@ public class JDBCDatabaseManager implements DatabaseManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
     private String getValuesFormated(DataSet input, String format) {
@@ -137,7 +134,6 @@ public class JDBCDatabaseManager implements DatabaseManager {
             String tableNames = getNamesFormated(newValue, "%s = ?,");
             PreparedStatement ps = connection.prepareStatement(
                     "UPDATE public." + tableName + " SET " + tableNames + "WHERE id = ?");
-
             int index = 1;
             for (Object value : newValue.getValue()) {
                 ps.setObject(index, value);

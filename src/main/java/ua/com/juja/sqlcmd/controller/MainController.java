@@ -13,7 +13,6 @@ public class MainController {
 
     public MainController(View view, DatabaseManager manager ){
         this.view = view;
-
         this.commands = new Command[]{
                 new Connect(manager, view),
                 new Help(view),
@@ -27,23 +26,20 @@ public class MainController {
         };
     }
 
-    public void run(){
+    public void run() {
         try {
             doWork();
             //return;
-        }catch (ExitException e){
+        } catch (ExitException e) {
             //do nothing
         }
-
     }
 
     private void doWork() {
         view.write("привет");
         view.write("введи, имя базы, логин, пароль в формате: connect|databaseName|userName|password");
-
         while (true) {
             String input = view.read();
-
             for (Command command : commands) {
                 try {
                     if (command.canProcess(input)) {
