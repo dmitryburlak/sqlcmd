@@ -45,14 +45,14 @@ public abstract class DatabaseManagertest {
         DataSet input = new DataSetImpl();
         input.put("id", 10);
         input.put("name", "hhh");
-        input.put("lastname", "ggg");
+        input.put("password", "ggg");
         manager.create("newlist", input);
 
         List<DataSet> newlists = manager.getTableDataSet("newlist");
         assertEquals(1, newlists.size());
 
         DataSet newlist = newlists.get(0);
-        assertEquals("[id, name, lastname]", newlist.getName().toString());
+        assertEquals("[id, name, password]", newlist.getName().toString());
         assertEquals("[10, hhh, ggg]", newlist.getValue().toString());
 
     }
@@ -65,12 +65,12 @@ public abstract class DatabaseManagertest {
         DataSet input = new DataSetImpl();
         input.put("id", 10);
         input.put("name", "hhh");
-        input.put("lastname", "ggg");
+        input.put("password", "ggg");
         manager.create("newlist", input);
 
         //when
         DataSet newValue = new DataSetImpl();
-        newValue.put("lastname", "ggghh");
+        newValue.put("password", "ggghh");
         manager.update("newlist", 10, newValue);
 
         //then
@@ -78,7 +78,7 @@ public abstract class DatabaseManagertest {
         assertEquals(1, newlists.size());
 
         DataSet newlist = newlists.get(0);
-        assertEquals("[id, name, lastname]", newlist.getName().toString());
+        assertEquals("[id, name, password]", newlist.getName().toString());
         assertEquals("[10, hhh, ggghh]", newlist.getValue().toString());
     }
 
@@ -88,7 +88,7 @@ public abstract class DatabaseManagertest {
 
         Set<String> columnNames = manager.getTableCloumns("newlist");
 
-        assertEquals("[id, name, lastname]", columnNames.toString());
+        assertEquals("[id, name, password]", columnNames.toString());
 
     }
 

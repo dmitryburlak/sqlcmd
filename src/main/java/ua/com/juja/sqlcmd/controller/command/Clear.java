@@ -9,7 +9,6 @@ public class Clear implements Command {
     private View view;
 
     public Clear(DatabaseManager manager, View view) {
-
         this.manager = manager;
         this.view = view;
     }
@@ -22,8 +21,7 @@ public class Clear implements Command {
     @Override
     public void process(String command) {
         String[] data = command.split("\\|");
-
-        if (!(data.length == 2)){
+        if (!(data.length == 2)) {
             throw new IllegalArgumentException("формат команды 'clear|tableName', а ты ввел:" + command);
         }
         manager.clear(data[1]);

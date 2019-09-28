@@ -9,7 +9,6 @@ public class IsConnected implements Command {
     private View view;
 
     public IsConnected(DatabaseManager manager, View view) {
-
         this.manager = manager;
         this.view = view;
     }
@@ -24,6 +23,5 @@ public class IsConnected implements Command {
         view.write(String.format("вы не можете пользоваться командой, %s, " +
                 "пока не подключитесь с помощью " +
                 "команды connect|databaseName|userName|password", command));
-
     }
 }

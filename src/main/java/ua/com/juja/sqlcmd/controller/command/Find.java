@@ -25,21 +25,18 @@ public class Find implements Command {
     @Override
     public void process(String command) {
         String[] data = command.split("\\|");
-        if (!(data.length == 2)){
+        if (!(data.length == 2)) {
             throw new IllegalArgumentException("формат команды 'find|tableName', а ты ввел:" + command);
         }
         String tableName = data[1];
-
         Set<String> tableColumns = manager.getTableCloumns(tableName);
         printHeader(tableColumns);
-
         List<DataSet> tableData = manager.getTableDataSet(tableName);
         printTable(tableData);
-
     }
 
     private void printTable(List<DataSet> tableData) {
-        for(DataSet row : tableData){
+        for (DataSet row : tableData) {
             printRow(row);
         }
         view.write("-----------------");
@@ -48,7 +45,7 @@ public class Find implements Command {
     private void printRow(DataSet row) {
         List<Object> values = row.getValue();
         String result = "|";
-        for (Object value : values){
+        for (Object value : values) {
             result += value + "|";
         }
         view.write(result);
@@ -56,7 +53,7 @@ public class Find implements Command {
 
     private void printHeader(Set<String> tableColumns) {
         String result = "|";
-        for (String name : tableColumns){
+        for (String name : tableColumns) {
             result += name + "|";
         }
         view.write("-----------------");

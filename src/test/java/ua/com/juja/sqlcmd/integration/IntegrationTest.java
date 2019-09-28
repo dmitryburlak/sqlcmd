@@ -215,7 +215,7 @@ public class IntegrationTest {
                 "введи команду или help:\r\n" +
                 //find|newlist
                 "-----------------\r\n" +
-                "|id|name|lastname|\r\n" +
+                "|id|name|password|\r\n" +
                 "-----------------\r\n" +
                 "|11|xxx|ccc|\r\n" +
                 "|12|vvv|bbb|\r\n" +
@@ -238,8 +238,8 @@ public class IntegrationTest {
         //then
         assertEquals("привет\r\n" +
                 "введи, имя базы, логин, пароль в формате: connect|databaseName|userName|password\r\n" +
-                "error!ожидается 4 параметра, а есть: 2\r\n" +
-                "try again\r\n" +
+                "ошибка!ожидается 4 параметра, а есть: 2\r\n" +
+                "попробуй еще раз\r\n" +
                 "введи команду или help:\r\n" +
                 "до встречи!\r\n", getData());
 
@@ -305,8 +305,8 @@ public class IntegrationTest {
                 "введи, имя базы, логин, пароль в формате: connect|databaseName|userName|password\r\n" +
                 "ок\r\n" +
                 "введи команду или help:\r\n" +
-                "error!формат команды 'clear|tableName', а ты ввел:clear|asd|sdf\r\n" +
-                "try again\r\n" +
+                "ошибка!формат команды 'clear|tableName', а ты ввел:clear|asd|sdf\r\n" +
+                "попробуй еще раз\r\n" +
                 "введи команду или help:\r\n" +
                 "до встречи!\r\n", getData());
 
@@ -328,8 +328,8 @@ public class IntegrationTest {
                 "введи, имя базы, логин, пароль в формате: connect|databaseName|userName|password\r\n" +
                 "ок\r\n" +
                 "введи команду или help:\r\n" +
-                "error!должно быть четное колличесво параметров, в формате 'create|tableName|column1|value1|column2|value2|...|columnN|valueN', а есть:create|newlist|error\r\n" +
-                "try again\r\n" +
+                "ошибка!должно быть четное колличесво параметров, в формате 'create|tableName|column1|value1|column2|value2|...|columnN|valueN', а есть:create|newlist|error\r\n" +
+                "попробуй еще раз\r\n" +
                 "введи команду или help:\r\n" +
                 "до встречи!\r\n", getData());
 

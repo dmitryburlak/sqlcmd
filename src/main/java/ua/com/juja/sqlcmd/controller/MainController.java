@@ -67,8 +67,8 @@ public class MainController {
         if (e.getCause() != null) {
             message += " " + e.getCause().getMessage();
         }
-        view.write("error!" + message);
-        view.write("try again");
+        view.write("ошибка!" + message);
+        view.write("попробуй еще раз");
     }
 }
 

@@ -6,7 +6,5 @@ public interface Command {
 
     void process (String command);
 
-    //TODO выделить новым методом формат и описание команд
-    //String format();
-    //String description();
+
 }

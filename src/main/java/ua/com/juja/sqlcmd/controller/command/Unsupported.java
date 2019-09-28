@@ -7,7 +7,6 @@ public class Unsupported implements Command {
     private View view;
 
     public Unsupported(View view) {
-
         this.view = view;
     }
 
