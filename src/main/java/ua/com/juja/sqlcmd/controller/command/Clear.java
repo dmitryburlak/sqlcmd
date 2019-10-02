@@ -1,9 +1,11 @@
 package ua.com.juja.sqlcmd.controller.command;
 
 import ua.com.juja.sqlcmd.model.DatabaseManager;
+import ua.com.juja.sqlcmd.view.MessageList;
 import ua.com.juja.sqlcmd.view.View;
 
 public class Clear implements Command {
+
 
     private DatabaseManager manager;
     private View view;
@@ -22,10 +24,10 @@ public class Clear implements Command {
     public void process(String command) {
         String[] data = command.split("\\|");
         if (!(data.length == 2)) {
-            throw new IllegalArgumentException("формат команды 'clear|tableName', а ты ввел:" + command);
+            throw new IllegalArgumentException(MessageList.WRONG_CLEAR_TABLE.getMessage() + command);
         }
         manager.clear(data[1]);
-        view.write(String.format("таблица %s очищена", data[1]));
+        view.write(String.format(MessageList.CLEAR_TABLE.getMessage(), data[1]));
 
     }
 }

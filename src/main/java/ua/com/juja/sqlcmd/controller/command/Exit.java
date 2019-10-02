@@ -1,6 +1,7 @@
 package ua.com.juja.sqlcmd.controller.command;
 
 
+import ua.com.juja.sqlcmd.view.MessageList;
 import ua.com.juja.sqlcmd.view.View;
 
 public class Exit implements Command {
@@ -17,7 +18,7 @@ public class Exit implements Command {
 
     @Override
     public void process(String command) {
-        view.write("до встречи!");
+        view.write(MessageList.EXIT_PROGRAM.getMessage());
         throw new ExitException();
     }
 }

@@ -2,6 +2,7 @@ package ua.com.juja.sqlcmd.controller.command;
 
 import ua.com.juja.sqlcmd.model.DataSet;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
+import ua.com.juja.sqlcmd.view.MessageList;
 import ua.com.juja.sqlcmd.view.View;
 
 import java.util.List;
@@ -26,7 +27,7 @@ public class Find implements Command {
     public void process(String command) {
         String[] data = command.split("\\|");
         if (!(data.length == 2)) {
-            throw new IllegalArgumentException("формат команды 'find|tableName', а ты ввел:" + command);
+            throw new IllegalArgumentException(MessageList.WRONG_FIND.getMessage() + command);
         }
         String tableName = data[1];
         Set<String> tableColumns = manager.getTableCloumns(tableName);

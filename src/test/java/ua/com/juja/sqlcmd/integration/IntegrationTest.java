@@ -266,8 +266,8 @@ public class IntegrationTest {
 */
         in.add("connect|namelist|postgres|root");
         in.add("clear|newlist");
-        in.add("create|newlist|id|11|name|xxx|lastname|ccc");
-        in.add("create|newlist|id|12|name|vvv|lastname|bbb");
+        in.add("create|newlist|id|11|name|xxx|password|ccc");
+        in.add("create|newlist|id|12|name|vvv|password|bbb");
         in.add("exit");
 
         //when
@@ -280,9 +280,9 @@ public class IntegrationTest {
                 "введи команду или help:\r\n" +
                 "таблица newlist очищена\r\n" +
                 "введи команду или help:\r\n" +
-                "в таблицу {names:[id, name, lastname], values:[11, xxx, ccc]} запись добавлена\r\n" +
+                "в таблицу {names:[id, name, password], values:[11, xxx, ccc]} запись добавлена\r\n" +
                 "введи команду или help:\r\n" +
-                "в таблицу {names:[id, name, lastname], values:[12, vvv, bbb]} запись добавлена\r\n" +
+                "в таблицу {names:[id, name, password], values:[12, vvv, bbb]} запись добавлена\r\n" +
                 "введи команду или help:\r\n" +
                 "до встречи!\r\n", getData());
 

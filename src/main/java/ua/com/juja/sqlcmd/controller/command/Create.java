@@ -3,6 +3,7 @@ package ua.com.juja.sqlcmd.controller.command;
 import ua.com.juja.sqlcmd.model.DataSet;
 import ua.com.juja.sqlcmd.model.DataSetImpl;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
+import ua.com.juja.sqlcmd.view.MessageList;
 import ua.com.juja.sqlcmd.view.View;
 
 public class Create implements Command {
@@ -24,9 +25,7 @@ public class Create implements Command {
     public void process(String command) {
         String[] data = command.split("\\|");
         if (data.length % 2 != 0) {
-            throw new IllegalArgumentException("должно быть четное колличесво параметров, " +
-                    "в формате 'create|tableName|column1|value1|column2|value2|...|columnN|valueN'," +
-                    " а есть:" + command);
+            throw new IllegalArgumentException(MessageList.WRONG_CREATE_TABLE.getMessage() + command);
         }
         String tableName = data[1];
         DataSet dataSet = new DataSetImpl();
@@ -36,6 +35,6 @@ public class Create implements Command {
             dataSet.put(columnName, columnValue);
         }
         manager.create(tableName, dataSet);
-        view.write(String.format("в таблицу %s запись добавлена", dataSet, tableName));
+        view.write(String.format(MessageList.CREATE_TABLE.getMessage(), dataSet, tableName));
     }
 }

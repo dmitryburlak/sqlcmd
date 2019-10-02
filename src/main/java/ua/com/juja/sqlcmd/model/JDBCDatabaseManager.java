@@ -10,10 +10,10 @@ public class JDBCDatabaseManager implements DatabaseManager {
 
     private Connection connection;
 
-    public static void main(String[] args) throws ClassNotFoundException, SQLException {
+   // public static void main(String[] args) throws ClassNotFoundException, SQLException {
 
 
-    }
+   //}
 
     @Override
     public List<DataSet> getTableDataSet(String tableName) {
