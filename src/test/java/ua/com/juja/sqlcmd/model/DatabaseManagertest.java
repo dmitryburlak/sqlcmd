@@ -3,7 +3,9 @@ package ua.com.juja.sqlcmd.model;
 
 import org.junit.Before;
 import org.junit.Test;
+import ua.com.juja.sqlcmd.controller.command.Connect;
 
+import java.sql.Connection;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -15,11 +17,14 @@ import static org.junit.Assert.assertTrue;
 public abstract class DatabaseManagertest {
 
     private DatabaseManager manager;
+    private DatabaseConnect connectmanager;
+
 
     @Before
     public void setup() {
+        connectmanager.connect("namelist", "postgres", "root");
         manager = getDatabaseManager();
-        manager.connect("namelist", "postgres", "root");
+
 
     }
 
@@ -29,6 +34,7 @@ public abstract class DatabaseManagertest {
     @Test
     public void testGetAllTambleNames() {
         //given
+        //manager.isConnected();
         manager.getTableDataSet("newlist");
 
         Set<String> tablesNames = manager.getTables();

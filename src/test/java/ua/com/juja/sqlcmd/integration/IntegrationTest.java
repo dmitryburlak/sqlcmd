@@ -5,6 +5,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import ua.com.juja.sqlcmd.controller.Main;
 import ua.com.juja.sqlcmd.model.DataSet;
+import ua.com.juja.sqlcmd.model.DatabaseConnect;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.model.JDBCDatabaseManager;
 
@@ -23,9 +24,11 @@ public class IntegrationTest {
     private ConfigurableInputStream in;
     private ByteArrayOutputStream out;
     private DatabaseManager databaseManager;
+    private DatabaseConnect connectmanager;
 
     @Before
     public void setup(){
+        connectmanager = new DatabaseConnect();
         databaseManager = new JDBCDatabaseManager();
         in = new ConfigurableInputStream();
         out = new ByteArrayOutputStream();
@@ -98,7 +101,7 @@ public class IntegrationTest {
     public void testListWhithoutConnect() {
 
         //given
-       // in.add("connect|namelist|postgres|root");
+        //in.add("connect|namelist|postgres|root");
         in.add("tables");
         in.add("exit");
 

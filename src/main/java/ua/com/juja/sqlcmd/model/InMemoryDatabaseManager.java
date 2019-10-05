@@ -23,10 +23,10 @@ public class InMemoryDatabaseManager implements DatabaseManager {
         return tables.keySet();
     }
 
-    @Override
+   /* @Override
     public void connect(String database, String userName, String password) {
 
-    }
+    }*/
 
     @Override
     public void clear(String tableName) {

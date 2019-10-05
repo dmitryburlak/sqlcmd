@@ -1,16 +1,17 @@
 package ua.com.juja.sqlcmd.controller.command;
 
+import ua.com.juja.sqlcmd.model.DatabaseConnect;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.view.View;
 
 public class Connect implements Command {
 
     private static String COMMAND_SAMPLE = "connect|namelist|postgres|root";
-    private DatabaseManager manager;
+    private DatabaseConnect connectmanager;
     private View view;
 
-    public Connect(DatabaseManager manager, View view) {
-        this.manager = manager;
+    public Connect(DatabaseConnect connectmanager, View view) {
+        this.connectmanager = connectmanager;
         this.view = view;
     }
 
@@ -29,7 +30,7 @@ public class Connect implements Command {
         String databaseName = data[1];
         String userName = data[2];
         String password = data[3];
-        manager.connect(databaseName, userName, password);
+        connectmanager.connect(databaseName, userName, password);
         view.write("ок");
     }
 
