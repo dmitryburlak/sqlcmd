@@ -4,6 +4,9 @@ package ua.com.juja.sqlcmd.view;
 
 public enum MessageList {
 
+    DRIVER_NOT_FOUND("добавь jdbc драйвер"),
+    NOT_CONNECTION("нет соединения для модели:"),
+
     CLEAR_TABLE("таблица %s очищена"),
     WRONG_CLEAR_TABLE("формат команды 'clear|tableName', а ты ввел:"),
 

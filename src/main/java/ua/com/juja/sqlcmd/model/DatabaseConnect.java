@@ -1,5 +1,7 @@
 package ua.com.juja.sqlcmd.model;
 
+import ua.com.juja.sqlcmd.view.MessageList;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -17,14 +19,14 @@ public class DatabaseConnect {
         try {
             Class.forName(driver);
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException("добавь jdbc драйвер" + e);
+            throw new RuntimeException(MessageList.DRIVER_NOT_FOUND.getMessage() + e);
         }
         try {
             connection = DriverManager.getConnection(host + database, userName,
                     password);
         } catch (SQLException e) {
             connection = null;
-            throw new RuntimeException(String.format("нет соединения для модели:",
+            throw new RuntimeException(String.format(MessageList.NOT_CONNECTION.getMessage(),
                     database, userName), e);
         }
         return connection;
