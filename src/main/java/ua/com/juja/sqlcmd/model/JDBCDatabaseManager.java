@@ -11,10 +11,10 @@ public class JDBCDatabaseManager implements DatabaseManager {
 
     @Override
     public List<DataSet> getTableDataSet(String tableName) {
+        String sqlquere = "SELECT * FROM public.";
         List<DataSet> result = new LinkedList<DataSet>();
-        try {
-            Statement stmt = connection().createStatement();
-            ResultSet res = stmt.executeQuery("SELECT * FROM public." + tableName);
+        try (Statement stmt = connection().createStatement();
+             ResultSet res = stmt.executeQuery(sqlquere + tableName)){
             ResultSetMetaData resmd = res.getMetaData();
             while (res.next()) {
                 DataSet dataSet = new DataSetImpl();
@@ -23,8 +23,8 @@ public class JDBCDatabaseManager implements DatabaseManager {
                     dataSet.put(resmd.getColumnName(i), res.getObject(i));
                 }
             }
-            res.close();
-            stmt.close();
+            //res.close();
+            //stmt.close();
             return result;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -33,11 +33,12 @@ public class JDBCDatabaseManager implements DatabaseManager {
     }
     @Override
     public int getSize(String tableName) {
+        String sqlquere = "SELECT COUNT (*) FROM public.";
         try (Statement stmt = connection().createStatement();
-             ResultSet resCount = stmt.executeQuery("SELECT COUNT (*) FROM public." + tableName)) {
+             ResultSet resCount = stmt.executeQuery(sqlquere + tableName)) {
             resCount.next();
             int size = resCount.getInt(1);
-            resCount.close();
+            //resCount.close();
             return size;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -47,16 +48,15 @@ public class JDBCDatabaseManager implements DatabaseManager {
 
     @Override
     public Set<String> getTables() {
+        String sqlquere = "SELECT table_name FROM information_schema.tables WHERE table_schema NOT IN ('information_schema','pg_catalog')";
         Set<String> tables = new LinkedHashSet<String>();
-        try {
-            Statement stmt = connection().createStatement();
-            ResultSet res = stmt.executeQuery("SELECT table_name FROM information_schema.tables\n" +
-                    "WHERE table_schema NOT IN ('information_schema','pg_catalog')");
+        try (Statement stmt = connection().createStatement();
+             ResultSet res = stmt.executeQuery(sqlquere)){
             while (res.next()) {
                 tables.add(res.getString("table_name"));
             }
-            res.close();
-            stmt.close();
+            //res.close();
+            //stmt.close();
             return tables;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -66,10 +66,10 @@ public class JDBCDatabaseManager implements DatabaseManager {
 
     @Override
     public void clear(String tableName) {
-        try {
-            Statement stmt = connection().createStatement();
-            stmt.executeUpdate("DELETE FROM public." + tableName);
-            stmt.close();
+        String sqlquere = "DELETE FROM public.";
+        try(Statement stmt = connection().createStatement()){
+            stmt.executeUpdate(sqlquere + tableName);
+            //stmt.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -77,13 +77,12 @@ public class JDBCDatabaseManager implements DatabaseManager {
 
     @Override
     public void create(String tableName, DataSet input) {
-        try {
-            Statement stmt = connection().createStatement();
+        try(Statement stmt = connection().createStatement()) {
             String tableNames = getNamesFormated(input, "%s,");
             String values = getValuesFormated(input, "'%s',");
             stmt.executeUpdate("INSERT INTO public." + tableName + "(" + tableNames + ")" +
                     "VALUES (" + values + ")");
-            stmt.close();
+            //stmt.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -100,10 +99,11 @@ public class JDBCDatabaseManager implements DatabaseManager {
 
     @Override
     public void update(String tableName, int id, DataSet newValue) {
-        try {
-            String tableNames = getNamesFormated(newValue, "%s = ?,");
-            PreparedStatement ps = connection().prepareStatement(
-                    "UPDATE public." + tableName + " SET " + tableNames + "WHERE id = ?");
+        String tableNames = getNamesFormated(newValue, "%s = ?,");
+        try(PreparedStatement ps = connection().prepareStatement(
+                "UPDATE public." + tableName + " SET " + tableNames + "WHERE id = ?")) {
+            /*PreparedStatement ps = connection().prepareStatement(
+                    "UPDATE public." + tableName + " SET " + tableNames + "WHERE id = ?");*/
             int index = 1;
             for (Object value : newValue.getValue()) {
                 ps.setObject(index, value);
@@ -111,7 +111,7 @@ public class JDBCDatabaseManager implements DatabaseManager {
             }
             ps.setInt(index, id);
             ps.executeUpdate();
-            ps.close();
+            //ps.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -119,15 +119,17 @@ public class JDBCDatabaseManager implements DatabaseManager {
 
     @Override
     public Set<String> getTableCloumns(String tableName) {
+        String sqlquere = "SELECT * FROM information_schema.columns WHERE table_schema = 'public' AND table_name = '";
         Set<String> tables = new LinkedHashSet<String>();
-        try {
-            Statement stmt = connection().createStatement();
-            ResultSet res = stmt.executeQuery("SELECT * FROM information_schema.columns WHERE table_schema = 'public' AND table_name = '" + tableName + "'");
+        try(Statement stmt = connection().createStatement();
+            ResultSet res = stmt.executeQuery(sqlquere + tableName + "'")) {
+            /*Statement stmt = connection().createStatement();
+            ResultSet res = stmt.executeQuery(sqlquere + tableName + "'");*/
             while (res.next()) {
                 tables.add(res.getString("column_name"));
             }
-            res.close();
-            stmt.close();
+            //res.close();
+            //stmt.close();
             return tables;
         } catch (SQLException e) {
             e.printStackTrace();
