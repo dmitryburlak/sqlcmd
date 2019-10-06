@@ -1,0 +1,22 @@
+список команд:
+
+connect|databaseName|userName|password
+для подключения к базе данных, с которой будем работать
+
+help
+список команд
+
+exit
+выход
+
+find|tableName
+содержимое таблицы 'tableName'
+
+tables
+список таблиц
+
+clear|tableName
+очистка таблицы 'tableName'
+
+create|tableName|column1|value1|column2|value2|...|columnN|valueN
+создание записи в таблице 'tableName'

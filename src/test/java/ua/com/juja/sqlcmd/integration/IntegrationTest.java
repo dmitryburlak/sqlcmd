@@ -61,20 +61,27 @@ public class IntegrationTest {
         assertEquals("привет\r\n" +
                 "введи, имя базы, логин, пароль в формате: connect|databaseName|userName|password\r\n" +
                 "список команд:\r\n" +
-                "\tconnect|databaseName|userName|password\r\n" +
-                "\t\tдля подключения к базе данных, с которой будем работать\r\n" +
-                "\thelp\r\n" +
-                "\t\tсписок команд\r\n" +
-                "\texit\r\n" +
-                "\t\tвыход\r\n" +
-                "\tfind|tableName\r\n" +
-                "\t\tсодержимое таблицы 'tableName'\r\n" +
-                "\ttables\r\n" +
-                "\t\tсписок таблиц\r\n" +
-                "\tclear|tableName\r\n" +
-                "\t\tочистка таблицы 'tableName'\r\n" +
-                "\tcreate|tableName|column1|value1|column2|value2|...|columnN|valueN\r\n" +
-                "\t\tсоздание записи в таблице 'tableName'\r\n" +
+                "\r\n" +
+                "connect|databaseName|userName|password\r\n" +
+                "для подключения к базе данных, с которой будем работать\r\n" +
+                "\r\n" +
+                "help\r\n" +
+                "список команд\r\n" +
+                "\r\n" +
+                "exit\r\n" +
+                "выход\r\n" +
+                "\r\n" +
+                "find|tableName\r\n" +
+                "содержимое таблицы 'tableName'\r\n" +
+                "\r\n" +
+                "tables\r\n" +
+                "список таблиц\r\n" +
+                "\r\n" +
+                "clear|tableName\r\n" +
+                "очистка таблицы 'tableName'\r\n" +
+                "\r\n" +
+                "create|tableName|column1|value1|column2|value2|...|columnN|valueN\r\n" +
+                "создание записи в таблице 'tableName'\r\n" +
                 "введи команду или help:\r\n" +
                 "до встречи!\r\n", getData());
 

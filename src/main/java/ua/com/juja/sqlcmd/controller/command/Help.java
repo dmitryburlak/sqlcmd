@@ -1,10 +1,21 @@
 package ua.com.juja.sqlcmd.controller.command;
 
+import ua.com.juja.sqlcmd.view.MessageList;
 import ua.com.juja.sqlcmd.view.View;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 
 public class Help implements Command {
 
     private View view;
+    private String helpfile = "src/main/resources/help.txt";
 
     public Help(View view){
         this.view = view;
@@ -17,27 +28,22 @@ public class Help implements Command {
 
     @Override
     public void process(String command) {
-        view.write("список команд:");
+        List<String> readHelp = new ArrayList<String>();
+        try(BufferedReader fileRead = new BufferedReader(new FileReader(helpfile))){
+            String currenLine;
+            while(fileRead.ready() && (currenLine = fileRead.readLine()) != null){
+                    readHelp.add(currenLine);
+            }
 
-        view.write("\tconnect|databaseName|userName|password");
-        view.write("\t\tдля подключения к базе данных, с которой будем работать");
+            Iterator iterator = readHelp.iterator();
+            while(iterator.hasNext()){
+              view.write(iterator.next().toString());
+            }
 
-        view.write("\thelp");
-        view.write("\t\tсписок команд");
+        }catch(IOException e){
+            throw new RuntimeException(MessageList.HELPTXT_NOT_FOUND.getMessage());
 
-        view.write("\texit");
-        view.write("\t\tвыход");
+        }
 
-        view.write("\tfind|tableName");
-        view.write("\t\tсодержимое таблицы 'tableName'");
-
-        view.write("\ttables");
-        view.write("\t\tсписок таблиц");
-
-        view.write("\tclear|tableName");
-        view.write("\t\tочистка таблицы 'tableName'");
-
-        view.write("\tcreate|tableName|column1|value1|column2|value2|...|columnN|valueN");
-        view.write("\t\tсоздание записи в таблице 'tableName'");
     }
 }

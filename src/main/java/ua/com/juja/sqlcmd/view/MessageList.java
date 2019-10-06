@@ -5,11 +5,13 @@ package ua.com.juja.sqlcmd.view;
 public enum MessageList {
 
     COMMAND_SAMPLE("connect|namelist|postgres|root"),
-    DRIVER_NOT_FOUND("добавь jdbc драйвер"),
+    DRIVER_NOT_FOUND("нужно добавить jdbc драйвер"),
     NOT_CONNECTION("нет соединения для модели:"),
     NOT_CONNECTED_COMMAND("вы не можете пользоваться командой, %s, пока не подключитесь с помощью команды connect|databaseName|userName|password"),
     WRONG_PARAM_CONNECT("ожидается %s параметра, а есть: %s"),
     OK_PARAM_CONNECT("ок"),
+
+    HELPTXT_NOT_FOUND("файл help.txt не найден"),
 
     CLEAR_TABLE("таблица %s очищена"),
     WRONG_CLEAR_TABLE("формат команды 'clear|tableName', а ты ввел:"),
@@ -23,14 +25,7 @@ public enum MessageList {
 
     EXIT_PROGRAM("до встречи!"),
 
-    UNSUPPORTED_COMMAND("несуществующая команда:"),
-
-
-
-
-    WRONG("формат команды 'clear|tableName', а ты ввел:");
-
-
+    UNSUPPORTED_COMMAND("несуществующая команда:");
 
 
     private String textmessage;
