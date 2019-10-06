@@ -21,6 +21,8 @@ public enum MessageList {
 
     UNSUPPORTED_COMMAND("несуществующая команда:"),
 
+    NOT_CONNECTED_COMMAND("вы не можете пользоваться командой, %s, пока не подключитесь с помощью команды connect|databaseName|userName|password"),
+
 
 
     WRONG("формат команды 'clear|tableName', а ты ввел:");

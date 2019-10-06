@@ -2,6 +2,7 @@ package ua.com.juja.sqlcmd.controller.command;
 
 import ua.com.juja.sqlcmd.model.DatabaseConnect;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
+import ua.com.juja.sqlcmd.view.MessageList;
 import ua.com.juja.sqlcmd.view.View;
 
 public class IsConnected implements Command {
@@ -21,8 +22,6 @@ public class IsConnected implements Command {
 
     @Override
     public void process(String command) {
-        view.write(String.format("вы не можете пользоваться командой, %s, " +
-                "пока не подключитесь с помощью " +
-                "команды connect|databaseName|userName|password", command));
+        view.write(String.format(MessageList.NOT_CONNECTED_COMMAND.getMessage(), command));
     }
 }

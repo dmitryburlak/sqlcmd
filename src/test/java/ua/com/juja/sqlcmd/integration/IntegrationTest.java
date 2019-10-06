@@ -24,11 +24,10 @@ public class IntegrationTest {
     private ConfigurableInputStream in;
     private ByteArrayOutputStream out;
     private DatabaseManager databaseManager;
-    private DatabaseConnect connectmanager;
+
 
     @Before
     public void setup(){
-        connectmanager = new DatabaseConnect();
         databaseManager = new JDBCDatabaseManager();
         in = new ConfigurableInputStream();
         out = new ByteArrayOutputStream();

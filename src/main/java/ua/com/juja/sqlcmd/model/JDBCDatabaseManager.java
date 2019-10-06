@@ -23,8 +23,6 @@ public class JDBCDatabaseManager implements DatabaseManager {
                     dataSet.put(resmd.getColumnName(i), res.getObject(i));
                 }
             }
-            //res.close();
-            //stmt.close();
             return result;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -38,7 +36,6 @@ public class JDBCDatabaseManager implements DatabaseManager {
              ResultSet resCount = stmt.executeQuery(sqlquere + tableName)) {
             resCount.next();
             int size = resCount.getInt(1);
-            //resCount.close();
             return size;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -55,8 +52,6 @@ public class JDBCDatabaseManager implements DatabaseManager {
             while (res.next()) {
                 tables.add(res.getString("table_name"));
             }
-            //res.close();
-            //stmt.close();
             return tables;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -69,7 +64,6 @@ public class JDBCDatabaseManager implements DatabaseManager {
         String sqlquere = "DELETE FROM public.";
         try(Statement stmt = connection().createStatement()){
             stmt.executeUpdate(sqlquere + tableName);
-            //stmt.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -82,7 +76,6 @@ public class JDBCDatabaseManager implements DatabaseManager {
             String values = getValuesFormated(input, "'%s',");
             stmt.executeUpdate("INSERT INTO public." + tableName + "(" + tableNames + ")" +
                     "VALUES (" + values + ")");
-            //stmt.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -102,8 +95,6 @@ public class JDBCDatabaseManager implements DatabaseManager {
         String tableNames = getNamesFormated(newValue, "%s = ?,");
         try(PreparedStatement ps = connection().prepareStatement(
                 "UPDATE public." + tableName + " SET " + tableNames + "WHERE id = ?")) {
-            /*PreparedStatement ps = connection().prepareStatement(
-                    "UPDATE public." + tableName + " SET " + tableNames + "WHERE id = ?");*/
             int index = 1;
             for (Object value : newValue.getValue()) {
                 ps.setObject(index, value);
@@ -111,7 +102,6 @@ public class JDBCDatabaseManager implements DatabaseManager {
             }
             ps.setInt(index, id);
             ps.executeUpdate();
-            //ps.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -123,13 +113,9 @@ public class JDBCDatabaseManager implements DatabaseManager {
         Set<String> tables = new LinkedHashSet<String>();
         try(Statement stmt = connection().createStatement();
             ResultSet res = stmt.executeQuery(sqlquere + tableName + "'")) {
-            /*Statement stmt = connection().createStatement();
-            ResultSet res = stmt.executeQuery(sqlquere + tableName + "'");*/
             while (res.next()) {
                 tables.add(res.getString("column_name"));
             }
-            //res.close();
-            //stmt.close();
             return tables;
         } catch (SQLException e) {
             e.printStackTrace();
