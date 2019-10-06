@@ -2,11 +2,11 @@ package ua.com.juja.sqlcmd.controller.command;
 
 import ua.com.juja.sqlcmd.model.DatabaseConnect;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
+import ua.com.juja.sqlcmd.view.MessageList;
 import ua.com.juja.sqlcmd.view.View;
 
 public class Connect implements Command {
 
-    private static String COMMAND_SAMPLE = "connect|namelist|postgres|root";
     private DatabaseConnect connectmanager;
     private View view;
 
@@ -24,17 +24,17 @@ public class Connect implements Command {
     public void process(String command) {
         String[] data = command.split("\\|");
         if (data.length < count()) {
-            throw new IllegalArgumentException(String.format("ожидается %s параметра, а есть: %s",
+            throw new IllegalArgumentException(String.format(MessageList.WRONG_PARAM_CONNECT.getMessage(),
                     count(), data.length));
         }
         String databaseName = data[1];
         String userName = data[2];
         String password = data[3];
         connectmanager.connect(databaseName, userName, password);
-        view.write("ок");
+        view.write(MessageList.OK_PARAM_CONNECT.getMessage());
     }
 
     private int count() {
-        return COMMAND_SAMPLE.split("\\|").length;
+        return MessageList.COMMAND_SAMPLE.getMessage().split("\\|").length;
     }
 }
