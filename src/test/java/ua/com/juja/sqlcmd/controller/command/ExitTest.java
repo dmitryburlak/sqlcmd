@@ -41,14 +41,13 @@ public class ExitTest {
         Command command = new Exit(view);
 
         //when
+        boolean canProcess = command.canProcess("exit");
         try {
             command.process("exit");
-            Assert.fail("Expected ExitException");
+            assertFalse(canProcess);
         } catch (ExitException e) {
             //donothing
         }
-        //then
         assertEquals("до встречи!\n", view.getContent());
-        //throws ExitException
     }
 }

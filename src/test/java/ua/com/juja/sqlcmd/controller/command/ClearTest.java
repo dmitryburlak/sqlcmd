@@ -25,9 +25,9 @@ public class ClearTest {
         view = mock(View.class);
         command = new Clear(manager, view);
     }
+
     @Test
     public void testClearTable(){
-
         //given
 
         //when
@@ -35,7 +35,6 @@ public class ClearTest {
         //then
         verify(manager).clear("newlist");
         verify(view).write("таблица newlist очищена");
-
     }
 
 
@@ -43,7 +42,6 @@ public class ClearTest {
     @Test
     public void testCanProcessClearWithParametersString(){
         //given
-
 
         //when
         boolean canProcess = command.canProcess("clear|");
@@ -56,7 +54,6 @@ public class ClearTest {
     public void testNotCanProcessClearWithoutParametersString(){
         //given
 
-
         //when
         boolean canProcess = command.canProcess("qwe|");
 
@@ -67,7 +64,6 @@ public class ClearTest {
     @Test
     public void testErrorClearCountParameters1(){
         //given
-
 
         //when
         try {
@@ -83,7 +79,6 @@ public class ClearTest {
     @Test
     public void testErrorClearCountParameters3(){
         //given
-
 
         //when
         try {
