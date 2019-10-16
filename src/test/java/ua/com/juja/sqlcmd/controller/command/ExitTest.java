@@ -34,20 +34,4 @@ public class ExitTest {
         //then
         assertFalse(canProcess);
     }
-
-    @Test
-    public void testProcessExitCommand_throwsExitException(){
-        //given
-        Command command = new Exit(view);
-
-        //when
-        boolean canProcess = command.canProcess("exit");
-        try {
-            command.process("exit");
-            assertFalse(canProcess);
-        } catch (ExitException e) {
-            //donothing
-        }
-        assertEquals("до встречи!\n", view.getContent());
-    }
 }

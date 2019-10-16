@@ -6,7 +6,6 @@ import org.mockito.ArgumentCaptor;
 import ua.com.juja.sqlcmd.model.DataSet;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.view.View;
-
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -37,32 +36,8 @@ public class ClearTest {
         verify(view).write("таблица newlist очищена");
     }
 
-
-
     @Test
-    public void testCanProcessClearWithParametersString(){
-        //given
-
-        //when
-        boolean canProcess = command.canProcess("clear|");
-
-        //then
-        assertTrue(canProcess);
-    }
-
-    @Test
-    public void testNotCanProcessClearWithoutParametersString(){
-        //given
-
-        //when
-        boolean canProcess = command.canProcess("qwe|");
-
-        //then
-        assertFalse(canProcess);
-    }
-
-    @Test
-    public void testErrorClearCountParameters1(){
+    public void testErrorClearFewParameters(){
         //given
 
         //when
@@ -77,7 +52,7 @@ public class ClearTest {
     }
 
     @Test
-    public void testErrorClearCountParameters3(){
+    public void testErrorClearMoreThanNecessaryParameters3(){
         //given
 
         //when
