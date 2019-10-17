@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class ConfigurableInputStream extends InputStream {
-
     private String line;
     private boolean endLine = false;
 
@@ -26,12 +25,10 @@ public class ConfigurableInputStream extends InputStream {
     }
 
     public void add(String line) {
-        if (this.line == null){
+        if (this.line == null) {
             this.line = line;
         } else {
             this.line += "\n" + line;
         }
     }
-
-
 }
