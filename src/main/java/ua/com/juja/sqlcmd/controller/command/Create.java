@@ -7,7 +7,6 @@ import ua.com.juja.sqlcmd.view.MessageList;
 import ua.com.juja.sqlcmd.view.View;
 
 public class Create implements Command {
-
     private DatabaseManager manager;
     private View view;
 
@@ -29,9 +28,11 @@ public class Create implements Command {
         }
         String tableName = data[1];
         DataSet dataSet = new DataSetImpl();
-        for (int index = 1; index < (data.length / 2); index++) {
-            String columnName = data[index * 2];
-            String columnValue = data[index * 2 + 1];
+        int middledatalength = data.length / 2;
+        for (int index = 1; index < middledatalength; index++) {
+            int freeindex = 2;
+            String columnName = data[index * freeindex];
+            String columnValue = data[index * freeindex + 1];
             dataSet.put(columnName, columnValue);
         }
         manager.create(tableName, dataSet);
