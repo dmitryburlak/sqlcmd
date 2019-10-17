@@ -13,7 +13,6 @@ import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
 
 public class ClearTest {
-
     private DatabaseManager manager;
     private View view;
     private Command command;
@@ -52,7 +51,7 @@ public class ClearTest {
     }
 
     @Test
-    public void testErrorClearMoreThanNecessaryParameters3(){
+    public void testErrorClearMoreThanNecessaryParameters(){
         //given
 
         //when
