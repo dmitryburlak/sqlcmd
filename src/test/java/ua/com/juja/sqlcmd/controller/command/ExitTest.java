@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import static junit.framework.TestCase.assertTrue;
+import static junit.framework.TestCase.fail;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
@@ -33,5 +34,22 @@ public class ExitTest {
 
         //then
         assertFalse(canProcess);
+    }
+
+    @Test
+    public void testProcessExitCommand_throwsExitException() {
+        //given
+        Command command = new Exit(view);
+
+        //when
+        try {
+            command.process("exit");
+            fail("Expected ExitExeption");
+        } catch (ExitException e) {
+            //donothing
+        }
+        //then
+        assertEquals("до встречи!\n", view.getContent());
+        //throws ExitException
     }
 }
