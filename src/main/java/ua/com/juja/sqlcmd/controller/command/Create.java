@@ -30,9 +30,9 @@ public class Create implements Command {
         DataSet dataSet = new DataSetImpl();
         int middledatalength = data.length / 2;
         for (int index = 1; index < middledatalength; index++) {
-            int freeindex = 2;
-            String columnName = data[index * freeindex];
-            String columnValue = data[index * freeindex + 1];
+            int freeindex = index * 2;
+            String columnName = data[freeindex];
+            String columnValue = data[freeindex + 1];
             dataSet.put(columnName, columnValue);
         }
         manager.create(tableName, dataSet);
