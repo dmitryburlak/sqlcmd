@@ -1,6 +1,6 @@
 package ua.com.juja.sqlcmd.controller.command;
 
-import ua.com.juja.sqlcmd.view.MessageList;
+import static ua.com.juja.sqlcmd.view.MessageList.*;
 import ua.com.juja.sqlcmd.view.View;
 
 public class Unsupported implements Command {
@@ -18,6 +18,6 @@ public class Unsupported implements Command {
 
     @Override
     public void process(String command) {
-        view.write(MessageList.UNSUPPORTED_COMMAND.getMessage() +command);
+        view.write(UNSUPPORTED_COMMAND.getMessage() +command);
     }
 }

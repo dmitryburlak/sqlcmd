@@ -4,6 +4,7 @@ package ua.com.juja.sqlcmd.view;
 
 public enum MessageList {
 
+
     COMMAND_SAMPLE("connect|namelist|postgres|root"),
     DRIVER_NOT_FOUND("нужно добавить jdbc драйвер"),
     NOT_CONNECTION("нет соединения для модели:"),
@@ -12,6 +13,7 @@ public enum MessageList {
     OK_PARAM_CONNECT("ок"),
 
     HELPTXT_NOT_FOUND("файл help.txt не найден"),
+    PROPERTIESFILE_NOT_FOUND("файл connect.properties не найден"),
 
     CLEAR_TABLE("таблица %s очищена"),
     WRONG_CLEAR_TABLE("формат команды 'clear|tableName', а ты ввел:"),
