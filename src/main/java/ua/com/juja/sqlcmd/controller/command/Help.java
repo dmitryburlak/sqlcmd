@@ -1,19 +1,17 @@
 package ua.com.juja.sqlcmd.controller.command;
 
-import ua.com.juja.sqlcmd.view.MessageList;
-import ua.com.juja.sqlcmd.view.View;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
+import ua.com.juja.sqlcmd.view.View;
 import java.io.IOException;
-import java.io.Reader;
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import static ua.com.juja.sqlcmd.view.MessageList.*;
 
 
 public class Help implements Command {
-
     private View view;
     private String helpfile = "src/main/resources/help.txt";
 
@@ -28,22 +26,11 @@ public class Help implements Command {
 
     @Override
     public void process(String command) {
-        List<String> readHelp = new ArrayList<String>();
-        try(BufferedReader fileRead = new BufferedReader(new FileReader(helpfile))){
-            String currenLine;
-            while(fileRead.ready() && (currenLine = fileRead.readLine()) != null){
-                    readHelp.add(currenLine);
-            }
-
-            Iterator iterator = readHelp.iterator();
-            while(iterator.hasNext()){
-              view.write(iterator.next().toString());
-            }
-
-        }catch(IOException e){
-            throw new RuntimeException(MessageList.HELPTXT_NOT_FOUND.getMessage());
-
+        try (Stream<String> stream = Files.lines(Paths.get(helpfile))) {
+            List<String> readHelp = stream.collect(Collectors.toList());
+            readHelp.forEach(System.out::println);
+        } catch (IOException e) {
+            throw new RuntimeException(HELPTXT_NOT_FOUND.getMessage());
         }
-
     }
 }
