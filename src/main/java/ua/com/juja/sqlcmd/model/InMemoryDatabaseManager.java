@@ -1,6 +1,6 @@
 package ua.com.juja.sqlcmd.model;
 
-import java.sql.SQLException;
+
 import java.util.*;
 
 public class InMemoryDatabaseManager implements DatabaseManager {
@@ -42,18 +42,12 @@ public class InMemoryDatabaseManager implements DatabaseManager {
 
     @Override
     public void update(String tableName, int id, DataSet newValue) {
-        for (int index = 0; index < get(tableName).size(); index++) {
-            DataSet dataSet = get(tableName).get(index);
-            Object objected = 0;
-            if (objected.equals(dataSet.get("id"))) objected = true;
-            else objected = false;
-            Object objectid = 0;
-            if (objectid.equals(id)) objectid = true;
-            else objectid = false;
-            if (objected == objectid) {
+        for (DataSet dataSet: get(tableName)) {
+            if (dataSet.get("id").equals(id)){
                 dataSet.updateFrom(newValue);
             }
         }
+
     }
 
     @Override
