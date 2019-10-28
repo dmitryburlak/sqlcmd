@@ -3,8 +3,6 @@ package ua.com.juja.sqlcmd.view;
 
 
 public enum MessageList {
-
-
     COMMAND_SAMPLE("connect|namelist|postgres|root"),
     DRIVER_NOT_FOUND("нужно добавить jdbc драйвер"),
     NOT_CONNECTION("нет соединения для модели:"),
@@ -18,10 +16,21 @@ public enum MessageList {
     CLEAR_TABLE("таблица %s очищена"),
     WRONG_CLEAR_TABLE("формат команды 'clear|tableName', а ты ввел:"),
 
-    CREATE_TABLE_ENTRY("в таблицу %s запись добавлена"),
-    WRONG_CREATE_TABLE_ENTRY("должно быть четное колличесво параметров," +
-            " в формате 'create|tableName|column1|value1|column2|value2|...|columnN|valueN'," +
+    CREATE_TABLE("таблица %s создана"),
+    WRONG_CREATE_TABLE_PARAM("формат команды create|tableName|column1(PK)|column2|...|columnN , а ты ввел: "),
+
+    DROP_TABLE("таблица %s удалена"),
+    WRONG_DROP_TABLE_PARAM("формат команды drop|tableName, а ты ввел: "),
+
+    INSERT_TABLE_DATA("в таблицу %s запись добавлена"),
+    WRONG_INSERT_TABLE_DATA("должно быть четное колличесво параметров," +
+            " в формате 'insert|tableName|column1|value1|column2|value2|...|columnN|valueN'," +
             " а есть:"),
+    DELETE_TABLE_DATA("в таблицe %s из колонки %s запись %s удалена"),
+    WRONG_DELETE_TABLE_DATA("формат команды delete|tableName|column|value, а ты ввел: "),
+
+    UPDATE_TABLE_DATA("в таблице %s id %d в колонке %s запись обновлена"),
+    WRONG_UPDATE_TABLE_DATA("формат команды update|tableName|id|columnN|newvalue , а ты ввел: "),
 
     WRONG_FIND("формат команды 'find|tableName', а ты ввел:"),
 

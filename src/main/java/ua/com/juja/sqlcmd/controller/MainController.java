@@ -12,7 +12,6 @@ public class MainController {
     private Command commands[];
     private View view;
 
-
     public MainController(View view, DatabaseManager manager ){
         this.view = view;
         this.commands = new Command[]{
@@ -21,8 +20,12 @@ public class MainController {
                 new Exit(view),
                 new IsConnected(manager, view),
                 new Tables(manager, view),
-                new Clear(manager, view),
                 new Create(manager, view),
+                new Drop(manager, view),
+                new Clear(manager, view),
+                new Insert(manager, view),
+                new Delete(manager, view),
+                new Update(manager, view),
                 new Find(manager, view),
                 new Unsupported(view)
         };
