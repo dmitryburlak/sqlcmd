@@ -70,7 +70,7 @@ public class JDBCDatabaseManager implements DatabaseManager {
     }
 
     @Override
-    public void create(String tableName, DataSet input) {
+    public void insert(String tableName, DataSet input) {
         try(Statement stmt = connection().createStatement()) {
             String tableNames = getNamesFormated(input, "%s,");
             String values = getValuesFormated(input, "'%s',");
@@ -80,14 +80,42 @@ public class JDBCDatabaseManager implements DatabaseManager {
             e.printStackTrace();
         }
     }
+    @Override
+    public void create(String tableName, DataSet keyName, DataSet input){
+        try(Statement stmt = connection().createStatement()){
+            String keyNameFormat = getNamesFormated(keyName, "%s,");
+            String columnsName = "";
+            String columnstype = " varchar(225)";
+            for (String data: input.getName()) {
+                columnsName += ", " + data + columnstype;
+            }
+            stmt.executeUpdate("CREATE TABLE " + tableName +
+                    " ( " + keyNameFormat + " INT PRIMARY KEY NOT NULL " + columnsName + ")");
 
-    private String getValuesFormated(DataSet input, String format) {
-        String values = "";
-        for (Object value : input.getValue()) {
-            values += String.format(format, value);
+        }catch (SQLException e) {
+            e.printStackTrace();
         }
-        values = values.substring(0, values.length() - 1);
-        return values;
+    }
+
+    @Override
+    public void delete(String tableName, DataSet input){
+        try(Statement stmt = connection().createStatement()){
+            String columnName = getNamesFormated(input, "%s,");
+            String columnValue = getValuesFormated(input, "'%s',");
+            stmt.executeUpdate("DELETE FROM " + tableName + " WHERE " + columnName + " = " + columnValue);
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void drop(String tableName){
+        String sqlquere = "DROP TABLE ";
+        try(Statement stmt = connection().createStatement()){
+            stmt.executeUpdate(sqlquere + tableName);
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -135,6 +163,15 @@ public class JDBCDatabaseManager implements DatabaseManager {
         }
         string = string.substring(0, string.length() - 1);
         return string;
+    }
+
+    private String getValuesFormated(DataSet input, String format) {
+        String values = "";
+        for (Object value : input.getValue()) {
+            values += String.format(format, value);
+        }
+        values = values.substring(0, values.length() - 1);
+        return values;
     }
 }
 
