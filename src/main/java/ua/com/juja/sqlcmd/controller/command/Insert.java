@@ -6,25 +6,25 @@ import ua.com.juja.sqlcmd.model.DatabaseManager;
 import static ua.com.juja.sqlcmd.view.MessageList.*;
 import ua.com.juja.sqlcmd.view.View;
 
-public class Create implements Command {
+public class Insert implements Command {
     private DatabaseManager manager;
     private View view;
 
-    public Create(DatabaseManager manager, View view) {
+    public Insert(DatabaseManager manager, View view) {
         this.manager = manager;
         this.view = view;
     }
 
     @Override
     public boolean canProcess(String command) {
-        return command.startsWith("create|");
+        return command.startsWith("insert|");
     }
 
     @Override
     public void process(String command) {
         String[] data = command.split("\\|");
         if (data.length % 2 != 0) {
-            throw new IllegalArgumentException(WRONG_CREATE_TABLE_ENTRY.getMessage() + command);
+            throw new IllegalArgumentException(WRONG_INSERT_TABLE_ENTRY.getMessage() + command);
         }
         String tableName = data[1];
         DataSet dataSet = new DataSetImpl();
@@ -35,7 +35,7 @@ public class Create implements Command {
             String columnValue = data[freeindex + 1];
             dataSet.put(columnName, columnValue);
         }
-        manager.create(tableName, dataSet);
-        view.write(String.format(CREATE_TABLE_ENTRY.getMessage(), dataSet, tableName));
+        manager.insert(tableName, dataSet);
+        view.write(String.format(INSERT_TABLE_ENTRY.getMessage(), dataSet, tableName));
     }
 }
