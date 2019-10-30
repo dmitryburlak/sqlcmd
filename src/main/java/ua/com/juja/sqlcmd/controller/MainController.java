@@ -1,20 +1,25 @@
 package ua.com.juja.sqlcmd.controller;
 
 import ua.com.juja.sqlcmd.controller.command.*;
+import ua.com.juja.sqlcmd.model.DataSet;
 import ua.com.juja.sqlcmd.model.DatabaseConnect;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
-import ua.com.juja.sqlcmd.view.View;
+import ua.com.juja.sqlcmd.view.*;
+
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 
 public class MainController {
 
     DatabaseConnect connectmanager = null;
-    private Command commands[];
+    private List<Command> commands;
     private View view;
 
     public MainController(View view, DatabaseManager manager ){
         this.view = view;
-        this.commands = new Command[]{
+        this.commands = new LinkedList<>(Arrays.asList(
                 new Connect(connectmanager, view),
                 new Help(view),
                 new Exit(view),
@@ -28,7 +33,7 @@ public class MainController {
                 new Update(manager, view),
                 new Find(manager, view),
                 new Unsupported(view)
-        };
+        ));
     }
 
     public void run() {
