@@ -17,14 +17,14 @@ import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 
 public class IntegrationTest {
-
     private ConfigurableInputStream in;
     private ByteArrayOutputStream out;
     private DatabaseManager databaseManager;
-
 
     @Before
     public void setup(){
@@ -36,7 +36,6 @@ public class IntegrationTest {
         System.setOut(new PrintStream(out));
     }
 
-
     private String getData() {
         try {
            return new String(out.toByteArray(), "UTF-8");
@@ -47,7 +46,6 @@ public class IntegrationTest {
 
     @Test
     public void testHelp() {
-
         //given
         //in.add("connect|namelist|postgres|root");
         in.add("help");
@@ -71,25 +69,36 @@ public class IntegrationTest {
                 "exit\r\n" +
                 "выход\r\n" +
                 "\r\n" +
-                "find|tableName\r\n" +
-                "содержимое таблицы 'tableName'\r\n" +
-                "\r\n" +
                 "tables\r\n" +
                 "список таблиц\r\n" +
+                "\r\n" +
+                "find|tableName\r\n" +
+                "посмотреть содержимое таблицы 'tableName'\r\n" +
+                "\r\n" +
+                "create|tableName|column1(PK)|column2|...|columnN\r\n" +
+                "создание таблицы 'tableName'\r\n" +
+                "\r\n" +
+                "drop|tableName\r\n" +
+                "удаление таблицы 'tableName'\r\n" +
                 "\r\n" +
                 "clear|tableName\r\n" +
                 "очистка таблицы 'tableName'\r\n" +
                 "\r\n" +
-                "create|tableName|column1|value1|column2|value2|...|columnN|valueN\r\n" +
+                "insert|tableName|column1|value1|column2|value2|...|columnN|valueN\r\n" +
                 "создание записи в таблице 'tableName'\r\n" +
+                "\r\n" +
+                "delete|tableName|column|value\r\n" +
+                "создание записи в таблице 'tableName' из колонки 'column' значение 'value'" +
+                "\r\n" +
+                "update|tableName|id|column|newvalue\r\n" +
+                "обновление записи таблице 'tableName' №id в колонке 'column' запись обновлена\r\n" +
+                "\r\n" +
                 "введи команду или help:\r\n" +
                 "до встречи!\r\n", getData());
-
     }
 
     @Test
     public void testExit() {
-
         //given
         in.add("exit");
 
@@ -100,12 +109,10 @@ public class IntegrationTest {
         assertEquals("привет\r\n" +
                 "введи, имя базы, логин, пароль в формате: connect|databaseName|userName|password\r\n" +
                 "до встречи!\r\n", getData());
-
     }
 
     @Test
     public void testListWhithoutConnect() {
-
         //given
         //in.add("connect|namelist|postgres|root");
         in.add("tables");
@@ -123,9 +130,9 @@ public class IntegrationTest {
                 "до встречи!\r\n", getData());
 
     }
+
     @Test
     public void testFindWhithoutConnect() {
-
         //given
         in.add("find|newlist");
         in.add("exit");
@@ -144,7 +151,6 @@ public class IntegrationTest {
 
     @Test
     public void testUnsupported() {
-
         //given
         in.add("unsupported");
         in.add("exit");
@@ -155,7 +161,7 @@ public class IntegrationTest {
         //then
         assertEquals("привет\r\n" +
                 "введи, имя базы, логин, пароль в формате: connect|databaseName|userName|password\r\n" +
-                "вы не можете пользоваться командой, unsupported, пока не подключитесь с помощью команды connect|databaseName|userName|password\r\n" +
+                "несуществующая команда:unsupported\r\n" +
                 "введи команду или help:\r\n" +
                 "до встречи!\r\n", getData());
 
@@ -163,7 +169,6 @@ public class IntegrationTest {
 
     @Test
     public void testUnsupportedAfterConnect() {
-
         //given
         in.add("connect|namelist|postgres|root");
         in.add("unsupported");
@@ -185,7 +190,6 @@ public class IntegrationTest {
 
     @Test
     public void testListAfterConnect() {
-
         //given
         in.add("connect|namelist|postgres|root");
         in.add("tables");
@@ -200,15 +204,13 @@ public class IntegrationTest {
                 "ок\r\n" +
                 "введи команду или help:\r\n" +
                 //tables
-                "[newlist]\r\n" +
+                "[supertable, newlist, newtable]\r\n" +
                 "введи команду или help:\r\n" +
                 "до встречи!\r\n", getData());
-
     }
 
     @Test
     public void testFindAfterConnect() {
-
         //given
         in.add("connect|namelist|postgres|root");
         in.add("find|newlist");
@@ -223,20 +225,19 @@ public class IntegrationTest {
                 "ок\r\n" +
                 "введи команду или help:\r\n" +
                 //find|newlist
-                "-----------------\r\n" +
-                "|id|name|password|\r\n" +
-                "-----------------\r\n" +
-                "|11|xxx|ccc|\r\n" +
-                "|12|vvv|bbb|\r\n" +
-                "-----------------\r\n" +
+                "+---+---------------+---------------+\r\n" +
+                "| id|           name|       password|\r\n" +
+                "+---+---------------+---------------+\r\n" +
+                "| 11|            xxx|            ccc|\r\n" +
+                "+---+---------------+---------------+\r\n" +
+                "| 12|            vvv|            bbb|\r\n" +
+                "+---+---------------+---------------+\r\n" +
                 "введи команду или help:\r\n" +
                 "до встречи!\r\n", getData());
-
     }
 
     @Test
     public void testConnectWhithError() {
-
         //given
         in.add("connect|namelist");
         in.add("exit");
@@ -251,33 +252,14 @@ public class IntegrationTest {
                 "попробуй еще раз\r\n" +
                 "введи команду или help:\r\n" +
                 "до встречи!\r\n", getData());
-
     }
 
     @Test
     public void testFindAfterConnect_whithData() {
-
-        //given
-       /* databaseManager.connect("namelist", "postgres", "root");
-
-        databaseManager.clear("newlist");
-
-        DataSet name1 = new DataSet();
-        name1.put("id", 10);
-        name1.put("name", "xxx");
-        name1.put("lastname", "ccc");
-        databaseManager.create("newlist", name1);
-
-        DataSet name2 = new DataSet();
-        name2.put("id", 11);
-        name2.put("name", "vvv");
-        name2.put("lastname", "bbb");
-        databaseManager.create("newlist", name2);
-*/
         in.add("connect|namelist|postgres|root");
         in.add("clear|newlist");
-        in.add("create|newlist|id|11|name|xxx|password|ccc");
-        in.add("create|newlist|id|12|name|vvv|password|bbb");
+        in.add("insert|newlist|id|11|name|xxx|password|ccc");
+        in.add("insert|newlist|id|12|name|vvv|password|bbb");
         in.add("exit");
 
         //when
@@ -290,17 +272,15 @@ public class IntegrationTest {
                 "введи команду или help:\r\n" +
                 "таблица newlist очищена\r\n" +
                 "введи команду или help:\r\n" +
-                "в таблицу {names:[id, name, password], values:[11, xxx, ccc]} запись добавлена\r\n" +
+                "в таблицу newlist запись добавлена\r\n" +
                 "введи команду или help:\r\n" +
-                "в таблицу {names:[id, name, password], values:[12, vvv, bbb]} запись добавлена\r\n" +
+                "в таблицу newlist запись добавлена\r\n" +
                 "введи команду или help:\r\n" +
                 "до встречи!\r\n", getData());
-
     }
 
     @Test
     public void testClearWhithError() {
-
         //given
         in.add("connect|namelist|postgres|root");
         in.add("clear|asd|sdf");
@@ -318,15 +298,13 @@ public class IntegrationTest {
                 "попробуй еще раз\r\n" +
                 "введи команду или help:\r\n" +
                 "до встречи!\r\n", getData());
-
     }
 
     @Test
     public void testCreateWhithError() {
-
         //given
         in.add("connect|namelist|postgres|root");
-        in.add("create|newlist|error");
+        in.add("insert|newlist|error");
         in.add("exit");
 
         //when
@@ -337,13 +315,9 @@ public class IntegrationTest {
                 "введи, имя базы, логин, пароль в формате: connect|databaseName|userName|password\r\n" +
                 "ок\r\n" +
                 "введи команду или help:\r\n" +
-                "ошибка!должно быть четное колличесво параметров, в формате 'create|tableName|column1|value1|column2|value2|...|columnN|valueN', а есть:create|newlist|error\r\n" +
+                "ошибка!должно быть четное колличесво параметров, в формате 'insert|tableName|column1|value1|column2|value2|...|columnN|valueN', а есть:insert|newlist|error\r\n" +
                 "попробуй еще раз\r\n" +
                 "введи команду или help:\r\n" +
                 "до встречи!\r\n", getData());
-
     }
-
-
-
 }
