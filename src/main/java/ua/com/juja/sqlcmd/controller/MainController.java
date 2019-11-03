@@ -12,7 +12,6 @@ import java.util.List;
 
 
 public class MainController {
-
     DatabaseConnect connectmanager = null;
     private List<Command> commands;
     private View view;
@@ -48,7 +47,8 @@ public class MainController {
     private void doWork() {
         view.write("привет");
         view.write("введи, имя базы, логин, пароль в формате: connect|databaseName|userName|password");
-        while (true) {
+        boolean flag = commands.contains(new Exit(view));
+        while (!flag) {
             String input = view.read();
             for (Command command : commands) {
                 try {
