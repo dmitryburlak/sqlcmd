@@ -25,7 +25,7 @@ public class Update implements Command {
         String[] data = command.split("\\|");
         int countinputparameters = 5;
         if (data.length < countinputparameters || data.length % 2 == 0){
-            throw new IllegalArgumentException(WRONG_UPDATE_TABLE_ENTRY.getMessage() + command);
+            throw new IllegalArgumentException(WRONG_UPDATE_TABLE_DATA.getMessage() + command);
         }
         String tableName = data[1];
         int id = Integer.valueOf(data[2]);
@@ -35,6 +35,6 @@ public class Update implements Command {
         dataSet.put(columns, newValue);
 
         manager.update(tableName, id, dataSet);
-        view.write(String.format(UPDATE_TABLE_ENTRY.getMessage(), tableName, id, columns));
+        view.write(String.format(UPDATE_TABLE_DATA.getMessage(), tableName, id, columns));
     }
 }

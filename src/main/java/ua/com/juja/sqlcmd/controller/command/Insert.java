@@ -24,7 +24,7 @@ public class Insert implements Command {
     public void process(String command) {
         String[] data = command.split("\\|");
         if (data.length % 2 != 0) {
-            throw new IllegalArgumentException(WRONG_INSERT_TABLE_ENTRY.getMessage() + command);
+            throw new IllegalArgumentException(WRONG_INSERT_TABLE_DATA.getMessage() + command);
         }
         String tableName = data[1];
         DataSet dataSet = new DataSetImpl();
@@ -36,6 +36,6 @@ public class Insert implements Command {
             dataSet.put(columnName, columnValue);
         }
         manager.insert(tableName, dataSet);
-        view.write(String.format(INSERT_TABLE_ENTRY.getMessage(), dataSet, tableName));
+        view.write(String.format(INSERT_TABLE_DATA.getMessage(), tableName));
     }
 }
