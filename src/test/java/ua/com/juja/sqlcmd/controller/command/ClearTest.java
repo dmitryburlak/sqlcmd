@@ -2,14 +2,9 @@ package ua.com.juja.sqlcmd.controller.command;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-import ua.com.juja.sqlcmd.model.DataSet;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.view.View;
-import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.fail;
 import static org.mockito.Mockito.*;
 
 public class ClearTest {
@@ -42,12 +37,10 @@ public class ClearTest {
         //when
         try {
             command.process("clear");
-            fail();
         } catch (IllegalArgumentException e){
             assertEquals("формат команды 'clear|tableName', а ты ввел:clear",
                     e.getMessage());
         }
-
     }
 
     @Test
@@ -57,12 +50,9 @@ public class ClearTest {
         //when
         try {
             command.process("qwe|newlist|qwe");
-            fail();
         } catch (IllegalArgumentException e){
             assertEquals("формат команды 'clear|tableName', а ты ввел:qwe|newlist|qwe",
                     e.getMessage());
         }
-
     }
-
 }
