@@ -10,18 +10,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 
-public  class DatabaseManagertest {
-
+public class DatabaseManagertest {
     private DatabaseManager manager;
     private DatabaseConnect connectmanager;
-
 
     @Before
     public void setup() {
         connectmanager.connect("namelist", "postgres", "root");
         manager = new JDBCDatabaseManager();
     }
-
 
     @Test
     public void testGetAllTableNames() {
