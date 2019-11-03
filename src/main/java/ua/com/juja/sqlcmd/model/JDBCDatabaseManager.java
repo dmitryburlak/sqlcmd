@@ -1,5 +1,7 @@
 package ua.com.juja.sqlcmd.model;
 
+import ua.com.juja.sqlcmd.view.PrintTable;
+
 import java.sql.*;
 import java.util.*;
 
