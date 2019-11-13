@@ -1,7 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
-    <title>help</title>
+    <title>sqlcmd</title>
 </head>
 <body>
 список команд:<br>
@@ -40,7 +41,7 @@ update|tableName|id|column|newvalue<br>
 обновление записи таблице 'tableName' №id в колонке 'column' запись обновлена<br>
 <br>
 <footer>
-    <a href="menu.jsp">menu</a><br>
+    <a href="menu">menu</a><br>
 </footer>
 
 </body>
