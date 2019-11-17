@@ -92,7 +92,7 @@ public class JDBCDatabaseManager implements DatabaseManager {
                 columnsName += ", " + data + columnstype;
             }
             stmt.executeUpdate("CREATE TABLE " + tableName +
-                    " ( " + keyNameFormat + " INT PRIMARY KEY NOT NULL " + columnsName + ")");
+                    " ( " + keyNameFormat + " SERIAL PRIMARY KEY NOT NULL " + columnsName + ")");
 
         }catch (SQLException e) {
             e.printStackTrace();
@@ -124,7 +124,7 @@ public class JDBCDatabaseManager implements DatabaseManager {
     public void update(String tableName, int id, DataSet newValue) {
         String tableNames = getNamesFormated(newValue, "%s = ?,");
         try(PreparedStatement ps = connection().prepareStatement(
-                "UPDATE public." + tableName + " SET " + tableNames + "WHERE id = ?")) {
+                "UPDATE public." + tableName + " SET " + tableNames + " WHERE id = ?")) {
             int index = 1;
             for (Object value : newValue.getValue()) {
                 ps.setObject(index, value);

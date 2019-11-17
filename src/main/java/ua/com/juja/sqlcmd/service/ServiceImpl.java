@@ -53,4 +53,33 @@ public class ServiceImpl implements Servise {
         dataSet.put(columnsecond, valuesecond);
         manager.insert(tableName, dataSet);
     }
+
+    @Override
+    public void delete(DatabaseManager manager, String tableName, String column, String value) {
+        DataSet dataSet = new DataSetImpl();
+        dataSet.put(column, value);
+        manager.delete(tableName, dataSet);
+    }
+
+    @Override
+    public void create(DatabaseManager manager, String tableName, String columnPk, String columnone, String columntwo) {
+        DataSet keyName = new DataSetImpl();
+        keyName.put(columnPk, "");
+        DataSet dataSet = new DataSetImpl();
+        dataSet.put(columnone, "");
+        dataSet.put(columntwo, "");
+        manager.create(tableName, keyName, dataSet);
+    }
+
+    @Override
+    public void drop(DatabaseManager manager, String tableName) {
+        manager.drop(tableName);
+    }
+
+    @Override
+    public void update(DatabaseManager manager, String tableName, int id, String column, String value) {
+        DataSet dataSet = new DataSetImpl();
+        dataSet.put(column, value);
+        manager.update(tableName, id, dataSet);
+    }
 }

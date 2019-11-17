@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static ua.com.juja.sqlcmd.view.MessageList.INSERT_TABLE_DATA;
+import static ua.com.juja.sqlcmd.view.MessageList.*;
 
 public class MainServlet extends HttpServlet {
     private Servise servise;
@@ -55,8 +55,19 @@ public class MainServlet extends HttpServlet {
         }else if (action.startsWith("/insert")){
             req.getRequestDispatcher("insert.jsp").forward(req, resp);
 
-        }
-        else {
+        }else if (action.startsWith("/delete")){
+            req.getRequestDispatcher("delete.jsp").forward(req, resp);
+
+        }else if (action.startsWith("/create")) {
+            req.getRequestDispatcher("create.jsp").forward(req, resp);
+
+        }else if (action.startsWith("/drop")){
+            req.getRequestDispatcher("drop.jsp").forward(req, resp);
+
+        }else if (action.startsWith("/update")){
+            req.getRequestDispatcher("update.jsp").forward(req, resp);
+
+        } else {
             req.getRequestDispatcher("error.jsp").forward(req, resp);
         }
     }
@@ -85,7 +96,7 @@ public class MainServlet extends HttpServlet {
 
        DatabaseManager manager = (DatabaseManager) req.getSession().getAttribute("db_manager");
 
-        if(action.startsWith("/insert")){
+        if(action.startsWith("/insert")) {
             String tableName = req.getParameter("tableName");
             String column = req.getParameter("column");
             String value = req.getParameter("value");
@@ -94,7 +105,40 @@ public class MainServlet extends HttpServlet {
             servise.insert(manager, tableName, column, value, columnsecond, valuesecond);
             req.setAttribute("message", String.format(INSERT_TABLE_DATA.getMessage(), tableName));
             req.getRequestDispatcher("insert.jsp").forward(req, resp);
-        }else {
+
+        } else if (action.startsWith("/delete")){
+            String tableName = req.getParameter("tableName");
+            String column = req.getParameter("column");
+            String value = req.getParameter("value");
+            servise.delete(manager, tableName, column, value);
+            req.setAttribute("message", String.format(DELETE_TABLE_DATA.getMessage(), tableName, column, value));
+            req.getRequestDispatcher("delete.jsp").forward(req, resp);
+
+        } else if (action.startsWith("/create")){
+            String tableName = req.getParameter("tableName");
+            String columnPk = req.getParameter("columnPk");
+            String columnone = req.getParameter("columnone");
+            String columntwo = req.getParameter("columntwo");
+            servise.create(manager, tableName, columnPk, columnone, columntwo);
+            req.setAttribute("message", String.format(CREATE_TABLE.getMessage(), tableName));
+            req.getRequestDispatcher("create.jsp").forward(req, resp);
+
+        } else if (action.startsWith("/drop")){
+            String tableName = req.getParameter("tableName");
+            servise.drop(manager, tableName);
+            req.setAttribute("message", String.format(DROP_TABLE.getMessage(), tableName));
+            req.getRequestDispatcher("drop.jsp").forward(req, resp);
+
+        }else if (action.startsWith("/update")){
+            String tableName = req.getParameter("tableName");
+            int id = Integer.valueOf(req.getParameter("id"));
+            String column = req.getParameter("column");
+            String value = req.getParameter("value");
+            servise.update(manager, tableName, id, column, value);
+            req.setAttribute("message", String.format(UPDATE_TABLE_DATA.getMessage(), tableName, id, column));
+            req.getRequestDispatcher("update.jsp").forward(req, resp);
+
+        } else {
            // do nothing
         }
     }

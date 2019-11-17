@@ -16,4 +16,12 @@ public interface Servise {
     String tablesList(DatabaseManager manager);
 
     void insert(DatabaseManager manager, String tableName, String column, String value, String columnsecond, String valuesecond);
+
+    void create(DatabaseManager manager, String tableName, String columnPk, String columnone, String columntwo);
+
+    void delete(DatabaseManager manager, String tableName, String column, String value);
+
+    void drop(DatabaseManager manager, String tableName);
+
+    void update(DatabaseManager manager, String tableName, int id, String column, String value);
 }

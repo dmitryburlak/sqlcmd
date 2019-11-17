@@ -5,27 +5,19 @@
     <title>sqlcmd</title>
 </head>
 <body>
-    <form action = "insert" method = "POST">
+    <form action = "delete" method = "POST">
         <table>
             <tr>
                 <td>table name:</td>
                 <td><input type = "text" name = "tableName" /><br></td>
             </tr>
             <tr>
-                <td>column1 name:</td>
+                <td>column name:</td>
                 <td><input type = "text" name = "column" /><br></td>
             </tr>
             <tr>
-                <td>column1 value:</td>
+                <td>column value:</td>
                 <td><input type = "text" name = "value" /><br></td>
-            </tr>
-            <tr>
-                <td>column2 name:</td>
-                <td><input type = "text" name = "columnsecond" /><br></td>
-            </tr>
-            <tr>
-                <td>column2 value:</td>
-                <td><input type = "text" name = "valuesecond" /><br></td>
             </tr>
             <tr>
                 <td></td>
