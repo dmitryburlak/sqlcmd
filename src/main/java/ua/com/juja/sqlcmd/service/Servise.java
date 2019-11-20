@@ -9,19 +9,19 @@ import java.util.Set;
 public interface Servise {
     List<String> commandsList();
 
-    DatabaseManager connect(String database, String userName, String password);
+    DatabaseManager connect(String database, String userName, String password) throws ServiseException;
 
-    List<List<String>> find(DatabaseManager manager, String tableName);
+    List<List<String>> find(DatabaseManager manager, String tableName) throws ServiseException;
 
-    String tablesList(DatabaseManager manager);
+    String tables(DatabaseManager manager) throws ServiseException;
 
-    void insert(DatabaseManager manager, String tableName, String column, String value, String columnsecond, String valuesecond);
+    void insert(DatabaseManager manager, String tableName, String column, String value, String columnsecond, String valuesecond) throws ServiseException;
 
-    void create(DatabaseManager manager, String tableName, String columnPk, String columnone, String columntwo);
+    void create(DatabaseManager manager, String tableName, String columnPk, String columnone, String columntwo) throws ServiseException;
 
-    void delete(DatabaseManager manager, String tableName, String column, String value);
+    void delete(DatabaseManager manager, String tableName, String column, String value) throws ServiseException;
 
-    void drop(DatabaseManager manager, String tableName);
+    void drop(DatabaseManager manager, String tableName) throws ServiseException;
 
-    void update(DatabaseManager manager, String tableName, int id, String column, String value);
+    void update(DatabaseManager manager, String tableName, int id, String column, String value) throws ServiseException;
 }
