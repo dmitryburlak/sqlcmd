@@ -1,9 +1,10 @@
 package ua.com.juja.sqlcmd.service;
 
+import org.springframework.stereotype.Component;
 import ua.com.juja.sqlcmd.model.*;
 
 import java.util.*;
-
+@Component
 public class ServiceImpl implements Servise {
 
     private DatabaseConnect connectmanager;
@@ -24,7 +25,7 @@ public class ServiceImpl implements Servise {
             DatabaseManager manager = new JDBCDatabaseManager();
             return manager;
         } catch (Exception e) {
-            throw new ServiseException("Connection error ", e);
+            throw new ServiseException("сonnection error ", e);
         }
     }
 

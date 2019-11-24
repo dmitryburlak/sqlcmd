@@ -1,10 +1,13 @@
 package ua.com.juja.sqlcmd.controller.web;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.service.ServiceImpl;
 import ua.com.juja.sqlcmd.service.Servise;
 import ua.com.juja.sqlcmd.service.ServiseException;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -14,12 +17,14 @@ import java.io.IOException;
 import static ua.com.juja.sqlcmd.view.MessageList.*;
 
 public class MainServlet extends HttpServlet {
+    @Autowired
     private Servise servise;
 
     @Override
-    public void init() throws ServletException{
-        super.init();
-        servise = new ServiceImpl();
+    public void init(ServletConfig config) throws ServletException{
+        super.init(config);
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this,
+                config.getServletContext());
     }
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
