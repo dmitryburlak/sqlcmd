@@ -1,17 +1,18 @@
 package ua.com.juja.sqlcmd.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ua.com.juja.sqlcmd.model.*;
 
 import java.util.*;
-@Component
-public class ServiceImpl implements Servise {
 
+@Component
+public abstract class ServiceImpl implements Servise {
+
+    @Autowired
     private DatabaseConnect connectmanager;
 
-    public ServiceImpl(){
-        connectmanager = new DatabaseConnect();
-    }
+    public abstract DatabaseManager getManager();
 
     @Override
     public List<String> commandsList() {
@@ -22,7 +23,7 @@ public class ServiceImpl implements Servise {
     public DatabaseManager connect(String database, String userName, String password) throws ServiseException {
         try{
             connectmanager.connect(database, userName, password);
-            DatabaseManager manager = new JDBCDatabaseManager();
+            DatabaseManager manager = getManager();
             return manager;
         } catch (Exception e) {
             throw new ServiseException("сonnection error ", e);
