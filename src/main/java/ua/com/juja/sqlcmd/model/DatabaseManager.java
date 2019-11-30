@@ -1,13 +1,12 @@
 package ua.com.juja.sqlcmd.model;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 public interface DatabaseManager {
 
-    List<DataSet> getTableDataSet(String tableName);
+    List<Map<String, Object>> getTableDataSet(String tableName);
 
     int getSize(String tableName);
 
@@ -15,15 +14,15 @@ public interface DatabaseManager {
 
     void clear(String tableName);
 
-    void insert(String tableName, DataSet input);
+    void insert(String tableName, Map<String, Object> input);
 
-    void create(String tableName, DataSet keyName, DataSet input);
+    void create(String tableName, String keyName, Set<String> input);
 
-    void delete(String tableName, DataSet input);
+    void delete(String tableName, Map<String, Object> input);
 
     void drop(String tableName);
 
-    void update(String tableName, int id, DataSet newValue);
+    void update(String tableName, int id, Map<String, Object> newValue);
 
     Set<String> getTableCloumns(String tableName);
 

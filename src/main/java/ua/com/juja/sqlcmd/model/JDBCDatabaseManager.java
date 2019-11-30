@@ -1,10 +1,11 @@
 package ua.com.juja.sqlcmd.model;
 
-import ua.com.juja.sqlcmd.view.PrintTable;
+import org.springframework.stereotype.Component;
+
 
 import java.sql.*;
 import java.util.*;
-
+@Component
 public class JDBCDatabaseManager implements DatabaseManager {
 
     private Connection connection(){
@@ -12,17 +13,17 @@ public class JDBCDatabaseManager implements DatabaseManager {
     }
 
     @Override
-    public List<DataSet> getTableDataSet(String tableName) {
+    public List<Map<String, Object>> getTableDataSet(String tableName) {
         String sqlquere = "SELECT * FROM public.";
-        List<DataSet> result = new LinkedList<DataSet>();
+        List<Map<String, Object>> result = new LinkedList<>();
         try (Statement stmt = connection().createStatement();
              ResultSet res = stmt.executeQuery(sqlquere + tableName)){
             ResultSetMetaData resmd = res.getMetaData();
             while (res.next()) {
-                DataSet dataSet = new DataSetImpl();
-                result.add(dataSet);
+                Map<String, Object> data = new LinkedHashMap<>();
+                result.add(data);
                 for (int i = 1; i <= resmd.getColumnCount(); i++) {
-                    dataSet.put(resmd.getColumnName(i), res.getObject(i));
+                    data.put(resmd.getColumnName(i), res.getObject(i));
                 }
             }
             return result;
@@ -48,7 +49,7 @@ public class JDBCDatabaseManager implements DatabaseManager {
     @Override
     public Set<String> getTables() {
         String sqlquere = "SELECT table_name FROM information_schema.tables WHERE table_schema NOT IN ('information_schema','pg_catalog')";
-        Set<String> tables = new LinkedHashSet<String>();
+        Set<String> tables = new LinkedHashSet<>();
         try (Statement stmt = connection().createStatement();
              ResultSet res = stmt.executeQuery(sqlquere)){
             while (res.next()) {
@@ -72,7 +73,7 @@ public class JDBCDatabaseManager implements DatabaseManager {
     }
 
     @Override
-    public void insert(String tableName, DataSet input) {
+    public void insert(String tableName, Map<String, Object> input) {
         try(Statement stmt = connection().createStatement()) {
             String tableNames = getNamesFormated(input, "%s,");
             String values = getValuesFormated(input, "'%s',");
@@ -83,16 +84,15 @@ public class JDBCDatabaseManager implements DatabaseManager {
         }
     }
     @Override
-    public void create(String tableName, DataSet keyName, DataSet input){
+    public void create(String tableName, String keyName, Set<String> input){
         try(Statement stmt = connection().createStatement()){
-            String keyNameFormat = getNamesFormated(keyName, "%s,");
             String columnsName = "";
             String columnstype = " varchar(225)";
-            for (String data: input.getName()) {
+            for (String data: input) {
                 columnsName += ", " + data + columnstype;
             }
             stmt.executeUpdate("CREATE TABLE " + tableName +
-                    " ( " + keyNameFormat + " SERIAL PRIMARY KEY NOT NULL " + columnsName + ")");
+                    " ( " + keyName + " SERIAL PRIMARY KEY NOT NULL " + columnsName + ")");
 
         }catch (SQLException e) {
             e.printStackTrace();
@@ -100,7 +100,7 @@ public class JDBCDatabaseManager implements DatabaseManager {
     }
 
     @Override
-    public void delete(String tableName, DataSet input){
+    public void delete(String tableName, Map<String, Object> input){
         try(Statement stmt = connection().createStatement()){
             String columnName = getNamesFormated(input, "%s,");
             String columnValue = getValuesFormated(input, "'%s',");
@@ -121,13 +121,13 @@ public class JDBCDatabaseManager implements DatabaseManager {
     }
 
     @Override
-    public void update(String tableName, int id, DataSet newValue) {
+    public void update(String tableName, int id, Map<String, Object> newValue) {
         String tableNames = getNamesFormated(newValue, "%s = ?,");
         try(PreparedStatement ps = connection().prepareStatement(
                 "UPDATE public." + tableName + " SET " + tableNames + " WHERE id = ?")) {
             int index = 1;
-            for (Object value : newValue.getValue()) {
-                ps.setObject(index, value);
+            for (Map.Entry value : newValue.entrySet()) {
+                ps.setObject(index, value.getValue());
                 index++;
             }
             ps.setInt(index, id);
@@ -140,7 +140,7 @@ public class JDBCDatabaseManager implements DatabaseManager {
     @Override
     public Set<String> getTableCloumns(String tableName) {
         String sqlquere = "SELECT * FROM information_schema.columns WHERE table_schema = 'public' AND table_name = '";
-        Set<String> tables = new LinkedHashSet<String>();
+        Set<String> tables = new LinkedHashSet<>();
         try(Statement stmt = connection().createStatement();
             ResultSet res = stmt.executeQuery(sqlquere + tableName + "'")) {
             while (res.next()) {
@@ -158,19 +158,19 @@ public class JDBCDatabaseManager implements DatabaseManager {
         return connection() != null;
     }
 
-    private String getNamesFormated(DataSet newValue, String format) {
-        String string = "";
-        for (String name : newValue.getName()) {
-            string += String.format(format, name);
+    private String getNamesFormated(Map<String, Object> input, String format) {
+        String names = "";
+        for (Map.Entry name : input.entrySet()) {
+            names += String.format(format, name.getKey());
         }
-        string = string.substring(0, string.length() - 1);
-        return string;
+        names = names.substring(0, names.length() - 1);
+        return names;
     }
 
-    private String getValuesFormated(DataSet input, String format) {
+    private String getValuesFormated(Map<String, Object> input, String format) {
         String values = "";
-        for (Object value : input.getValue()) {
-            values += String.format(format, value);
+        for (Map.Entry value : input.entrySet()) {
+            values += String.format(format, value.getValue());
         }
         values = values.substring(0, values.length() - 1);
         return values;
