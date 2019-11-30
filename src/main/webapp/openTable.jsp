@@ -5,17 +5,6 @@
     <title>sqlcmd</title>
 </head>
 <body>
-    <form action = "find" method = "POST">
-        <table>
-            <tr>
-                <td>table name:</td>
-                <td><input type = "text" name = "tableName" /><br></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td><input type = "submit" value = "submit" /></td>
-            </tr>
-        </table>
         <br>
         <br>
         <tr>
@@ -35,6 +24,7 @@
         </table>
     </form>
     <footer>
+        <a href="find">find another table</a><br>
         <a href="menu">menu</a><br>
     </footer>
 </body>

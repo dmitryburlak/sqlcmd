@@ -3,7 +3,6 @@ package ua.com.juja.sqlcmd.controller.web;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
-import ua.com.juja.sqlcmd.service.ServiceImpl;
 import ua.com.juja.sqlcmd.service.Servise;
 import ua.com.juja.sqlcmd.service.ServiseException;
 
@@ -50,12 +49,6 @@ public class MainServlet extends HttpServlet {
             jsp("help.jsp", resp, req);
 
         } else if (action.startsWith("/find")) {
-            String tableName = req.getParameter("table");
-            try {
-                req.setAttribute("table", servise.find(manager, tableName));
-            } catch (ServiseException e) {
-                errorJSP(req, resp, e);
-            }
             jsp("find.jsp", resp, req);
 
         }else if (action.startsWith("/tables")){
@@ -112,6 +105,9 @@ public class MainServlet extends HttpServlet {
         if(action.startsWith("/insert")) {
             serviseInsert(manager, req, resp);
 
+        } else if (action.startsWith("/find")){
+            serviseFind(manager, req, resp);
+
         } else if (action.startsWith("/delete")){
             serviseDelete(manager, req, resp);
 
@@ -126,6 +122,17 @@ public class MainServlet extends HttpServlet {
 
         } else {
            // do nothing
+        }
+    }
+
+    private void serviseFind(DatabaseManager manager, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String tableName = req.getParameter("tableName");
+        try{
+            req.setAttribute("tableName", servise.find(manager, tableName));
+            req.setAttribute("message", tableName);
+            req.getRequestDispatcher("openTable.jsp").forward(req, resp);
+        }catch(ServiseException e){
+            errorJSP(req, resp, e);
         }
     }
 

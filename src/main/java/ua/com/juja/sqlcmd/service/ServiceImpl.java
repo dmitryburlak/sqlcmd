@@ -43,14 +43,14 @@ public abstract class ServiceImpl implements Servise {
 
     private void getList(DatabaseManager manager, String tableName, List<List<String>> result) {
         List<String> columns = new LinkedList<>(manager.getTableCloumns(tableName));
-        List<DataSet> tableData = manager.getTableDataSet(tableName);
+        List<Map<String, Object>> tableData = manager.getTableDataSet(tableName);
         result.add(columns);
-        for (DataSet dataset : tableData){
-            List<String> row = new ArrayList<>(columns.size());
-            result.add(row);
-            for (String column : columns){
-                row.add(dataset.get(column).toString());
+        for (Map<String, Object> data : tableData) {
+            List<String> row = new ArrayList<>();
+            for (Object column : data.values()) {
+                row.add(String.valueOf(column));
             }
+            result.add(row);
         }
     }
 
@@ -63,16 +63,15 @@ public abstract class ServiceImpl implements Servise {
         }catch (Exception e){
             throw new ServiseException("list tables error", e);
         }
-
     }
 
     @Override
     public void insert(DatabaseManager manager, String tableName, String column, String value, String columnsecond, String valuesecond) throws ServiseException {
-        DataSet dataSet = new DataSetImpl();
-        dataSet.put(column, value);
-        dataSet.put(columnsecond, valuesecond);
+        Map<String, Object> input = new LinkedHashMap<>();
+        input.put(column, value);
+        input.put(columnsecond, valuesecond);
         try{
-            manager.insert(tableName, dataSet);
+            manager.insert(tableName, input);
         } catch (Exception e){
             throw new ServiseException("insert record error", e);
         }
@@ -80,10 +79,10 @@ public abstract class ServiceImpl implements Servise {
 
     @Override
     public void delete(DatabaseManager manager, String tableName, String column, String value) throws ServiseException {
-        DataSet dataSet = new DataSetImpl();
-        dataSet.put(column, value);
+        Map<String, Object> input = new LinkedHashMap<>();
+        input.put(column, value);
         try{
-            manager.delete(tableName, dataSet);
+            manager.delete(tableName, input);
         } catch (Exception e){
             throw new ServiseException("delete record error", e);
         }
@@ -91,13 +90,11 @@ public abstract class ServiceImpl implements Servise {
 
     @Override
     public void create(DatabaseManager manager, String tableName, String columnPk, String columnone, String columntwo) throws ServiseException {
-        DataSet keyName = new DataSetImpl();
-        keyName.put(columnPk, "");
-        DataSet dataSet = new DataSetImpl();
-        dataSet.put(columnone, "");
-        dataSet.put(columntwo, "");
+        Set<String> input = new LinkedHashSet<>();
+        input.add(columnone);
+        input.add(columntwo);
         try{
-            manager.create(tableName, keyName, dataSet);
+            manager.create(tableName, columnPk, input);
         } catch (Exception e){
             throw new ServiseException("create table error", e);
         }
@@ -114,10 +111,10 @@ public abstract class ServiceImpl implements Servise {
 
     @Override
     public void update(DatabaseManager manager, String tableName, int id, String column, String value) throws ServiseException {
-        DataSet dataSet = new DataSetImpl();
-        dataSet.put(column, value);
+        Map<String, Object> input = new LinkedHashMap<>();
+        input.put(column, value);
         try{
-            manager.update(tableName, id, dataSet);
+            manager.update(tableName, id, input);
         } catch (Exception e){
             throw new ServiseException("update record error", e);
         }
