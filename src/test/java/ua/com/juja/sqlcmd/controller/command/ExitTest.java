@@ -8,6 +8,7 @@ import static junit.framework.TestCase.fail;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
+/*
 public class ExitTest {
 
     private FakeView view = new FakeView();
@@ -53,3 +54,4 @@ public class ExitTest {
         //throws ExitException
     }
 }
+*/

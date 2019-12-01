@@ -1,7 +1,6 @@
 package ua.com.juja.sqlcmd.controller.command;
 
-import ua.com.juja.sqlcmd.view.View;
-
+/*
 public class FakeView implements View {
     private String messages = "";
     private String input = null;
@@ -34,3 +33,4 @@ public class FakeView implements View {
         this.messages = messages;
     }
 }
+*/

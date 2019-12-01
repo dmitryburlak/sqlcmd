@@ -1,16 +1,9 @@
 package ua.com.juja.sqlcmd.controller.command;
 
-import org.junit.Before;
-import org.junit.Test;
-import ua.com.juja.sqlcmd.model.DataSet;
-import ua.com.juja.sqlcmd.model.DataSetImpl;
-import ua.com.juja.sqlcmd.model.DatabaseManager;
-import ua.com.juja.sqlcmd.view.View;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.*;
 
-public class CreateTest {
+/*public class CreateTest {
     private DatabaseManager manager;
     private View view;
     private Command command;
@@ -67,4 +60,4 @@ public class CreateTest {
                     e.getMessage());
         }
     }
-}
+}*/

@@ -1,24 +1,15 @@
 package ua.com.juja.sqlcmd.controller.command;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
-import static org.mockito.Mockito.*;
-import ua.com.juja.sqlcmd.model.DataSet;
-import ua.com.juja.sqlcmd.model.DataSetImpl;
-import ua.com.juja.sqlcmd.model.DatabaseManager;
-import ua.com.juja.sqlcmd.view.PrintTable;
-import ua.com.juja.sqlcmd.view.View;
 
-import java.util.*;
+
 
 import static org.junit.Assert.assertEquals;
 
+/*
 public class FindTest {
     private DatabaseManager manager;
     private View view;
@@ -116,3 +107,4 @@ public class FindTest {
         }
     }
 }
+*/

@@ -1,15 +1,17 @@
 package ua.com.juja.sqlcmd.model;
 
+import org.springframework.stereotype.Component;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import static ua.com.juja.sqlcmd.view.MessageList.*;
-
+@Component
 public class DatabaseConnect {
 
-    private static Connection connection;
+    public static Connection connection;
 
-    public static Connection connect(String database, String userName, String password) {
+    public Connection connect(String database, String userName, String password) {
         String host = setupDriver();
         try {
             connection = DriverManager.getConnection(host + database, userName,
@@ -22,7 +24,7 @@ public class DatabaseConnect {
         return connection;
     }
 
-    private static String setupDriver() {
+    private String setupDriver() {
         ConnectProperties connectProperties = new ConnectProperties().readProperties();
         String driver = connectProperties.getDriver();
         String host = connectProperties.getHost();

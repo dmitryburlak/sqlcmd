@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 
+/*
 public class LogOutputStream extends OutputStream {
 
     private String log;
@@ -18,3 +19,4 @@ public class LogOutputStream extends OutputStream {
         return log;
     }
 }
+*/

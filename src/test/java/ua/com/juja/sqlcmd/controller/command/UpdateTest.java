@@ -1,19 +1,12 @@
 package ua.com.juja.sqlcmd.controller.command;
 
-import org.junit.Before;
-import org.junit.Test;
-import ua.com.juja.sqlcmd.model.DataSet;
-import ua.com.juja.sqlcmd.model.DataSetImpl;
-import ua.com.juja.sqlcmd.model.DatabaseManager;
-import ua.com.juja.sqlcmd.view.View;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Matchers.refEq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
+/*
 public class UpdateTest {
     private DatabaseManager manager;
     private View view;
@@ -70,3 +63,4 @@ public class UpdateTest {
         }
     }
 }
+*/
