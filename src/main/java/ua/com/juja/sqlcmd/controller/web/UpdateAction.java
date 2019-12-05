@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static ua.com.juja.sqlcmd.view.MessageList.UPDATE_TABLE_DATA;
+import static ua.com.juja.sqlcmd.view.MessageList.*;
 
 public class UpdateAction extends AbstractAction {
 
