@@ -16,23 +16,6 @@
                 <td><input type = "submit" value = "submit" /></td>
             </tr>
         </table>
-        <br>
-        <br>
-        <tr>
-            <td>table: </td>
-            <td>${message}</td>
-        </tr>
-        <table border="1">
-            <c:forEach var="row" items="${tableName}">
-                <tr>
-                    <c:forEach var="element" items="${row}">
-                        <td>
-                                ${element}
-                        </td>
-                    </c:forEach>
-                </tr>
-            </c:forEach>
-        </table>
     </form>
     <footer>
         <a href="menu">menu</a><br>

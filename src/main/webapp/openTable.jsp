@@ -5,8 +5,6 @@
     <title>sqlcmd</title>
 </head>
 <body>
-        <br>
-        <br>
         <tr>
             <td>table: </td>
             <td>${message}</td>
