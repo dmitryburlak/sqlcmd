@@ -21,13 +21,13 @@ public abstract class ServiceImpl implements Servise {
 
    @Override
     public DatabaseManager connect(String database, String userName, String password) throws ServiseException {
-        try{
-            connectmanager.connect(database, userName, password);
-            DatabaseManager manager = getManager();
-            return manager;
-        } catch (Exception e) {
-            throw new ServiseException("сonnection error ", e);
-        }
+       try{
+           connectmanager.connect(database, userName, password);
+           DatabaseManager manager = getManager();
+           return manager;
+       } catch (Exception e) {
+           throw new ServiseException("сonnection error ", e);
+       }
     }
 
    @Override

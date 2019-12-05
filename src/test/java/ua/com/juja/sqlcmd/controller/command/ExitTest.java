@@ -44,7 +44,7 @@ public class ExitTest {
 
         //when
         try {
-            command.process("exit");
+            command.get("exit");
             fail("Expected ExitExeption");
         } catch (ExitException e) {
             //donothing

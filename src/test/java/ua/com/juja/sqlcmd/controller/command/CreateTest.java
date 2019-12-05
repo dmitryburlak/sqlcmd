@@ -26,7 +26,7 @@ import static org.junit.Assert.fail;
         input.put("data2", "");
 
         //when
-        command.process("create|newdata|id|data1|data2");
+        command.get("create|newdata|id|data1|data2");
 
         //then
         verify(manager).create(refEq(tableName), refEq(keyId), refEq(input));
@@ -39,7 +39,7 @@ import static org.junit.Assert.fail;
 
         //when
         try {
-            command.process("create");
+            command.get("create");
             fail();
         } catch (IllegalArgumentException e){
             assertEquals("формат команды create|tableName|column1(PK)|column2|...|columnN , а ты ввел: create",
@@ -53,7 +53,7 @@ import static org.junit.Assert.fail;
 
         //when
         try {
-            command.process("qwe|newdata");
+            command.get("qwe|newdata");
             fail();
         } catch (IllegalArgumentException e){
             assertEquals("формат команды create|tableName|column1(PK)|column2|...|columnN , а ты ввел: qwe|newdata",

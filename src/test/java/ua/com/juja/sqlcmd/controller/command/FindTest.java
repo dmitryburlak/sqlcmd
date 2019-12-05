@@ -42,7 +42,7 @@ public class FindTest {
                 .thenReturn(Arrays.asList(user1, user2));
 
         //when
-        command.process("find|newlist");
+        command.get("find|newlist");
 
         //then
 
@@ -78,7 +78,7 @@ public class FindTest {
                 .thenReturn(new ArrayList<DataSet>());
 
         //when
-        command.process("find|newlist");
+        command.get("find|newlist");
 
         //then
 
@@ -99,7 +99,7 @@ public class FindTest {
 
         //when
         try {
-            command.process("find|newlist|yyy");
+            command.get("find|newlist|yyy");
             fail("expected error");
         } catch (IllegalArgumentException e){
             assertEquals("формат команды 'find|tableName', а ты ввел:find|newlist|yyy",

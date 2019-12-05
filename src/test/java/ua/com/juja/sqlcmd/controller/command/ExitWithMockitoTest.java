@@ -44,7 +44,7 @@ public class ExitWithMockitoTest {
 
         //when
         try {
-            command.process("exit");
+            command.get("exit");
             Assert.fail("Expected ExitException");
         } catch (ExitException e) {
             //donothing

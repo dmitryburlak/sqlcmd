@@ -28,7 +28,7 @@ public class UpdateTest {
         input.put("data1", "value1");
 
         //when
-        command.process("update|newdata|1|data1|value1");
+        command.get("update|newdata|1|data1|value1");
 
         //then
         verify(manager).update(refEq(tableName), eq(id), refEq(input));
@@ -41,7 +41,7 @@ public class UpdateTest {
 
         //when
         try {
-            command.process("update");
+            command.get("update");
             fail();
         } catch (IllegalArgumentException e){
             assertEquals("формат команды update|tableName|id|columnN|newvalue , а ты ввел: update",
@@ -55,7 +55,7 @@ public class UpdateTest {
 
         //when
         try {
-            command.process("qwe|data1|value1|11");
+            command.get("qwe|data1|value1|11");
             fail();
         } catch (IllegalArgumentException e){
             assertEquals("формат команды update|tableName|id|columnN|newvalue , а ты ввел: qwe|data1|value1|11",

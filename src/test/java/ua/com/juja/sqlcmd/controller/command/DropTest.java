@@ -27,7 +27,7 @@ public class DropTest {
         //given
 
         //when
-        command.process("drop|newdata");
+        command.get("drop|newdata");
 
         //then
         verify(manager).drop("newdata");
@@ -40,7 +40,7 @@ public class DropTest {
 
         //when
         try {
-            command.process("drop");
+            command.get("drop");
             fail();
         } catch (IllegalArgumentException e){
             assertEquals("формат команды drop|tableName, а ты ввел: drop",
@@ -54,7 +54,7 @@ public class DropTest {
 
         //when
         try {
-            command.process("qwe|newdata|qwe");
+            command.get("qwe|newdata|qwe");
             fail();
         } catch (IllegalArgumentException e){
             assertEquals("формат команды drop|tableName, а ты ввел: qwe|newdata|qwe",

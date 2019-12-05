@@ -10,7 +10,6 @@ public enum MessageList {
     WRONG_PARAM_CONNECT("ожидается %s параметра, а есть: %s"),
     OK_PARAM_CONNECT("ок"),
 
-    HELPTXT_NOT_FOUND("файл help.txt не найден"),
     PROPERTIESFILE_NOT_FOUND("файл connect.properties не найден"),
 
     CLEAR_TABLE("таблица %s очищена"),

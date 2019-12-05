@@ -28,7 +28,7 @@ public class TablesTest {
         //given
 
         //when
-        command.process("tables");
+        command.get("tables");
 
         //then
         verify(manager).getTables();

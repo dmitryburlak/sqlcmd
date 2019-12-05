@@ -1,10 +1,14 @@
 package ua.com.juja.sqlcmd.model;
 
+import ua.com.juja.sqlcmd.controller.web.NullDatabaseManager;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 public interface DatabaseManager {
+
+    DatabaseManager NULL = new NullDatabaseManager();
 
     List<Map<String, Object>> getTableDataSet(String tableName);
 

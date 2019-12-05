@@ -26,7 +26,7 @@ public class InsertTest {
         input.put("data1", "value1");
 
         //when
-        command.process("insert|newdata|data1|value1");
+        command.get("insert|newdata|data1|value1");
 
         //then
         verify(manager).insert(refEq(tableName), refEq(input));
@@ -39,7 +39,7 @@ public class InsertTest {
 
         //when
         try {
-            command.process("insert");
+            command.get("insert");
             fail();
         } catch (IllegalArgumentException e){
             assertEquals("должно быть четное колличесво параметров, " +
@@ -55,7 +55,7 @@ public class InsertTest {
 
         //when
         try {
-            command.process("qwe|newdata|data1|value1|11");
+            command.get("qwe|newdata|data1|value1|11");
             fail();
         } catch (IllegalArgumentException e){
             assertEquals("должно быть четное колличесво параметров, " +

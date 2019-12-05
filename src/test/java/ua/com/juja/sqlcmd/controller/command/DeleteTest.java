@@ -26,7 +26,7 @@ public class DeleteTest {
         input.put("data1", "value1");
 
         //when
-        command.process("delete|newdata|data1|value1");
+        command.get("delete|newdata|data1|value1");
 
         //then
         verify(manager).delete(refEq(tableName), refEq(input));
@@ -39,7 +39,7 @@ public class DeleteTest {
 
         //when
         try {
-            command.process("delete");
+            command.get("delete");
             fail();
         } catch (IllegalArgumentException e){
             assertEquals("формат команды delete|tableName|column|value, а ты ввел: delete",
@@ -53,7 +53,7 @@ public class DeleteTest {
 
         //when
         try {
-            command.process("delete|newdata|data1|value1|11");
+            command.get("delete|newdata|data1|value1|11");
             fail();
         } catch (IllegalArgumentException e){
             assertEquals("формат команды delete|tableName|column|value, а ты ввел: delete|newdata|data1|value1|11",

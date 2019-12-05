@@ -25,7 +25,7 @@ public class ClearTest {
         //given
 
         //when
-        command.process("clear|newlist");
+        command.get("clear|newlist");
         //then
         verify(manager).clear("newlist");
         verify(view).write("таблица newlist очищена");
@@ -37,7 +37,7 @@ public class ClearTest {
 
         //when
         try {
-            command.process("clear");
+            command.get("clear");
         } catch (IllegalArgumentException e){
             assertEquals("формат команды 'clear|tableName', а ты ввел:clear",
                     e.getMessage());
@@ -50,7 +50,7 @@ public class ClearTest {
 
         //when
         try {
-            command.process("qwe|newlist|qwe");
+            command.get("qwe|newlist|qwe");
         } catch (IllegalArgumentException e){
             assertEquals("формат команды 'clear|tableName', а ты ввел:qwe|newlist|qwe",
                     e.getMessage());

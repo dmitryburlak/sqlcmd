@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import static ua.com.juja.sqlcmd.view.MessageList.*;
+
 @Component
 public class DatabaseConnect {
 
@@ -24,7 +25,7 @@ public class DatabaseConnect {
         return connection;
     }
 
-    private String setupDriver() {
+    public String setupDriver() {
         ConnectProperties connectProperties = new ConnectProperties().readProperties();
         String driver = connectProperties.getDriver();
         String host = connectProperties.getHost();
