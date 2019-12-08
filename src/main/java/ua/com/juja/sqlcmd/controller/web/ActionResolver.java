@@ -1,10 +1,10 @@
 package ua.com.juja.sqlcmd.controller.web;
 
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Component;
+import ua.com.juja.sqlcmd.controller.web.actions.*;
 import ua.com.juja.sqlcmd.service.Servise;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
