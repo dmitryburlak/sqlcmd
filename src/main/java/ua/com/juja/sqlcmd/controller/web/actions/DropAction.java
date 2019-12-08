@@ -1,5 +1,6 @@
-package ua.com.juja.sqlcmd.controller.web;
+package ua.com.juja.sqlcmd.controller.web.actions;
 
+import ua.com.juja.sqlcmd.controller.web.AbstractAction;
 import ua.com.juja.sqlcmd.service.Servise;
 import ua.com.juja.sqlcmd.service.ServiseException;
 
@@ -8,31 +9,33 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class FindAction extends AbstractAction {
+import static ua.com.juja.sqlcmd.view.MessageList.*;
 
-    public FindAction(Servise servise) {
+public class DropAction extends AbstractAction {
+
+    public DropAction(Servise servise) {
         super(servise);
     }
 
     @Override
     public boolean canProcess(String url) {
-        return url.startsWith("/find");
+        return url.startsWith("/drop");
     }
 
     @Override
     public void get(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        jsp("find.jsp", req, resp);
+        jsp("drop.jsp", req, resp);
     }
 
     @Override
     public void post(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String tableName = req.getParameter("tableName");
-        try{
-            req.setAttribute("tableName", servise.find(getManagerAfterConnect(req), tableName));
-            req.setAttribute("message", tableName);
-            req.getRequestDispatcher("openTable.jsp").forward(req, resp);
-        }catch(ServiseException e){
+        try {
+            servise.drop(getManagerAfterConnect(req), tableName);
+        } catch (ServiseException e) {
             errorJSP(req, resp, e);
         }
+        req.setAttribute("message", String.format(DROP_TABLE.getMessage(), tableName));
+        jsp("drop.jsp", req, resp);
     }
 }

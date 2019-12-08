@@ -1,5 +1,6 @@
-package ua.com.juja.sqlcmd.controller.web;
+package ua.com.juja.sqlcmd.controller.web.actions;
 
+import ua.com.juja.sqlcmd.controller.web.AbstractAction;
 import ua.com.juja.sqlcmd.service.Servise;
 import ua.com.juja.sqlcmd.service.ServiseException;
 
@@ -10,31 +11,34 @@ import java.io.IOException;
 
 import static ua.com.juja.sqlcmd.view.MessageList.*;
 
-public class DropAction extends AbstractAction {
+public class UpdateAction extends AbstractAction {
 
-    public DropAction(Servise servise) {
+    public UpdateAction(Servise servise) {
         super(servise);
     }
 
     @Override
     public boolean canProcess(String url) {
-        return url.startsWith("/drop");
+        return url.startsWith("/update");
     }
 
     @Override
     public void get(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        jsp("drop.jsp", req, resp);
+        jsp("update.jsp", req, resp);
     }
 
     @Override
     public void post(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String tableName = req.getParameter("tableName");
+        int id = Integer.valueOf(req.getParameter("id"));
+        String column = req.getParameter("column");
+        String value = req.getParameter("value");
         try {
-            servise.drop(getManagerAfterConnect(req), tableName);
+            servise.update(getManagerAfterConnect(req), tableName, id, column, value);
         } catch (ServiseException e) {
             errorJSP(req, resp, e);
         }
-        req.setAttribute("message", String.format(DROP_TABLE.getMessage(), tableName));
-        jsp("drop.jsp", req, resp);
+        req.setAttribute("message", String.format(UPDATE_TABLE_DATA.getMessage(), tableName, id, column));
+        jsp("update.jsp", req, resp);
     }
 }
