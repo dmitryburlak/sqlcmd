@@ -13,9 +13,6 @@ connect|databaseName|userName|password<br>
 help<br>
 список команд<br>
 <br>
-exit<br>
-выход<br>
-<br>
 tables<br>
 список таблиц<br>
 <br>
