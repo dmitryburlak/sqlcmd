@@ -5,10 +5,16 @@
     <title>sqlcmd</title>
 </head>
 <body>
+<tr>
+    <td>list tables:</td>
+    <td>${items}</td>
+</tr>
+<br>
+<br>
     <form action = "find" method = "POST">
         <table>
             <tr>
-                <td>table name:</td>
+                <td>find table name:</td>
                 <td><input type = "text" name = "tableName" /><br></td>
             </tr>
             <tr>
