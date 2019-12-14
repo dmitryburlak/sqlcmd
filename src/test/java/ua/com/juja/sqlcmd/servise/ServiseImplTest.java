@@ -147,4 +147,16 @@ public class ServiseImplTest {
         verify(manager, times(1)).update(tableName, id, input);
     }
 
+    @Test
+    public void serviseClearTest(){
+        //given
+        final String tableName = "newlist";
+
+        //when
+        servise.clear(manager, tableName);
+
+        //then
+        verify(manager, times(1)).clear(tableName);
+    }
+
 }
