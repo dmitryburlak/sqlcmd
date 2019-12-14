@@ -5,7 +5,7 @@
 </head>
 <body>
 <tr>
-    <td>йойкс! ловим ошибку: ${message}</td>
+    <td>йойкс! ловим ошибку: ${errorMessage}</td>
     <td><a href="menu">menu</a></td>
 </tr>
 
