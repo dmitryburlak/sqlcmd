@@ -3,7 +3,7 @@ package ua.com.juja.sqlcmd.model;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
-import static ua.com.juja.sqlcmd.view.MessageList.*;
+import static ua.com.juja.sqlcmd.message.MessageList.*;
 
 public class ConnectProperties {
     private String driver;
