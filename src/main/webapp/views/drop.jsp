@@ -8,7 +8,7 @@
     <form action = "drop" method = "POST">
             <table>
                 <tr>
-                    <td>drop table name:</td>
+                    <td>drop table:</td>
                     <td><input type = "text" name = "tableName" /><br></td>
                 </tr>
                 <tr>
