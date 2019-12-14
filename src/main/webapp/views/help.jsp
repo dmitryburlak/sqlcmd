@@ -32,7 +32,7 @@ insert|tableName|column1|value1|column2|value2|...|columnN|valueN<br>
 создание записи в таблице 'tableName'<br>
 <br>
 delete|tableName|column|value<br>
-создание записи в таблице 'tableName' из колонки 'column' значение 'value'<br>
+удаление записи таблицы 'tableName' из колонки 'column' значение 'value'<br>
 <br>
 update|tableName|id|column|newvalue<br>
 обновление записи таблице 'tableName' №id в колонке 'column' запись обновлена<br>
