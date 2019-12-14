@@ -1,4 +1,4 @@
-package ua.com.juja.sqlcmd.view;
+package ua.com.juja.sqlcmd.message;
 
 
 
@@ -16,7 +16,7 @@ public enum MessageList {
     WRONG_CLEAR_TABLE("формат команды 'clear|tableName', а ты ввел:"),
 
     CREATE_TABLE("таблица %s создана"),
-    WRONG_CREATE_TABLE_PARAM("формат команды create|tableName|column1(PK)|column2|...|columnN , а ты ввел: "),
+    WRONG_CREATE_TABLE_PARAM("формат команды Create|tableName|column1(PK)|column2|...|columnN , а ты ввел: "),
 
     DROP_TABLE("таблица %s удалена"),
     WRONG_DROP_TABLE_PARAM("формат команды drop|tableName, а ты ввел: "),
