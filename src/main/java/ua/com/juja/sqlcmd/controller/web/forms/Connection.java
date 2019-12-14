@@ -1,7 +1,6 @@
-package ua.com.juja.sqlcmd.controller.web;
+package ua.com.juja.sqlcmd.controller.web.forms;
 
 public class Connection {
-
     private String database;
     private String userName;
     private String password;
@@ -10,7 +9,6 @@ public class Connection {
     public Connection() {
 
     }
-
     public Connection(String fromPage) {
         this.fromPage = fromPage;
     }
@@ -18,15 +16,12 @@ public class Connection {
     public String getDatabase() {
         return database;
     }
-
     public String getUserName() {
         return userName;
     }
-
     public String getPassword() {
         return password;
     }
-
     public String getFromPage() {
         return fromPage;
     }
@@ -34,15 +29,12 @@ public class Connection {
     public void setDatabase(String database) {
         this.database = database;
     }
-
     public void setUserName(String userName) {
         this.userName = userName;
     }
-
     public void setPassword(String password) {
         this.password = password;
     }
-
     public void setFromPage(String fromPage) {
         this.fromPage = fromPage;
     }
