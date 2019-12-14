@@ -119,4 +119,13 @@ public abstract class ServiceImpl implements Servise {
             throw new ServiseException("update record error", e);
         }
     }
+
+    @Override
+    public void clear(DatabaseManager manager, String tableName) throws ServiseException {
+        try{
+            manager.clear(tableName);
+        } catch (Exception e){
+            throw new ServiseException("clear table error", e);
+        }
+    }
 }

@@ -25,5 +25,6 @@ public interface Servise {
 
     void update(DatabaseManager manager, String tableName, int id, String column, String value) throws ServiseException;
 
+    void clear(DatabaseManager manager, String tableName) throws ServiseException;
 
 }
