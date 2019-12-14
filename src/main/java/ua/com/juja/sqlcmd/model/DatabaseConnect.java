@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import static ua.com.juja.sqlcmd.view.MessageList.*;
+import static ua.com.juja.sqlcmd.message.MessageList.*;
 
 @Component
 public class DatabaseConnect {
