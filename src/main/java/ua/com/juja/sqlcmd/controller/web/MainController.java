@@ -17,6 +17,8 @@ import ua.com.juja.sqlcmd.service.ServiseException;
 
 import javax.servlet.http.HttpSession;
 
+import java.util.Objects;
+
 import static ua.com.juja.sqlcmd.message.MessageList.*;
 
 @Controller
@@ -43,12 +45,11 @@ public class MainController {
 
     @RequestMapping(value = "/tables", method = RequestMethod.GET)
     public String tables(Model model, HttpSession session){
-        DatabaseManager manager = getManager(session);
-        if (manager == null){
+        if (!isConnected(session)){
             session.setAttribute("fromPage", "/tables");
             return "redirect:/connect";
         }
-        model.addAttribute("items", servise.tables(manager));
+        model.addAttribute("items", servise.tables());
         return "tables";
     }
 
@@ -57,7 +58,7 @@ public class MainController {
         String fromPage = (String) session.getAttribute("fromPage");
         session.removeAttribute("fromPage");
         model.addAttribute("connection", new Connection(fromPage));
-        if (getManager(session) == null) {
+        if (!isConnected(session)) {
             return "connect";
         } else {
             return "redirect:/menu";
@@ -68,9 +69,9 @@ public class MainController {
     public String connectPost(@ModelAttribute("connection") Connection connection,
                               Model model, HttpSession session) {
         try{
-            DatabaseManager manager = servise.connect(connection.getDatabase(),
+            servise.connect(connection.getDatabase(),
                     connection.getUserName(), connection.getPassword());
-            session.setAttribute("db_manager", manager);
+            session.setAttribute("db_manager", servise.getManager());
             return "redirect:" + connection.getFromPage();
         } catch (Exception e){
             model.addAttribute("errorMessage", e.getMessage());
@@ -80,20 +81,19 @@ public class MainController {
 
     @RequestMapping(value = "/find", method = RequestMethod.GET)
     public String findGet(Model model, HttpSession session){
-        DatabaseManager manager = getManager(session);
-        if (manager == null) {
+        if (!isConnected(session)) {
             session.setAttribute("fromPage", "/find");
             return "redirect:/connect";
         }
-        model.addAttribute("items", servise.tables(manager));
+        model.addAttribute("items", servise.tables());
         return "find";
     }
 
     @RequestMapping(value = "/find", params = {"tableName"}, method = RequestMethod.POST)
     public String findPost(@RequestParam(value = "tableName") String tableName,
-                           Model model, HttpSession session){
+                           Model model){
         try{
-            model.addAttribute("tableName", servise.find(getManager(session), tableName));
+            model.addAttribute("tableName", servise.find(tableName));
             model.addAttribute("message", tableName);
             return "openTable";
         }catch(ServiseException e){
@@ -103,10 +103,9 @@ public class MainController {
         }
     }
 
-    @RequestMapping(value = "/create", method = RequestMethod.GET)
+   @RequestMapping(value = "/create", method = RequestMethod.GET)
     public String createGet(Model model, HttpSession session){
-        DatabaseManager manager = getManager(session);
-        if (manager == null) {
+        if (!isConnected(session)) {
             session.setAttribute("fromPage", "/create");
             return "redirect:/connect";
         }
@@ -116,9 +115,9 @@ public class MainController {
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public String createPost(@ModelAttribute("create") Create create,
-                             Model model, HttpSession session){
+                             Model model){
         try {
-            servise.create(getManager(session), create.getTableName(), create.getColumnPk(),
+            servise.create(create.getTableName(), create.getColumnPk(),
                     create.getColumnone(), create.getColumntwo());
         } catch (ServiseException e) {
             model.addAttribute("errorMessage", e.getMessage());
@@ -130,8 +129,7 @@ public class MainController {
 
     @RequestMapping(value = "/drop", method = RequestMethod.GET)
     public String dropGet(HttpSession session){
-        DatabaseManager manager = getManager(session);
-        if (manager == null) {
+        if (!isConnected(session)) {
             session.setAttribute("fromPage", "/drop");
             return "redirect:/connect";
         }
@@ -140,9 +138,9 @@ public class MainController {
 
     @RequestMapping(value = "/drop", params = {"tableName"}, method = RequestMethod.POST)
     public String dropPost(@RequestParam(value = "tableName") String tableName,
-                           Model model, HttpSession session) {
+                           Model model) {
         try {
-            servise.drop(getManager(session), tableName);
+            servise.drop(tableName);
         } catch (ServiseException e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "error";
@@ -153,8 +151,7 @@ public class MainController {
 
     @RequestMapping(value = "/clear", method = RequestMethod.GET)
     public String clearGet(HttpSession session){
-        DatabaseManager manager = getManager(session);
-        if (manager == null) {
+        if (!isConnected(session)) {
             session.setAttribute("fromPage", "/clear");
             return "redirect:/connect";
         }
@@ -163,9 +160,9 @@ public class MainController {
 
     @RequestMapping(value = "/clear", params = {"tableName"}, method = RequestMethod.POST)
     public String clearPost(@RequestParam(value = "tableName") String tableName,
-                            Model model, HttpSession session) {
+                            Model model) {
         try {
-            servise.clear(getManager(session), tableName);
+            servise.clear(tableName);
         } catch (ServiseException e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "error";
@@ -176,8 +173,7 @@ public class MainController {
 
     @RequestMapping(value = "/insert", method = RequestMethod.GET)
     public String insertGet(Model model, HttpSession session){
-        DatabaseManager manager = getManager(session);
-        if (manager == null) {
+        if (!isConnected(session)) {
             session.setAttribute("fromPage", "/insert");
             return "redirect:/connect";
         }
@@ -187,9 +183,9 @@ public class MainController {
 
     @RequestMapping(value = "/insert", method = RequestMethod.POST)
     public String insertPost(@ModelAttribute(value = "insert") Insert insert,
-                             Model model, HttpSession session) {
+                             Model model) {
         try {
-            servise.insert(getManager(session), insert.getTableName(), insert.getColumn(), insert.getValue(),
+            servise.insert(insert.getTableName(), insert.getColumn(), insert.getValue(),
                     insert.getColumnsecond(), insert.getValuesecond());
         } catch (ServiseException e) {
             model.addAttribute("errorMessage", e.getMessage());
@@ -201,8 +197,7 @@ public class MainController {
 
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
     public String deleteGet(HttpSession session){
-        DatabaseManager manager = getManager(session);
-        if (manager == null) {
+        if (!isConnected(session)) {
             session.setAttribute("fromPage", "/delete");
             return "redirect:/connect";
         }
@@ -213,9 +208,9 @@ public class MainController {
     public String deletePost(@RequestParam(value = "tableName") String tableName,
                              @RequestParam(value = "column") String column,
                              @RequestParam(value = "value") String value,
-                             Model model, HttpSession session) {
+                             Model model) {
         try {
-            servise.delete(getManager(session), tableName, column, value);
+            servise.delete(tableName, column, value);
         } catch (ServiseException e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "error";
@@ -226,8 +221,7 @@ public class MainController {
 
     @RequestMapping(value = "/update", method = RequestMethod.GET)
     public String updateGet(Model model, HttpSession session){
-        DatabaseManager manager = getManager(session);
-        if (manager == null) {
+        if (!isConnected(session)) {
             session.setAttribute("fromPage", "/update");
             return "redirect:/connect";
         }
@@ -236,10 +230,10 @@ public class MainController {
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public String updtePost(@ModelAttribute(value = "update") Update update,
-                            Model model, HttpSession session) {
+    public String updatePost(@ModelAttribute(value = "update") Update update,
+                            Model model) {
         try {
-            servise.update(getManager(session), update.getTableName(), update.getId(), update.getColumn(),
+            servise.update(update.getTableName(), update.getId(), update.getColumn(),
                     update.getValue());
         } catch (ServiseException e) {
             model.addAttribute("errorMessage", e.getMessage());
@@ -249,7 +243,7 @@ public class MainController {
         return "update";
     }
 
-    private DatabaseManager getManager(HttpSession session) {
-        return (DatabaseManager) session.getAttribute("db_manager");
+    private boolean isConnected(HttpSession session){
+        return Objects.nonNull(session.getAttribute("db_manager")) ? true : false;
     }
 }
