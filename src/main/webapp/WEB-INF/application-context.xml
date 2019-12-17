@@ -10,12 +10,5 @@
     <context:annotation-config/>
     <context:component-scan base-package="ua.com.juja.sqlcmd"/>
 
-    <bean id="servise" class="ua.com.juja.sqlcmd.service.ServiceImpl">
-        <lookup-method name="getManager" bean="JDBCDatabaseManager"/>
-    </bean>
-
-    <!--<bean id="actionResolver" class="ua.com.juja.sqlcmd.controller.web.ActionResolver">
-        <constructor-arg type="ua.com.juja.sqlcmd.service.Servise" ref="servise"/>
-    </bean>-->
 
 </beans>
