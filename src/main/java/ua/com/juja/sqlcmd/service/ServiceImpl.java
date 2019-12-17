@@ -2,17 +2,23 @@ package ua.com.juja.sqlcmd.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import ua.com.juja.sqlcmd.model.*;
 
 import java.util.*;
 
 @Component
-public abstract class ServiceImpl implements Servise {
+public class ServiceImpl implements Servise {
 
     @Autowired
     private DatabaseConnect connectmanager;
 
-    public abstract DatabaseManager getManager();
+    @Autowired
+    private DatabaseManager manager;
+
+    public DatabaseManager getManager() {
+        return manager;
+    }
 
     @Override
     public List<String> commandsList() {
@@ -20,28 +26,26 @@ public abstract class ServiceImpl implements Servise {
     }
 
    @Override
-    public DatabaseManager connect(String database, String userName, String password) throws ServiseException {
+    public void connect(String database, String userName, String password) throws ServiseException {
        try{
            connectmanager.connect(database, userName, password);
-           DatabaseManager manager = getManager();
-           return manager;
        } catch (Exception e) {
            throw new ServiseException("сonnection error ", e);
        }
     }
 
    @Override
-    public List<List<String>> find(DatabaseManager manager, String tableName) throws ServiseException {
+    public List<List<String>> find(String tableName) throws ServiseException {
         List<List<String>> result = new LinkedList<>();
         try{
-            getList(manager, tableName, result);
+            getList(tableName, result);
             return result;
         } catch (Exception e){
             throw new ServiseException("find error ", e);
         }
     }
 
-    private void getList(DatabaseManager manager, String tableName, List<List<String>> result) {
+    private void getList(String tableName, List<List<String>> result) {
         List<String> columns = new LinkedList<>(manager.getTableCloumns(tableName));
         List<Map<String, Object>> tableData = manager.getTableDataSet(tableName);
         result.add(columns);
@@ -55,7 +59,7 @@ public abstract class ServiceImpl implements Servise {
     }
 
     @Override
-    public String tables(DatabaseManager manager) throws ServiseException {
+    public String tables() throws ServiseException {
         try {
             Set<String> tableNames = manager.getTables();
             String tables = tableNames.toString();
@@ -66,7 +70,7 @@ public abstract class ServiceImpl implements Servise {
     }
 
     @Override
-    public void insert(DatabaseManager manager, String tableName, String column, String value, String columnsecond, String valuesecond) throws ServiseException {
+    public void insert(String tableName, String column, String value, String columnsecond, String valuesecond) throws ServiseException {
         Map<String, Object> input = new LinkedHashMap<>();
         input.put(column, value);
         input.put(columnsecond, valuesecond);
@@ -78,7 +82,7 @@ public abstract class ServiceImpl implements Servise {
     }
 
     @Override
-    public void delete(DatabaseManager manager, String tableName, String column, String value) throws ServiseException {
+    public void delete(String tableName, String column, String value) throws ServiseException {
         Map<String, Object> input = new LinkedHashMap<>();
         input.put(column, value);
         try{
@@ -89,7 +93,7 @@ public abstract class ServiceImpl implements Servise {
     }
 
     @Override
-    public void create(DatabaseManager manager, String tableName, String columnPk, String columnone, String columntwo) throws ServiseException {
+    public void create(String tableName, String columnPk, String columnone, String columntwo) throws ServiseException {
         Set<String> input = new LinkedHashSet<>();
         input.add(columnone);
         input.add(columntwo);
@@ -101,7 +105,7 @@ public abstract class ServiceImpl implements Servise {
     }
 
     @Override
-    public void drop(DatabaseManager manager, String tableName) throws ServiseException {
+    public void drop(String tableName) throws ServiseException {
         try{
             manager.drop(tableName);
         } catch (Exception e){
@@ -110,7 +114,7 @@ public abstract class ServiceImpl implements Servise {
     }
 
     @Override
-    public void update(DatabaseManager manager, String tableName, int id, String column, String value) throws ServiseException {
+    public void update(String tableName, int id, String column, String value) throws ServiseException {
         Map<String, Object> input = new LinkedHashMap<>();
         input.put(column, value);
         try{
@@ -121,7 +125,7 @@ public abstract class ServiceImpl implements Servise {
     }
 
     @Override
-    public void clear(DatabaseManager manager, String tableName) throws ServiseException {
+    public void clear(String tableName) throws ServiseException {
         try{
             manager.clear(tableName);
         } catch (Exception e){
