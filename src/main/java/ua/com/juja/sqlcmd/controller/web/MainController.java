@@ -99,7 +99,6 @@ public class MainController {
         }catch(ServiseException e){
             model.addAttribute("errorMessage", e.getMessage());
             return "error";
-
         }
     }
 
