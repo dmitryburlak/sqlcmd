@@ -1,5 +1,7 @@
 package ua.com.juja.sqlcmd.model;
 
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
@@ -10,6 +12,8 @@ import static ua.com.juja.sqlcmd.message.MessageList.*;
 @Component
 public class DatabaseConnect {
 
+    public static JdbcTemplate jdbcTemplate;
+
     public static Connection connection;
 
     public Connection connect(String database, String userName, String password) {
@@ -17,8 +21,11 @@ public class DatabaseConnect {
         try {
             connection = DriverManager.getConnection(host + database, userName,
                     password);
+            jdbcTemplate = new JdbcTemplate(
+                    new SingleConnectionDataSource(connection, false));
         } catch (SQLException e) {
             connection = null;
+            jdbcTemplate = null;
             throw new RuntimeException(String.format(NOT_CONNECTION.getMessage(),
                     database, userName), e);
         }
@@ -39,5 +46,9 @@ public class DatabaseConnect {
 
     public static Connection getConnection() {
         return connection;
+    }
+
+    public static JdbcTemplate getJdbcTemplate(){
+        return jdbcTemplate;
     }
 }

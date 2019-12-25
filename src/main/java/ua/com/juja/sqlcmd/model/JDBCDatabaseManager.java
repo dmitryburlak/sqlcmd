@@ -1,11 +1,16 @@
 package ua.com.juja.sqlcmd.model;
 
 import org.springframework.context.annotation.Scope;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 import org.springframework.stereotype.Component;
 
 
 import java.sql.*;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
 public class JDBCDatabaseManager implements DatabaseManager {
@@ -14,145 +19,95 @@ public class JDBCDatabaseManager implements DatabaseManager {
         return DatabaseConnect.getConnection();
     }
 
+    private JdbcTemplate jdbcTemplate(){
+        return DatabaseConnect.getJdbcTemplate();
+    }
+
     @Override
     public List<Map<String, Object>> getTableDataSet(String tableName) {
-        String sqlquere = "SELECT * FROM public.";
-        List<Map<String, Object>> result = new LinkedList<>();
-        try (Statement stmt = connection().createStatement();
-             ResultSet res = stmt.executeQuery(sqlquere + tableName)){
-            ResultSetMetaData resmd = res.getMetaData();
-            while (res.next()) {
-                Map<String, Object> data = new LinkedHashMap<>();
-                result.add(data);
-                for (int i = 1; i <= resmd.getColumnCount(); i++) {
-                    data.put(resmd.getColumnName(i), res.getObject(i));
-                }
-            }
-            return result;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return result;
-        }
+        String sqlquery = "SELECT * FROM public.";
+        return jdbcTemplate().query(sqlquery + tableName,
+                (res, row) -> {
+                    ResultSetMetaData resmd = res.getMetaData();
+                    Map<String, Object> data = new LinkedHashMap<>();
+                    for (int i = 1; i <= resmd.getColumnCount(); i++) {
+                        data.put(resmd.getColumnName(i), res.getObject(i));
+                    }
+                    return data;
+                });
     }
+
     @Override
     public int getSize(String tableName) {
-        String sqlquere = "SELECT COUNT (*) FROM public.";
-        try (Statement stmt = connection().createStatement();
-             ResultSet resCount = stmt.executeQuery(sqlquere + tableName)) {
-            resCount.next();
-            int size = resCount.getInt(1);
-            return size;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return 0;
-        }
+        String sqlquery = "SELECT COUNT (*) FROM public.";
+        return jdbcTemplate().queryForObject(sqlquery + tableName, Integer.class);
     }
 
     @Override
     public Set<String> getTables() {
-        String sqlquere = "SELECT table_name FROM information_schema.tables WHERE table_schema NOT IN ('information_schema','pg_catalog')";
-        Set<String> tables = new LinkedHashSet<>();
-        try (Statement stmt = connection().createStatement();
-             ResultSet res = stmt.executeQuery(sqlquere)){
-            while (res.next()) {
-                tables.add(res.getString("table_name"));
-            }
-            return tables;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return tables;
-        }
+        String sqlquery = "SELECT table_name FROM information_schema.tables WHERE table_schema NOT IN ('information_schema','pg_catalog')";
+        return new LinkedHashSet<>(jdbcTemplate().query(sqlquery,
+                (res, row) -> res.getString("table_name")));
     }
 
     @Override
     public void clear(String tableName) {
-        String sqlquere = "DELETE FROM public.";
-        try(Statement stmt = connection().createStatement()){
-            stmt.executeUpdate(sqlquere + tableName);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        String sqlquery = "DELETE FROM public.";
+        jdbcTemplate().execute(sqlquery + tableName);
     }
 
     @Override
     public void insert(String tableName, Map<String, Object> input) {
-        try(Statement stmt = connection().createStatement()) {
-            String tableNames = getNamesFormated(input, "%s,");
-            String values = getValuesFormated(input, "'%s',");
-            stmt.executeUpdate("INSERT INTO public." + tableName + "(" + tableNames + ")" +
-                    "VALUES (" + values + ")");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        String tableNames = getInputKey(input);
+        String values = getInputValue(input);
+        String sqlquery = String.format("INSERT INTO public.%s (%s)" +
+                "VALUES (%s)", tableName, tableNames, values);
+        jdbcTemplate().update(sqlquery);
     }
+
     @Override
     public void create(String tableName, String keyName, Set<String> input){
-        try(Statement stmt = connection().createStatement()){
-            String columnsName = "";
-            String columnstype = " varchar(225)";
-            for (String data: input) {
-                columnsName += ", " + data + columnstype;
-            }
-            stmt.executeUpdate("CREATE TABLE " + tableName +
-                    " ( " + keyName + " SERIAL PRIMARY KEY NOT NULL " + columnsName + ")");
+        String columnsName = input.stream()
+                .collect(Collectors.joining(" varchar(225), ", "", " varchar(225)"));
 
-        }catch (SQLException e) {
-            e.printStackTrace();
-        }
+        String sqlquery = String.format("CREATE TABLE %s ( %s SERIAL PRIMARY KEY NOT NULL, %s)",
+                tableName, keyName, columnsName);
+        jdbcTemplate().update(sqlquery);
     }
 
     @Override
     public void delete(String tableName, Map<String, Object> input){
-        try(Statement stmt = connection().createStatement()){
-            String columnName = getNamesFormated(input, "%s,");
-            String columnValue = getValuesFormated(input, "'%s',");
-            stmt.executeUpdate("DELETE FROM " + tableName + " WHERE " + columnName + " = " + columnValue);
-        }catch (SQLException e) {
-            e.printStackTrace();
-        }
+        String columnName = getInputKey(input);
+        String columnValue = getInputValue(input);
+        String sqlquery = String.format("DELETE FROM %s WHERE %s = %s",
+                tableName, columnName, columnValue);
+        jdbcTemplate().update(sqlquery);
     }
 
     @Override
     public void drop(String tableName){
-        String sqlquere = "DROP TABLE ";
-        try(Statement stmt = connection().createStatement()){
-            stmt.executeUpdate(sqlquere + tableName);
-        }catch (SQLException e) {
-            e.printStackTrace();
-        }
+        String sqlquery = "DROP TABLE ";
+        jdbcTemplate().execute(sqlquery + tableName);
     }
 
     @Override
     public void update(String tableName, int id, Map<String, Object> newValue) {
-        String tableNames = getNamesFormated(newValue, "%s = ?,");
-        try(PreparedStatement ps = connection().prepareStatement(
-                "UPDATE public." + tableName + " SET " + tableNames + " WHERE id = ?")) {
-            int index = 1;
-            for (Map.Entry value : newValue.entrySet()) {
-                ps.setObject(index, value.getValue());
-                index++;
-            }
-            ps.setInt(index, id);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        String tableNames = newValue.entrySet().stream()
+                .map(Map.Entry::getKey)
+                .collect(Collectors.joining("", "", " = ?"));
+
+        List<Object> objects = new LinkedList<>(newValue.values());
+        objects.add(id);
+
+        String sqlquery = String.format("UPDATE public.%s SET %s WHERE id = ?", tableName, tableNames);
+        jdbcTemplate().update(sqlquery, objects.toArray());
     }
 
     @Override
     public Set<String> getTableCloumns(String tableName) {
-        String sqlquere = "SELECT * FROM information_schema.columns WHERE table_schema = 'public' AND table_name = '";
-        Set<String> tables = new LinkedHashSet<>();
-        try(Statement stmt = connection().createStatement();
-            ResultSet res = stmt.executeQuery(sqlquere + tableName + "'")) {
-            while (res.next()) {
-                tables.add(res.getString("column_name"));
-            }
-            return tables;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return tables;
-        }
+        String sqlquery = "SELECT * FROM information_schema.columns WHERE table_schema = 'public' AND table_name = '";
+        return new LinkedHashSet<>(jdbcTemplate().query(sqlquery + tableName + "'",
+                (res, row) -> res.getString("column_name")));
     }
 
    @Override
@@ -160,22 +115,17 @@ public class JDBCDatabaseManager implements DatabaseManager {
         return connection() != null;
     }
 
-    private String getNamesFormated(Map<String, Object> input, String format) {
-        String names = "";
-        for (Map.Entry name : input.entrySet()) {
-            names += String.format(format, name.getKey());
-        }
-        names = names.substring(0, names.length() - 1);
-        return names;
+    private String getInputKey(Map<String, Object> input) {
+        return input.entrySet().stream()
+                .map(Map.Entry::getKey)
+                .collect(Collectors.joining(", "));
     }
 
-    private String getValuesFormated(Map<String, Object> input, String format) {
-        String values = "";
-        for (Map.Entry value : input.entrySet()) {
-            values += String.format(format, value.getValue());
-        }
-        values = values.substring(0, values.length() - 1);
-        return values;
+    private String getInputValue(Map<String, Object> input) {
+        return input.entrySet().stream()
+                .map(Map.Entry::getValue)
+                .map(String::valueOf)
+                .collect(Collectors.joining("', '", "'", "'"));
     }
 }
 

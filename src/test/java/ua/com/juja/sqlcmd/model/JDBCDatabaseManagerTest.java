@@ -22,7 +22,7 @@ public class JDBCDatabaseManagerTest {
     @Test
     public void testGetAllTableNames() {
         Set<String> tablesNames = manager.getTables();
-        assertEquals("[newtable, supertable, newlist]", tablesNames.toString());
+        assertEquals("[supertable, newlist]", tablesNames.toString());
     }
 
     @Test
@@ -98,7 +98,6 @@ public class JDBCDatabaseManagerTest {
     @Test
     public void testDropCreateTable() {
         //given
-        manager.drop("newtable");
 
         //when
         String tableName = "newtable";
@@ -112,7 +111,10 @@ public class JDBCDatabaseManagerTest {
         manager.create(tableName, keyName, input);
         Set<String> columnNames = manager.getTableCloumns("newtable");
         assertEquals("[id, one, two]", columnNames.toString());
+
+        manager.drop("newtable");
     }
+
     @Test
     public void testDeleteTableData() {
         //given
@@ -147,4 +149,21 @@ public class JDBCDatabaseManagerTest {
         }
     }
 
+    @Test
+    public void testGetSize() {
+        //given
+        manager.clear("newlist");
+
+        Map<String, Object> input = new LinkedHashMap<>();
+        input.put("id", 10);
+        input.put("name", "hhh");
+        input.put("password", "ggg");
+        manager.insert("newlist", input);
+
+        //when
+        //then
+        assertEquals(1, manager.getSize("newlist"));
+
+
+    }
 }
