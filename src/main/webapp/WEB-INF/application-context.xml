@@ -10,5 +10,14 @@
     <context:annotation-config/>
     <context:component-scan base-package="ua.com.juja.sqlcmd"/>
 
+    <bean id="logDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="${log.jdbc.driverClassName}" />
+        <property name="url" value="${log.jdbc.url}" />
+        <property name="username" value="${log.jdbc.username}" />
+        <property name="password" value="${log.jdbc.password}" />
+    </bean>
+
+    <context:property-placeholder location="resources/log.jdbc.properties" />
+
 
 </beans>

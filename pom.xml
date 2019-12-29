@@ -93,7 +93,7 @@
                 <version>2.2</version>
                 <configuration>
                     <port>8080</port>
-                    <path>/mysqlsmd</path>
+                    <path>/mysqlcmd</path>
                 </configuration>
             </plugin>
         </plugins>

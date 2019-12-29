@@ -11,23 +11,25 @@ import static ua.com.juja.sqlcmd.message.MessageList.*;
 
 @Component
 public class DatabaseConnect {
+    private static JdbcTemplate jdbcTemplate;
+    private static Connection connection;
+    private static String dbName;
+    private static String userName;
 
-    public static JdbcTemplate jdbcTemplate;
-
-    public static Connection connection;
-
-    public Connection connect(String database, String userName, String password) {
+    public Connection connect(String dbName, String userName, String password) {
         String host = setupDriver();
         try {
-            connection = DriverManager.getConnection(host + database, userName,
+            connection = DriverManager.getConnection(host + dbName, userName,
                     password);
             jdbcTemplate = new JdbcTemplate(
                     new SingleConnectionDataSource(connection, false));
+            this.dbName = dbName;
+            this.userName = userName;
         } catch (SQLException e) {
             connection = null;
             jdbcTemplate = null;
             throw new RuntimeException(String.format(NOT_CONNECTION.getMessage(),
-                    database, userName), e);
+                    dbName, userName), e);
         }
         return connection;
     }
@@ -50,5 +52,13 @@ public class DatabaseConnect {
 
     public static JdbcTemplate getJdbcTemplate(){
         return jdbcTemplate;
+    }
+
+    public static String getDbName() {
+        return dbName;
+    }
+
+    public static String getUserName() {
+        return userName;
     }
 }

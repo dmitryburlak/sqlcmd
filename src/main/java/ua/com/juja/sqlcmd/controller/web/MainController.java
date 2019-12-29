@@ -3,10 +3,7 @@ package ua.com.juja.sqlcmd.controller.web;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import ua.com.juja.sqlcmd.controller.web.forms.Connection;
 import ua.com.juja.sqlcmd.controller.web.forms.Create;
 import ua.com.juja.sqlcmd.controller.web.forms.Insert;
@@ -51,6 +48,13 @@ public class MainController {
         }
         model.addAttribute("items", servise.tables());
         return "tables";
+    }
+
+    @RequestMapping(value = "/actions/{userName}", method = RequestMethod.GET)
+    public String actions(Model model,
+                          @PathVariable(value = "userName") String userName){
+        model.addAttribute("userName", servise.getAllFor(userName));
+        return "actions";
     }
 
     @RequestMapping(value = "/connect", method = RequestMethod.GET)

@@ -1,13 +1,14 @@
 package ua.com.juja.sqlcmd.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ua.com.juja.sqlcmd.model.*;
 
 import java.util.*;
 
-@Component
+@Service
 public class ServiceImpl implements Servise {
 
     @Autowired
@@ -15,6 +16,14 @@ public class ServiceImpl implements Servise {
 
     @Autowired
     private DatabaseManager manager;
+
+    private UserActionsDao userActions;
+
+    @Autowired
+    @Qualifier("userActionsDaoImpl")
+    public void setUserActions(UserActionsDao userActions) {
+        this.userActions = userActions;
+    }
 
     public DatabaseManager getManager() {
         return manager;
@@ -29,10 +38,11 @@ public class ServiceImpl implements Servise {
     public void connect(String database, String userName, String password) throws ServiseException {
        try{
            connectmanager.connect(database, userName, password);
+           userActions.log(manager.getUserName(), manager.getDbName(), "CONNECT" );
        } catch (Exception e) {
            throw new ServiseException("сonnection error ", e);
        }
-    }
+   }
 
    @Override
     public List<List<String>> find(String tableName) throws ServiseException {
@@ -43,7 +53,8 @@ public class ServiceImpl implements Servise {
         } catch (Exception e){
             throw new ServiseException("find error ", e);
         }
-    }
+       //userActions.log(manager.getUserName(), manager.getDbName(), "FIND (" + tableName + ")");
+   }
 
     private void getList(String tableName, List<List<String>> result) {
         List<String> columns = new LinkedList<>(manager.getTableCloumns(tableName));
@@ -63,6 +74,7 @@ public class ServiceImpl implements Servise {
         try {
             Set<String> tableNames = manager.getTables();
             String tables = tableNames.toString();
+            userActions.log(manager.getUserName(), manager.getDbName(), "LIST TABLES" );
             return tables;
         }catch (Exception e){
             throw new ServiseException("list tables error", e);
@@ -76,6 +88,7 @@ public class ServiceImpl implements Servise {
         input.put(columnsecond, valuesecond);
         try{
             manager.insert(tableName, input);
+            userActions.log(manager.getUserName(), manager.getDbName(), "INSERT DATA" );
         } catch (Exception e){
             throw new ServiseException("insert record error", e);
         }
@@ -87,6 +100,7 @@ public class ServiceImpl implements Servise {
         input.put(column, value);
         try{
             manager.delete(tableName, input);
+            userActions.log(manager.getUserName(), manager.getDbName(), "DELETE DATA" );
         } catch (Exception e){
             throw new ServiseException("delete record error", e);
         }
@@ -99,6 +113,7 @@ public class ServiceImpl implements Servise {
         input.add(columntwo);
         try{
             manager.create(tableName, columnPk, input);
+            userActions.log(manager.getUserName(), manager.getDbName(), "CREATE TABLE" );
         } catch (Exception e){
             throw new ServiseException("create table error", e);
         }
@@ -108,6 +123,7 @@ public class ServiceImpl implements Servise {
     public void drop(String tableName) throws ServiseException {
         try{
             manager.drop(tableName);
+            userActions.log(manager.getUserName(), manager.getDbName(), "DROP TABLE" );
         } catch (Exception e){
             throw new ServiseException("drop table error", e);
         }
@@ -119,6 +135,7 @@ public class ServiceImpl implements Servise {
         input.put(column, value);
         try{
             manager.update(tableName, id, input);
+            userActions.log(manager.getUserName(), manager.getDbName(), "UPDATE DATA" );
         } catch (Exception e){
             throw new ServiseException("update record error", e);
         }
@@ -128,8 +145,17 @@ public class ServiceImpl implements Servise {
     public void clear(String tableName) throws ServiseException {
         try{
             manager.clear(tableName);
+            userActions.log(manager.getUserName(), manager.getDbName(), "CLEAR TABLE" );
         } catch (Exception e){
             throw new ServiseException("clear table error", e);
         }
+    }
+
+    @Override
+    public List<UserAction> getAllFor(String userName){
+        if(Objects.isNull(userName)){
+            throw new IllegalArgumentException("userName cant be null");
+        }
+        return userActions.getAllFor(userName);
     }
 }

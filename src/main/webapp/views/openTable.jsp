@@ -20,7 +20,6 @@
                 </tr>
             </c:forEach>
         </table>
-    </form>
     <footer>
         <a href="find">find another table</a><br>
         <a href="menu">menu</a><br>

@@ -15,9 +15,9 @@ import java.util.stream.Stream;
 @Component
 public class JDBCDatabaseManager implements DatabaseManager {
 
-    private Connection connection(){
+    /*private Connection connection(){
         return DatabaseConnect.getConnection();
-    }
+    }*/
 
     private JdbcTemplate jdbcTemplate(){
         return DatabaseConnect.getJdbcTemplate();
@@ -112,7 +112,17 @@ public class JDBCDatabaseManager implements DatabaseManager {
 
    @Override
     public boolean isConnected() {
-        return connection() != null;
+        return Objects.nonNull(DatabaseConnect.getConnection()) ? true : false;
+    }
+
+    @Override
+    public String getDbName() {
+        return DatabaseConnect.getDbName();
+    }
+
+    @Override
+    public String getUserName() {
+        return DatabaseConnect.getUserName();
     }
 
     private String getInputKey(Map<String, Object> input) {

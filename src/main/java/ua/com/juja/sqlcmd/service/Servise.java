@@ -1,6 +1,7 @@
 package ua.com.juja.sqlcmd.service;
 
 import ua.com.juja.sqlcmd.model.DatabaseManager;
+import ua.com.juja.sqlcmd.model.UserAction;
 
 import java.util.List;
 
@@ -28,4 +29,6 @@ public interface Servise {
     void clear(String tableName) throws ServiseException;
 
     DatabaseManager getManager();
+
+    List<UserAction> getAllFor(String userName);
 }

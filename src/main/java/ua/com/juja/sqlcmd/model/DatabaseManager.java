@@ -27,4 +27,9 @@ public interface DatabaseManager {
     Set<String> getTableCloumns(String tableName);
 
     boolean isConnected();
+
+    String getDbName();
+
+    String getUserName();
+
 }
