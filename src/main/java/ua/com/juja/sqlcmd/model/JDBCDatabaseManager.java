@@ -15,10 +15,6 @@ import java.util.stream.Stream;
 @Component
 public class JDBCDatabaseManager implements DatabaseManager {
 
-    /*private Connection connection(){
-        return DatabaseConnect.getConnection();
-    }*/
-
     private JdbcTemplate jdbcTemplate(){
         return DatabaseConnect.getJdbcTemplate();
     }
