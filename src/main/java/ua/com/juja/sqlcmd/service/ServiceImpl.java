@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 import ua.com.juja.sqlcmd.model.*;
+import ua.com.juja.sqlcmd.model.entity.DatabaseConnection;
 import ua.com.juja.sqlcmd.model.entity.UserAction;
 //import ua.com.juja.sqlcmd.model.UserActionRepository;
 
@@ -25,6 +26,9 @@ public class ServiceImpl implements Servise {
     @Autowired
     private UserActionRepository userActions;
 
+    @Autowired
+    private DatabaseConnectionRepository databaseConnection;
+
     @Override
     public List<String> commandsList() {
         return Arrays.asList("help", "tables", "find", "create", "drop", "clear", "insert", "delete", "update");
@@ -34,19 +38,18 @@ public class ServiceImpl implements Servise {
     public void connect(String database, String userName, String password) throws ServiseException {
        try{
            connectmanager.connect(database, userName, password);
-           userActions.save(new UserAction(manager.getUserName(), manager.getDbName(), "CONNECT"));
+           saveAction("CONNECT");
        } catch (Exception e) {
            throw new ServiseException("сonnection error ", e);
        }
    }
 
-   @Override
+    @Override
     public List<List<String>> find(String tableName) throws ServiseException {
         List<List<String>> result = new LinkedList<>();
         try{
             getList(tableName, result);
-            userActions.save(new UserAction(manager.getUserName(), manager.getDbName(),
-                    "FIND (" + tableName + ")"));
+            saveAction("FIND (" + tableName + ")");
             return result;
         } catch (Exception e){
             throw new ServiseException("find error ", e);
@@ -72,7 +75,7 @@ public class ServiceImpl implements Servise {
         try {
             Set<String> tableNames = manager.getTables();
             String tables = tableNames.toString();
-            userActions.save(new UserAction(manager.getUserName(), manager.getDbName(), "LIST TABLES"));
+            saveAction("LIST TABLES");
             return tables;
         }catch (Exception e){
             throw new ServiseException("list tables error", e);
@@ -86,7 +89,7 @@ public class ServiceImpl implements Servise {
         input.put(columnsecond, valuesecond);
         try{
             manager.insert(tableName, input);
-            userActions.save(new UserAction(manager.getUserName(), manager.getDbName(), "INSERT DATA"));
+            saveAction("INSERT DATA");
         } catch (Exception e){
             throw new ServiseException("insert record error", e);
         }
@@ -98,7 +101,7 @@ public class ServiceImpl implements Servise {
         input.put(column, value);
         try{
             manager.delete(tableName, input);
-            userActions.save(new UserAction(manager.getUserName(), manager.getDbName(), "DELETE DATA"));
+            saveAction("DELETE DATA");
         } catch (Exception e){
             throw new ServiseException("delete record error", e);
         }
@@ -111,7 +114,7 @@ public class ServiceImpl implements Servise {
         input.add(columntwo);
         try{
             manager.create(tableName, columnPk, input);
-            userActions.save(new UserAction(manager.getUserName(), manager.getDbName(), "CREATE TABLE"));
+            saveAction("CREATE TABLE");
         } catch (Exception e){
             throw new ServiseException("create table error", e);
         }
@@ -121,7 +124,7 @@ public class ServiceImpl implements Servise {
     public void drop(String tableName) throws ServiseException {
         try{
             manager.drop(tableName);
-            userActions.save(new UserAction(manager.getUserName(), manager.getDbName(), "DROP TABLE"));
+            saveAction("DROP TABLE");
         } catch (Exception e){
             throw new ServiseException("drop table error", e);
         }
@@ -133,7 +136,7 @@ public class ServiceImpl implements Servise {
         input.put(column, value);
         try{
             manager.update(tableName, id, input);
-            userActions.save(new UserAction(manager.getUserName(), manager.getDbName(), "UPDATE DATA"));
+            saveAction("UPDATE DATA");
         } catch (Exception e){
             throw new ServiseException("update record error", e);
         }
@@ -143,7 +146,7 @@ public class ServiceImpl implements Servise {
     public void clear(String tableName) throws ServiseException {
         try{
             manager.clear(tableName);
-            userActions.save(new UserAction(manager.getUserName(), manager.getDbName(), "CLEAR TABLE"));
+            saveAction("CLEAR TABLE");
         } catch (Exception e){
             throw new ServiseException("clear table error", e);
         }
@@ -155,5 +158,15 @@ public class ServiceImpl implements Servise {
             throw new IllegalArgumentException("userName cant be null");
         }
         return userActions.findByName(userName);
+    }
+
+    private void saveAction(String action) {
+        DatabaseConnection dc = databaseConnection.findByNameAndDbName(manager.getUserName(),
+                manager.getDbName());
+
+        if(Objects.isNull(dc)){
+            dc = databaseConnection.save(new DatabaseConnection(manager.getUserName(), manager.getDbName()));
+        }
+        userActions.save(new UserAction(dc, action));
     }
 }

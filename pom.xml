@@ -15,6 +15,8 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <org.springframework.version>5.0.1.RELEASE</org.springframework.version>
+        <org.springframework.data.version>2.1.14.RELEASE</org.springframework.data.version>
+        <org.hibernate.entitymanager.version>4.3.11.Final</org.hibernate.entitymanager.version>
     </properties>
 
     <dependencies>
@@ -52,13 +54,13 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-jpa</artifactId>
-            <version>2.1.14.RELEASE</version>
+            <version>${org.springframework.data.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
-            <version>4.3.11.Final</version>
+            <version>${org.hibernate.entitymanager.version}</version>
         </dependency>
 
         <dependency>
@@ -103,7 +105,7 @@
 </dependencies>
 
     <build>
-        <finalName>${artifactId}</finalName>
+        <finalName>${project.artifactId}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

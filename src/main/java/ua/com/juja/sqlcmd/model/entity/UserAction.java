@@ -11,22 +11,19 @@ public class UserAction {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @Column(name = "user_name")
-    private String name;
-
-    @Column(name = "db_name")
-    private String dbName;
-
     @Column(name = "action")
     private String action;
+
+    @JoinColumn(name = "database_connection_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private DatabaseConnection connection;
 
     public UserAction() {
         //do nothing
     }
 
-    public UserAction(String name, String dbName, String action) {
-        this.name = name;
-        this.dbName = dbName;
+    public UserAction(DatabaseConnection connection, String action) {
+        this.connection = connection;
         this.action = action;
     }
 
@@ -34,31 +31,23 @@ public class UserAction {
         this.id = id;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setDbName(String dbName) {
-        this.dbName = dbName;
-    }
-
     public void setAction(String action) {
         this.action = action;
+    }
+
+    public void setConnection(DatabaseConnection connection) {
+        this.connection = connection;
     }
 
     public int getId() {
         return id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getDbName() {
-        return dbName;
-    }
-
     public String getAction() {
         return action;
+    }
+
+    public DatabaseConnection getConnection() {
+        return connection;
     }
 }
