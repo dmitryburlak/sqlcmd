@@ -7,7 +7,7 @@ import ua.com.juja.sqlcmd.model.entity.UserAction;
 
 import java.util.List;
 
-public interface UserActionRepository extends CrudRepository<UserAction, Integer>, UserActionRepositoryCustom {
+public interface UserActionRepository extends CrudRepository<UserAction, Integer>, UserActionRepositoryCustom{
 
     @Query("SELECT ua FROM UserAction ua WHERE ua.connection.name = :name")
     List<UserAction> findByName(@Param("name") String name);

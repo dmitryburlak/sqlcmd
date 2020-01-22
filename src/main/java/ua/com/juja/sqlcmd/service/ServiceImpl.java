@@ -3,13 +3,13 @@ package ua.com.juja.sqlcmd.service;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ua.com.juja.sqlcmd.model.*;
 import ua.com.juja.sqlcmd.model.entity.UserAction;
-//import ua.com.juja.sqlcmd.model.UserActionRepository;
-
 import java.util.*;
 
 @Service
+@Transactional
 public class ServiceImpl implements Servise {
 
     @Autowired
@@ -45,7 +45,7 @@ public class ServiceImpl implements Servise {
         List<List<String>> result = new LinkedList<>();
         try{
             getList(tableName, result);
-            userActions.createAction(manager.getUserName(), manager.getDbName(), "FIND (" + tableName + ")");;
+            userActions.createAction(manager.getUserName(), manager.getDbName(), "FIND (" + tableName + ")");
             return result;
         } catch (Exception e){
             throw new ServiseException("find error ", e);

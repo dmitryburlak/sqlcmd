@@ -17,7 +17,8 @@
     <context:component-scan base-package="ua.com.juja.sqlcmd"/>
 
     <jpa:repositories base-package="ua.com.juja.sqlcmd.model"
-                      entity-manager-factory-ref="emf"/>
+                      entity-manager-factory-ref="emf"
+                      transaction-manager-ref="transactionManager"/>
 
     <bean id="emf"
           class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
@@ -28,7 +29,7 @@
             <props>
                 <prop key="hibernate.show_sql">true</prop>
                 <prop key="hibernate.hbm2ddl.auto">validate</prop>
-                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
             </props>
         </property>
 
@@ -37,8 +38,8 @@
         </property>
     </bean>
 
-    <tx:annotation-driven transaction-manager="transactionManager" />
-    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    <tx:annotation-driven/>
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
         <property name="dataSource" ref="logDataSource"/>
     </bean>
 
@@ -51,6 +52,7 @@
 
     <context:property-placeholder location="resources/log.jdbc.properties"/>
 
-
+    <bean id="persistenceExceptionTranslationPostProcessor" class=
+            "org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
 
 </beans>
