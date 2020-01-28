@@ -1,7 +1,5 @@
 package ua.com.juja.sqlcmd.model.entity;
 
-import jdk.nashorn.internal.objects.annotations.Property;
-
 import javax.persistence.*;
 
 @Entity

@@ -218,7 +218,7 @@ public class MainController {
             model.addAttribute("errorMessage", e.getMessage());
             return "error";
         }
-        model.addAttribute("message", String.format(DELETE_TABLE_DATA.getMessage(), tableName));
+        model.addAttribute("message", String.format(DELETE_TABLE_DATA.getMessage(), tableName, column, value));
         return "delete";
     }
 
@@ -242,7 +242,7 @@ public class MainController {
             model.addAttribute("errorMessage", e.getMessage());
             return "error";
         }
-        model.addAttribute("message", String.format(UPDATE_TABLE_DATA.getMessage(), update.getTableName()));
+        model.addAttribute("message", String.format(UPDATE_TABLE_DATA.getMessage(), update.getTableName(), update.getId(), update.getColumn()));
         return "update";
     }
 
