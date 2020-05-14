@@ -8,9 +8,8 @@ import ua.com.juja.sqlcmd.controller.web.forms.Connection;
 import ua.com.juja.sqlcmd.controller.web.forms.Create;
 import ua.com.juja.sqlcmd.controller.web.forms.Insert;
 import ua.com.juja.sqlcmd.controller.web.forms.Update;
-import ua.com.juja.sqlcmd.model.DatabaseManager;
-import ua.com.juja.sqlcmd.service.Servise;
-import ua.com.juja.sqlcmd.service.ServiseException;
+import ua.com.juja.sqlcmd.service.ServiceComponent;
+import ua.com.juja.sqlcmd.service.ServiceComponentException;
 
 import javax.servlet.http.HttpSession;
 
@@ -20,9 +19,12 @@ import static ua.com.juja.sqlcmd.message.MessageList.*;
 
 @Controller
 public class MainController {
+    private final ServiceComponent serviceComponent;
 
-    @Autowired
-    private Servise servise;
+   @Autowired
+    public MainController(ServiceComponent serviceComponent) {
+        this.serviceComponent = serviceComponent;
+    }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String slash(){
@@ -31,7 +33,7 @@ public class MainController {
 
     @RequestMapping(value = "/menu", method = RequestMethod.GET)
     public String menu(Model model){
-        model.addAttribute("items", servise.commandsList());
+        model.addAttribute("items", serviceComponent.commandsList());
         return "menu";
     }
 
@@ -46,14 +48,14 @@ public class MainController {
             session.setAttribute("fromPage", "/tables");
             return "redirect:/connect";
         }
-        model.addAttribute("items", servise.tables());
+        model.addAttribute("items", serviceComponent.tables());
         return "tables";
     }
 
     @RequestMapping(value = "/actions/{userName}", method = RequestMethod.GET)
     public String actions(Model model,
                           @PathVariable(value = "userName") String userName){
-        model.addAttribute("userName", servise.getAllFor(userName));
+        model.addAttribute("userName", serviceComponent.getAllFor(userName));
         return "actions";
     }
 
@@ -73,9 +75,9 @@ public class MainController {
     public String connectPost(@ModelAttribute("connection") Connection connection,
                               Model model, HttpSession session) {
         try{
-            servise.connect(connection.getDatabase(),
+            serviceComponent.connect(connection.getDatabase(),
                     connection.getUserName(), connection.getPassword());
-            session.setAttribute("db_manager", servise.getManager());
+            session.setAttribute("db_manager", serviceComponent.getManager());
             return "redirect:" + connection.getFromPage();
         } catch (Exception e){
             model.addAttribute("errorMessage", e.getMessage());
@@ -89,7 +91,7 @@ public class MainController {
             session.setAttribute("fromPage", "/find");
             return "redirect:/connect";
         }
-        model.addAttribute("items", servise.tables());
+        model.addAttribute("items", serviceComponent.tables());
         return "find";
     }
 
@@ -97,10 +99,10 @@ public class MainController {
     public String findPost(@RequestParam(value = "tableName") String tableName,
                            Model model){
         try{
-            model.addAttribute("tableName", servise.find(tableName));
+            model.addAttribute("tableName", serviceComponent.find(tableName));
             model.addAttribute("message", tableName);
             return "openTable";
-        }catch(ServiseException e){
+        }catch(ServiceComponentException e){
             model.addAttribute("errorMessage", e.getMessage());
             return "error";
         }
@@ -120,9 +122,9 @@ public class MainController {
     public String createPost(@ModelAttribute("create") Create create,
                              Model model){
         try {
-            servise.create(create.getTableName(), create.getColumnPk(),
-                    create.getColumnone(), create.getColumntwo());
-        } catch (ServiseException e) {
+            serviceComponent.create(create.getTableName(), create.getColumnPk(),
+                    create.getColumnOne(), create.getColumnTwo());
+        } catch (ServiceComponentException e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "error";
         }
@@ -143,8 +145,8 @@ public class MainController {
     public String dropPost(@RequestParam(value = "tableName") String tableName,
                            Model model) {
         try {
-            servise.drop(tableName);
-        } catch (ServiseException e) {
+            serviceComponent.drop(tableName);
+        } catch (ServiceComponentException e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "error";
         }
@@ -165,8 +167,8 @@ public class MainController {
     public String clearPost(@RequestParam(value = "tableName") String tableName,
                             Model model) {
         try {
-            servise.clear(tableName);
-        } catch (ServiseException e) {
+            serviceComponent.clear(tableName);
+        } catch (ServiceComponentException e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "error";
         }
@@ -188,9 +190,9 @@ public class MainController {
     public String insertPost(@ModelAttribute(value = "insert") Insert insert,
                              Model model) {
         try {
-            servise.insert(insert.getTableName(), insert.getColumn(), insert.getValue(),
-                    insert.getColumnsecond(), insert.getValuesecond());
-        } catch (ServiseException e) {
+            serviceComponent.insert(insert.getTableName(), insert.getColumn(), insert.getValue(),
+                    insert.getColumnSecond(), insert.getValueSecond());
+        } catch (ServiceComponentException e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "error";
         }
@@ -213,8 +215,8 @@ public class MainController {
                              @RequestParam(value = "value") String value,
                              Model model) {
         try {
-            servise.delete(tableName, column, value);
-        } catch (ServiseException e) {
+            serviceComponent.delete(tableName, column, value);
+        } catch (ServiceComponentException e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "error";
         }
@@ -236,9 +238,9 @@ public class MainController {
     public String updatePost(@ModelAttribute(value = "update") Update update,
                             Model model) {
         try {
-            servise.update(update.getTableName(), update.getId(), update.getColumn(),
+            serviceComponent.update(update.getTableName(), update.getId(), update.getColumn(),
                     update.getValue());
-        } catch (ServiseException e) {
+        } catch (ServiceComponentException e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "error";
         }
