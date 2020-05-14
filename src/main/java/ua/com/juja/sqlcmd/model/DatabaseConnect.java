@@ -19,8 +19,7 @@ public class DatabaseConnect {
     public Connection connect(String dbName, String userName, String password) {
         String host = setupDriver();
         try {
-            connection = DriverManager.getConnection(host + dbName, userName,
-                    password);
+            connection = DriverManager.getConnection(host + dbName, userName, password);
             jdbcTemplate = new JdbcTemplate(
                     new SingleConnectionDataSource(connection, false));
             this.dbName = dbName;
