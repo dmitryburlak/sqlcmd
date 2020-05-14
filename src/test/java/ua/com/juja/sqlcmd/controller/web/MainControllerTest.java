@@ -16,17 +16,11 @@ import ua.com.juja.sqlcmd.controller.web.forms.Insert;
 import ua.com.juja.sqlcmd.controller.web.forms.Update;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.model.JDBCDatabaseManager;
-import ua.com.juja.sqlcmd.service.Servise;
-
-
+import ua.com.juja.sqlcmd.service.ServiceComponent;
 import java.util.Arrays;
-
-
 import static java.lang.String.valueOf;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
-
 import static org.mockito.Mockito.*;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -40,7 +34,7 @@ public class MainControllerTest {
     private MainController mainController;
 
     @Mock
-    private Servise service;
+    private ServiceComponent serviceComponent;
 
     @BeforeEach
     public void setupMock() {
@@ -62,12 +56,12 @@ public class MainControllerTest {
 
     @Test
     public void menu_get_Test() throws Exception {
-        when(service.commandsList())
+        when(serviceComponent.commandsList())
                 .thenReturn(Arrays.asList("help", "tables", "find", "create", "drop", "clear", "insert", "delete", "update"));
 
         mockMvc.perform(get("/menu"))
                 .andDo(print())
-                .andExpect(model().attribute("items", service.commandsList()))
+                .andExpect(model().attribute("items", serviceComponent.commandsList()))
                 .andExpect(status().isOk())
                 .andExpect(forwardedUrl("/webapp/views/menu.jsp"));
     }
@@ -99,10 +93,10 @@ public class MainControllerTest {
         mockMvc.perform(builder)
                     .andDo(print())
                     .andExpect(status().isOk())
-                    .andExpect(model().attribute("items", service.tables()))
+                    .andExpect(model().attribute("items", serviceComponent.tables()))
                     .andExpect(forwardedUrl("/webapp/views/tables.jsp"));
 
-        when(service.tables()).thenReturn("newlist, supertable");
+        when(serviceComponent.tables()).thenReturn("newlist, supertable");
     }
 
     @Test
@@ -125,10 +119,10 @@ public class MainControllerTest {
         connection.setUserName("postgres");
         connection.setPassword("root");
 
-        doNothing().when(service)
+        doNothing().when(serviceComponent)
                .connect(connection.getDatabase(), connection.getUserName(), connection.getPassword());
 
-        when(service.getManager()).thenReturn(getManager());
+        when(serviceComponent.getManager()).thenReturn(getManager());
         MockHttpSession mockSession = new MockHttpSession();
         mockSession.setAttribute("db_manager", getManager());
 
@@ -145,10 +139,10 @@ public class MainControllerTest {
                 .andExpect(model().attribute("connection", instanceOf(connection.getClass())))
                 .andExpect(redirectedUrl(connection.getFromPage()));
 
-        verify(service, times(1))
+        verify(serviceComponent, times(1))
                 .connect(connection.getDatabase(), connection.getUserName(), connection.getPassword());
 
-        verify(service, times(1)).getManager();
+        verify(serviceComponent, times(1)).getManager();
     }
 
     @Test
@@ -170,16 +164,16 @@ public class MainControllerTest {
         mockMvc.perform(builder)
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("items", service.tables()))
+                .andExpect(model().attribute("items", serviceComponent.tables()))
                 .andExpect(forwardedUrl("/webapp/views/find.jsp"));
 
-        when(service.tables()).thenReturn("newlist, supertable");
+        when(serviceComponent.tables()).thenReturn("newlist, supertable");
     }
 
     @Test
     public void find_post_Test() throws Exception {
         String tableName = "newlist";
-        when(service.find(tableName)).thenReturn(Arrays.asList(Arrays.asList("tables data")));
+        when(serviceComponent.find(tableName)).thenReturn(Arrays.asList(Arrays.asList("tables data")));
 
         MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post("/find")
                 .sessionAttr("db_manager", getManager())
@@ -188,7 +182,7 @@ public class MainControllerTest {
         mockMvc.perform(builder)
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("tableName", service.find(tableName)))
+                .andExpect(model().attribute("tableName", serviceComponent.find(tableName)))
                 .andExpect(model().attribute("message", tableName))
                 .andExpect(forwardedUrl("/webapp/views/openTable.jsp"));
     }
@@ -221,18 +215,18 @@ public class MainControllerTest {
         Create create = new Create();
         create.setTableName("someName");
         create.setColumnPk("id");
-        create.setColumnone("someColumnOne");
-        create.setColumntwo("someColumnTwo");
+        create.setColumnOne("someColumnOne");
+        create.setColumnTwo("someColumnTwo");
 
-        doNothing().when(service)
-                .create(create.getTableName(), create.getColumnPk(), create.getColumnone(), create.getColumntwo());
+        doNothing().when(serviceComponent)
+                .create(create.getTableName(), create.getColumnPk(), create.getColumnOne(), create.getColumnTwo());
 
         MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post("/create", create)
                 .sessionAttr("db_manager", getManager())
                 .param("tableName", create.getTableName())
                 .param("columnPk", create.getColumnPk())
-                .param("columnone", create.getColumnone())
-                .param("columntwo", create.getColumntwo());
+                .param("columnOne", create.getColumnOne())
+                .param("columnTwo", create.getColumnTwo());
 
         mockMvc.perform(builder)
                 .andDo(print())
@@ -241,8 +235,8 @@ public class MainControllerTest {
                 .andExpect(model().attribute("message", "таблица " + create.getTableName() + " создана"))
                 .andExpect(forwardedUrl("/webapp/views/create.jsp"));
 
-        verify(service, times(1))
-                .create(create.getTableName(), create.getColumnPk(), create.getColumnone(), create.getColumntwo());
+        verify(serviceComponent, times(1))
+                .create(create.getTableName(), create.getColumnPk(), create.getColumnOne(), create.getColumnTwo());
     }
 
     @Test
@@ -270,7 +264,7 @@ public class MainControllerTest {
     @Test
     public void drop_post_Test() throws Exception {
         String tableName = "somethingName";
-        doNothing().when(service).drop(tableName);
+        doNothing().when(serviceComponent).drop(tableName);
 
         MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post("/drop")
                 .sessionAttr("db_manager", getManager())
@@ -282,7 +276,7 @@ public class MainControllerTest {
                 .andExpect(model().attribute("message", "таблица " + tableName + " удалена"))
                 .andExpect(forwardedUrl("/webapp/views/drop.jsp"));
 
-        verify(service, times(1)).drop(tableName);
+        verify(serviceComponent, times(1)).drop(tableName);
     }
 
     @Test
@@ -310,7 +304,7 @@ public class MainControllerTest {
     @Test
     public void clear_post_Test() throws Exception {
         String tableName = "someName";
-        doNothing().when(service).clear(tableName);
+        doNothing().when(serviceComponent).clear(tableName);
 
         MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post("/clear")
                 .sessionAttr("db_manager", getManager())
@@ -322,7 +316,7 @@ public class MainControllerTest {
                 .andExpect(model().attribute("message", "таблица " + tableName + " очищена"))
                 .andExpect(forwardedUrl("/webapp/views/clear.jsp"));
 
-        verify(service, times(1)).clear(tableName);
+        verify(serviceComponent, times(1)).clear(tableName);
     }
 
     @Test
@@ -354,19 +348,19 @@ public class MainControllerTest {
         insert.setTableName("someName");
         insert.setColumn("someColumnOne");
         insert.setValue("one");
-        insert.setColumnsecond("someColumnTwo");
-        insert.setColumnsecond("two");
+        insert.setColumnSecond("someColumnTwo");
+        insert.setColumnSecond("two");
 
-        doNothing().when(service).insert(insert.getTableName(),
-                insert.getColumn(), insert.getValue(), insert.getColumnsecond(), insert.getValuesecond());
+        doNothing().when(serviceComponent).insert(insert.getTableName(),
+                insert.getColumn(), insert.getValue(), insert.getColumnSecond(), insert.getValueSecond());
 
         MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post("/insert", insert)
                 .sessionAttr("db_manager", getManager())
                 .param("tableName", insert.getTableName())
                 .param("column", insert.getColumn())
                 .param("value", insert.getValue())
-                .param("columnsecond", insert.getColumnsecond())
-                .param("valuesecond", insert.getValuesecond());
+                .param("columnSecond", insert.getColumnSecond())
+                .param("valueSecond", insert.getValueSecond());
 
         mockMvc.perform(builder)
                 .andDo(print())
@@ -375,9 +369,9 @@ public class MainControllerTest {
                 .andExpect(model().attribute("message", "в таблицу "+ insert.getTableName() +" запись добавлена"))
                 .andExpect(forwardedUrl("/webapp/views/insert.jsp"));
 
-        verify(service, times(1)).insert(insert.getTableName(),
-                        insert.getColumn(), insert.getValue(), insert.getColumnsecond(), insert.getValuesecond());
-        service.drop("someName");
+        verify(serviceComponent, times(1)).insert(insert.getTableName(),
+                        insert.getColumn(), insert.getValue(), insert.getColumnSecond(), insert.getValueSecond());
+        serviceComponent.drop("someName");
     }
 
     @Test
@@ -407,7 +401,7 @@ public class MainControllerTest {
         String tableName = "someName";
         String column = "column";
         String value = "value";
-        doNothing().when(service).delete(tableName, column, value);
+        doNothing().when(serviceComponent).delete(tableName, column, value);
 
         MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post("/delete")
                 .sessionAttr("db_manager", getManager())
@@ -421,7 +415,7 @@ public class MainControllerTest {
                 .andExpect(model().attribute("message", "в таблицe " + tableName + " из колонки " + column + " запись " + value + " удалена"))
                 .andExpect(forwardedUrl("/webapp/views/delete.jsp"));
 
-        verify(service, times(1)).delete(tableName, column, value);
+        verify(serviceComponent, times(1)).delete(tableName, column, value);
     }
 
     @Test
@@ -455,7 +449,7 @@ public class MainControllerTest {
         update.setColumn("column");
         update.setValue("value");
 
-        doNothing().when(service).update(update.getTableName(), update.getId(), update.getColumn(), update.getValue());
+        doNothing().when(serviceComponent).update(update.getTableName(), update.getId(), update.getColumn(), update.getValue());
 
         MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.post("/update", update)
                 .sessionAttr("db_manager", getManager())
@@ -471,7 +465,7 @@ public class MainControllerTest {
                 .andExpect(model().attribute("message", "в таблице someName id " + valueOf(update.getId()) + " в колонке "+ update.getColumn() + " запись обновлена"))
                 .andExpect(forwardedUrl("/webapp/views/update.jsp"));
 
-        verify(service, times(1))
+        verify(serviceComponent, times(1))
                 .update(update.getTableName(), update.getId(), update.getColumn(), update.getValue());
     }
 
