@@ -17,13 +17,12 @@ public class ConnectProperties {
         return host;
     }
 
-    public ConnectProperties readProperties(){
-
+    public ConnectProperties readProperties() {
         Properties properties = new Properties();
 
         try{
-            FileInputStream fileproperties = new FileInputStream("src/main/resources/connect.properties");
-            properties.load(fileproperties);
+            FileInputStream fileProperties = new FileInputStream("src/main/resources/connect.properties");
+            properties.load(fileProperties);
         }catch (IOException e){
             throw new RuntimeException(PROPERTIESFILE_NOT_FOUND.getMessage());
         }
