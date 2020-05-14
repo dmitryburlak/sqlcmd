@@ -7,8 +7,9 @@ public class Connection {
     private String fromPage;
 
     public Connection() {
-
+        //do nothing
     }
+
     public Connection(String fromPage) {
         this.fromPage = fromPage;
     }
