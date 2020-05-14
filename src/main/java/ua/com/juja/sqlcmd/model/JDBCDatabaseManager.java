@@ -21,13 +21,13 @@ public class JDBCDatabaseManager implements DatabaseManager {
 
     @Override
     public List<Map<String, Object>> getTableDataSet(String tableName) {
-        String sqlquery = "SELECT * FROM public.";
-        return jdbcTemplate().query(sqlquery + tableName,
+        String sqlQuery = "SELECT * FROM public.";
+        return jdbcTemplate().query(sqlQuery + tableName,
                 (res, row) -> {
-                    ResultSetMetaData resmd = res.getMetaData();
+                    ResultSetMetaData resMd = res.getMetaData();
                     Map<String, Object> data = new LinkedHashMap<>();
-                    for (int i = 1; i <= resmd.getColumnCount(); i++) {
-                        data.put(resmd.getColumnName(i), res.getObject(i));
+                    for (int i = 1; i <= resMd.getColumnCount(); i++) {
+                        data.put(resMd.getColumnName(i), res.getObject(i));
                     }
                     return data;
                 });
@@ -35,30 +35,30 @@ public class JDBCDatabaseManager implements DatabaseManager {
 
     @Override
     public int getSize(String tableName) {
-        String sqlquery = "SELECT COUNT (*) FROM public.";
-        return jdbcTemplate().queryForObject(sqlquery + tableName, Integer.class);
+        String sqlQuery = "SELECT COUNT (*) FROM public.";
+        return jdbcTemplate().queryForObject(sqlQuery + tableName, Integer.class);
     }
 
     @Override
     public Set<String> getTables() {
-        String sqlquery = "SELECT table_name FROM information_schema.tables WHERE table_schema NOT IN ('information_schema','pg_catalog')";
-        return new LinkedHashSet<>(jdbcTemplate().query(sqlquery,
+        String sqlQuery = "SELECT table_name FROM information_schema.tables WHERE table_schema NOT IN ('information_schema','pg_catalog')";
+        return new LinkedHashSet<>(jdbcTemplate().query(sqlQuery,
                 (res, row) -> res.getString("table_name")));
     }
 
     @Override
     public void clear(String tableName) {
-        String sqlquery = "DELETE FROM public.";
-        jdbcTemplate().execute(sqlquery + tableName);
+        String sqlQuery = "DELETE FROM public.";
+        jdbcTemplate().execute(sqlQuery + tableName);
     }
 
     @Override
     public void insert(String tableName, Map<String, Object> input) {
         String tableNames = getInputKey(input);
         String values = getInputValue(input);
-        String sqlquery = String.format("INSERT INTO public.%s (%s)" +
+        String sqlQuery = String.format("INSERT INTO public.%s (%s)" +
                 "VALUES (%s)", tableName, tableNames, values);
-        jdbcTemplate().update(sqlquery);
+        jdbcTemplate().update(sqlQuery);
     }
 
     @Override
@@ -66,24 +66,24 @@ public class JDBCDatabaseManager implements DatabaseManager {
         String columnsName = input.stream()
                 .collect(Collectors.joining(" varchar(225), ", "", " varchar(225)"));
 
-        String sqlquery = String.format("CREATE TABLE %s ( %s SERIAL PRIMARY KEY NOT NULL, %s)",
+        String sqlQuery = String.format("CREATE TABLE %s ( %s SERIAL PRIMARY KEY NOT NULL, %s)",
                 tableName, keyName, columnsName);
-        jdbcTemplate().update(sqlquery);
+        jdbcTemplate().update(sqlQuery);
     }
 
     @Override
     public void delete(String tableName, Map<String, Object> input){
         String columnName = getInputKey(input);
         String columnValue = getInputValue(input);
-        String sqlquery = String.format("DELETE FROM %s WHERE %s = %s",
+        String sqlQuery = String.format("DELETE FROM %s WHERE %s = %s",
                 tableName, columnName, columnValue);
-        jdbcTemplate().update(sqlquery);
+        jdbcTemplate().update(sqlQuery);
     }
 
     @Override
     public void drop(String tableName){
-        String sqlquery = "DROP TABLE ";
-        jdbcTemplate().execute(sqlquery + tableName);
+        String sqlQuery = "DROP TABLE ";
+        jdbcTemplate().execute(sqlQuery + tableName);
     }
 
     @Override
@@ -95,14 +95,14 @@ public class JDBCDatabaseManager implements DatabaseManager {
         List<Object> objects = new LinkedList<>(newValue.values());
         objects.add(id);
 
-        String sqlquery = String.format("UPDATE public.%s SET %s WHERE id = ?", tableName, tableNames);
-        jdbcTemplate().update(sqlquery, objects.toArray());
+        String sqlQuery = String.format("UPDATE public.%s SET %s WHERE id = ?", tableName, tableNames);
+        jdbcTemplate().update(sqlQuery, objects.toArray());
     }
 
     @Override
     public Set<String> getTableCloumns(String tableName) {
-        String sqlquery = "SELECT * FROM information_schema.columns WHERE table_schema = 'public' AND table_name = '";
-        return new LinkedHashSet<>(jdbcTemplate().query(sqlquery + tableName + "'",
+        String sqlQuery = "SELECT * FROM information_schema.columns WHERE table_schema = 'public' AND table_name = '";
+        return new LinkedHashSet<>(jdbcTemplate().query(sqlQuery + tableName + "'",
                 (res, row) -> res.getString("column_name")));
     }
 
