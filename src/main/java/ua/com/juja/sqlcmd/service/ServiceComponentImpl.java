@@ -1,7 +1,6 @@
 package ua.com.juja.sqlcmd.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.juja.sqlcmd.model.*;
@@ -10,20 +9,23 @@ import java.util.*;
 
 @Service
 @Transactional
-public class ServiceImpl implements Servise {
+public class ServiceComponentImpl implements ServiceComponent {
+    private final DatabaseConnect connectManager;
+    private final DatabaseManager manager;
+    private final UserActionRepository userActions;
 
     @Autowired
-    private DatabaseConnect connectmanager;
-
-    @Autowired
-    private DatabaseManager manager;
+    public ServiceComponentImpl(DatabaseConnect connectManager,
+                                DatabaseManager manager,
+                                UserActionRepository userActions) {
+        this.connectManager = connectManager;
+        this.manager = manager;
+        this.userActions = userActions;
+    }
 
     public DatabaseManager getManager() {
         return manager;
     }
-
-    @Autowired
-    private UserActionRepository userActions;
 
     @Override
     public List<String> commandsList() {
@@ -31,24 +33,24 @@ public class ServiceImpl implements Servise {
     }
 
    @Override
-    public void connect(String database, String userName, String password) throws ServiseException {
+    public void connect(String database, String userName, String password) throws ServiceComponentException {
        try{
-           connectmanager.connect(database, userName, password);
+           connectManager.connect(database, userName, password);
            userActions.createAction(manager.getUserName(), manager.getDbName(), "CONNECT");
        } catch (Exception e) {
-           throw new ServiseException("сonnection error ", e);
+           throw new ServiceComponentException("сonnection error ", e);
        }
    }
 
     @Override
-    public List<List<String>> find(String tableName) throws ServiseException {
+    public List<List<String>> find(String tableName) throws ServiceComponentException {
         List<List<String>> result = new LinkedList<>();
         try{
             getList(tableName, result);
             userActions.createAction(manager.getUserName(), manager.getDbName(), "FIND (" + tableName + ")");
             return result;
         } catch (Exception e){
-            throw new ServiseException("find error ", e);
+            throw new ServiceComponentException("find error ", e);
         }
    }
 
@@ -66,19 +68,19 @@ public class ServiceImpl implements Servise {
     }
 
     @Override
-    public String tables() throws ServiseException {
+    public String tables() throws ServiceComponentException {
         try {
             Set<String> tableNames = manager.getTables();
             String tables = tableNames.toString();
             userActions.createAction(manager.getUserName(), manager.getDbName(), "LIST TABLES");
             return tables;
         }catch (Exception e){
-            throw new ServiseException("list tables error", e);
+            throw new ServiceComponentException("list tables error", e);
         }
     }
 
     @Override
-    public void insert(String tableName, String column, String value, String columnsecond, String valuesecond) throws ServiseException {
+    public void insert(String tableName, String column, String value, String columnsecond, String valuesecond) throws ServiceComponentException {
         Map<String, Object> input = new LinkedHashMap<>();
         input.put(column, value);
         input.put(columnsecond, valuesecond);
@@ -86,24 +88,24 @@ public class ServiceImpl implements Servise {
             manager.insert(tableName, input);
             userActions.createAction(manager.getUserName(), manager.getDbName(), "INSERT DATA");
         } catch (Exception e){
-            throw new ServiseException("insert record error", e);
+            throw new ServiceComponentException("insert record error", e);
         }
     }
 
     @Override
-    public void delete(String tableName, String column, String value) throws ServiseException {
+    public void delete(String tableName, String column, String value) throws ServiceComponentException {
         Map<String, Object> input = new LinkedHashMap<>();
         input.put(column, value);
         try{
             manager.delete(tableName, input);
             userActions.createAction(manager.getUserName(), manager.getDbName(), "DELETE DATA");
         } catch (Exception e){
-            throw new ServiseException("delete record error", e);
+            throw new ServiceComponentException("delete record error", e);
         }
     }
 
     @Override
-    public void create(String tableName, String columnPk, String columnone, String columntwo) throws ServiseException {
+    public void create(String tableName, String columnPk, String columnone, String columntwo) throws ServiceComponentException {
         Set<String> input = new LinkedHashSet<>();
         input.add(columnone);
         input.add(columntwo);
@@ -111,39 +113,39 @@ public class ServiceImpl implements Servise {
             manager.create(tableName, columnPk, input);
             userActions.createAction(manager.getUserName(), manager.getDbName(), "CREATE TABLE");
         } catch (Exception e){
-            throw new ServiseException("create table error", e);
+            throw new ServiceComponentException("create table error", e);
         }
     }
 
     @Override
-    public void drop(String tableName) throws ServiseException {
+    public void drop(String tableName) throws ServiceComponentException {
         try{
             manager.drop(tableName);
             userActions.createAction(manager.getUserName(), manager.getDbName(), "DROP TABLE");
         } catch (Exception e){
-            throw new ServiseException("drop table error", e);
+            throw new ServiceComponentException("drop table error", e);
         }
     }
 
     @Override
-    public void update(String tableName, int id, String column, String value) throws ServiseException {
+    public void update(String tableName, int id, String column, String value) throws ServiceComponentException {
         Map<String, Object> input = new LinkedHashMap<>();
         input.put(column, value);
         try{
             manager.update(tableName, id, input);
             userActions.createAction(manager.getUserName(), manager.getDbName(), "UPDATE DATA");
         } catch (Exception e){
-            throw new ServiseException("update record error", e);
+            throw new ServiceComponentException("update record error", e);
         }
     }
 
     @Override
-    public void clear(String tableName) throws ServiseException {
+    public void clear(String tableName) throws ServiceComponentException {
         try{
             manager.clear(tableName);
             userActions.createAction(manager.getUserName(), manager.getDbName(), "CLEAR TABLE");
         } catch (Exception e){
-            throw new ServiseException("clear table error", e);
+            throw new ServiceComponentException("clear table error", e);
         }
     }
 
