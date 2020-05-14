@@ -4,8 +4,8 @@ public class Insert {
     private String tableName;
     private String column;
     private String value;
-    private String columnsecond;
-    private String valuesecond;
+    private String columnSecond;
+    private String valueSecond;
 
     public Insert() {
     }
@@ -19,11 +19,11 @@ public class Insert {
     public String getValue() {
         return value;
     }
-    public String getColumnsecond() {
-        return columnsecond;
+    public String getColumnSecond() {
+        return columnSecond;
     }
-    public String getValuesecond() {
-        return valuesecond;
+    public String getValueSecond() {
+        return valueSecond;
     }
 
     public void setTableName(String tableName) {
@@ -35,10 +35,10 @@ public class Insert {
     public void setValue(String value) {
         this.value = value;
     }
-    public void setColumnsecond(String columnsecond) {
-        this.columnsecond = columnsecond;
+    public void setColumnSecond(String columnSecond) {
+        this.columnSecond = columnSecond;
     }
-    public void setValuesecond(String valuesecond) {
-        this.valuesecond = valuesecond;
+    public void setValueSecond(String valueSecond) {
+        this.valueSecond = valueSecond;
     }
 }

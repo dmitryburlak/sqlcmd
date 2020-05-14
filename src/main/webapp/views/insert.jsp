@@ -22,11 +22,11 @@
             </tr>
             <tr>
                 <td>column2 name:</td>
-                <td><form:input path = "columnsecond" /><br></td>
+                <td><form:input path = "columnSecond" /><br></td>
             </tr>
             <tr>
                 <td>column2 value:</td>
-                <td><form:input path = "valuesecond" /><br></td>
+                <td><form:input path = "valueSecond" /><br></td>
             </tr>
             <tr>
                 <td></td>
