@@ -7,6 +7,7 @@ public class Update {
     private String value;
 
     public Update() {
+        //do nothing
     }
 
     public String getTableName() {
