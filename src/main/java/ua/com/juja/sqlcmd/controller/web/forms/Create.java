@@ -3,10 +3,11 @@ package ua.com.juja.sqlcmd.controller.web.forms;
 public class Create {
     private String tableName;
     private String columnPk;
-    private String columnone;
-    private String columntwo;
+    private String columnOne;
+    private String columnTwo;
 
     public Create() {
+        //do nothing
     }
 
     public String getTableName() {
@@ -15,11 +16,11 @@ public class Create {
     public String getColumnPk() {
         return columnPk;
     }
-    public String getColumnone() {
-        return columnone;
+    public String getColumnOne() {
+        return columnOne;
     }
-    public String getColumntwo() {
-        return columntwo;
+    public String getColumnTwo() {
+        return columnTwo;
     }
 
     public void setTableName(String tableName) {
@@ -28,11 +29,11 @@ public class Create {
     public void setColumnPk(String columnPk) {
         this.columnPk = columnPk;
     }
-    public void setColumnone(String columnone) {
-        this.columnone = columnone;
+    public void setColumnOne(String columnOne) {
+        this.columnOne = columnOne;
     }
-    public void setColumntwo(String columntwo) {
-        this.columntwo = columntwo;
+    public void setColumnTwo(String columnTwo) {
+        this.columnTwo = columnTwo;
     }
 
 }

@@ -18,11 +18,11 @@
                 </tr>
                 <tr>
                     <td>column1 name:</td>
-                    <td><form:input path = "columnone" /><br></td>
+                    <td><form:input path = "columnOne" /><br></td>
                 </tr>
                 <tr>
                     <td>column2 name:</td>
-                    <td><form:input path = "columntwo" /><br></td>
+                    <td><form:input path = "columnTwo" /><br></td>
                 </tr>
                 <tr>
                     <td></td>
